@@ -1,0 +1,6 @@
+services:
+  angular-app:
+    command: ["sleep", "infinity"]
+    volumes:
+      - ./:/app
+      - /app/node_modules
