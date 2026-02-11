@@ -2,8 +2,6 @@ FROM node:20-alpine
 
 WORKDIR /app
 
-RUN npm install -g @angular/cli@17
-
 RUN apk add --no-cache \
     python3 \
     make \
@@ -15,4 +13,4 @@ RUN npm install
 
 EXPOSE 4200
 
-CMD ["ng", "serve", "--host", "0.0.0.0", "--poll", "2000"]
+CMD ["npx", "ng", "serve", "--host", "0.0.0.0", "--poll", "2000"]
