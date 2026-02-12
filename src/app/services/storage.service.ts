@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { EncryptionService } from './encryption.service';
+import { Logger } from '../utils/logger';
 
 export interface ApiCredentials {
   login: string;
@@ -39,7 +40,7 @@ export class StorageService {
       }
       return JSON.parse(decrypted) as ApiCredentials;
     } catch (error) {
-      console.error('Failed to retrieve credentials:', error);
+      Logger.error('Failed to retrieve credentials:', error);
       return null;
     }
   }

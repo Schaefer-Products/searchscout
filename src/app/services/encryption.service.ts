@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import * as CryptoJS from 'crypto-js';
+import { Logger } from '../utils/logger';
 
 @Injectable({
   providedIn: 'root'
@@ -26,7 +27,7 @@ export class EncryptionService {
       const bytes = CryptoJS.AES.decrypt(ciphertext, this.secretKey);
       return bytes.toString(CryptoJS.enc.Utf8);
     } catch (error) {
-      console.error('Decryption failed:', error);
+      Logger.error('Decryption failed:', error);
       return '';
     }
   }

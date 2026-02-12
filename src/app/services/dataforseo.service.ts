@@ -4,6 +4,7 @@ import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 import { StorageService, ApiCredentials } from './storage.service';
+import { Logger } from '../utils/logger';
 
 export interface ValidationResult {
   isValid: boolean;
@@ -36,7 +37,7 @@ export class DataforseoService {
 
     return this.http.post<any>(url, body, { headers }).pipe(
       map(response => {
-        console.log('DataForSEO response:', response); // Debug log
+        Logger.log('DataForSEO response:', response); // Debug log
         // DataForSEO returns status_code 20000 for success
         if (response.status_code === 20000) {
           return { isValid: true };
@@ -54,7 +55,7 @@ export class DataforseoService {
         }
       }),
       catchError(error => {
-        console.error('HTTP error:', error); // Debug log
+        Logger.error('HTTP error:', error); // Debug log
         // Handle HTTP errors (401 = unauthorized, etc.)
         let errorMessage = 'Failed to validate credentials';
 

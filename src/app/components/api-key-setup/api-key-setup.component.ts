@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataforseoService } from '../../services/dataforseo.service';
+import { Logger } from '../../utils/logger';
 
 @Component({
   selector: 'app-api-key-setup',
@@ -36,12 +37,12 @@ export class ApiKeySetupComponent {
     }
 
     this.isValidating = true;
-    console.log('Starting validation...'); // Debug log
+    Logger.log('Starting validation...'); // Debug log
 
     // Validate credentials via Sandbox
     this.dataforseoService.validateCredentials(this.login, this.password).subscribe({
       next: (result) => {
-        console.log('Validation result:', result); // Debug log
+        Logger.log('Validation result:', result); // Debug log
         this.isValidating = false;
 
         if (result.isValid) {
@@ -50,19 +51,19 @@ export class ApiKeySetupComponent {
             login: this.login,
             password: this.password
           });
-          console.log('Credentials saved, navigating to dashboard...'); // Debug log
+          Logger.log('Credentials saved, navigating to dashboard...'); // Debug log
 
           // Navigate to main app (dashboard doesn't exist yet, so this will show blank)
           // We'll create dashboard in Feature 2
           this.router.navigate(['/dashboard']);
         } else {
           this.errorMessage = result.error || 'Validation failed';
-          console.log('Validation failed:', this.errorMessage);
+          Logger.log('Validation failed:', this.errorMessage);
           this.cdr.detectChanges(); // Force change detection
         }
       },
       error: (error) => {
-        console.error('Validation error:', error); // Debug log
+        Logger.error('Validation error:', error); // Debug log
         this.isValidating = false;
 
         // Handle the error object properly
@@ -77,7 +78,7 @@ export class ApiKeySetupComponent {
         this.cdr.detectChanges(); // Force change detection
       },
       complete: () => {
-        console.log('Validation observable completed'); // Debug log
+        Logger.log('Validation observable completed'); // Debug log
       }
     });
   }
