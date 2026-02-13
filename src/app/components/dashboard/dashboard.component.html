@@ -1,1 +1,340 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+  <!-- Header -->
+  <header class="dashboard-header">
+    <div class="header-content">
+      <h1>SearchScout</h1>
+      <p class="tagline">Discover your keyword opportunities</p>
+    </div>
+  </header>
+
+  <!-- Domain Input Section -->
+  <section class="domain-input-section">
+    <div class="input-card">
+      <h2>Analyze Your Domain</h2>
+      <p class="description">
+        Enter your website domain to see what keywords you're currently ranking
+        for
+      </p>
+
+      <form (ngSubmit)="analyzeDomain()" class="domain-form">
+        <div class="input-group">
+          <input
+            type="text"
+            [(ngModel)]="domain"
+            name="domain"
+            placeholder="example.com"
+            [disabled]="isAnalyzing"
+            class="domain-input"
+            required
+          />
+          <button
+            type="submit"
+            class="btn-primary"
+            [disabled]="isAnalyzing || !domain.trim()"
+          >
+            <span *ngIf="!isAnalyzing">Analyze Domain</span>
+            <span *ngIf="isAnalyzing">
+              <span class="spinner"></span>
+              Analyzing...
+            </span>
+          </button>
+        </div>
+      </form>
+
+      <!-- Error Message -->
+      <div class="error-message" *ngIf="errorMessage && !isAnalyzing">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        {{ errorMessage }}
+      </div>
+    </div>
+  </section>
+
+  <!-- Results Section -->
+  <section class="results-section" *ngIf="hasAnalyzed && keywords.length > 0">
+    <!-- Cache Info & Actions -->
+    <div class="results-header">
+      <div class="cache-info" *ngIf="cacheMetadata">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <span>Data from cache ({{ cacheMetadata.ageInDays }} days old)</span>
+      </div>
+      <div class="cache-info fresh" *ngIf="!cacheMetadata">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M5 13l4 4L19 7"
+          />
+        </svg>
+        <span>Fresh data</span>
+      </div>
+      <button
+        class="btn-refresh"
+        (click)="refreshData()"
+        [disabled]="isAnalyzing"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+          />
+        </svg>
+        Refresh
+      </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+            />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Total Keywords</div>
+          <div class="stat-value">{{ keywords.length }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+            />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Total Search Volume</div>
+          <div class="stat-value">{{ totalSearchVolume | number }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"
+            />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Average Position</div>
+          <div class="stat-value">{{ averagePosition }}</div>
+        </div>
+      </div>
+
+      <div class="stat-card highlight">
+        <div class="stat-icon">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+            />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Top 3 Rankings</div>
+          <div class="stat-value">{{ topThreeCount }}</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Keywords Table -->
+    <div class="table-container">
+      <!-- Add this scroll hint for mobile -->
+      <div class="scroll-hint" *ngIf="keywords.length > 0">
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M13 5l7 7-7 7M5 5l7 7-7 7"
+          />
+        </svg>
+        <span>Scroll to see more →</span>
+      </div>
+      <table class="keywords-table">
+        <thead>
+          <tr>
+            <th (click)="sortBy('keyword')" class="sortable">
+              Keyword {{ getSortIcon("keyword") }}
+            </th>
+            <th (click)="sortBy('searchVolume')" class="sortable">
+              Search Volume {{ getSortIcon("searchVolume") }}
+            </th>
+            <th (click)="sortBy('difficulty')" class="sortable">
+              Difficulty {{ getSortIcon("difficulty") }}
+            </th>
+            <th (click)="sortBy('position')" class="sortable">
+              Position {{ getSortIcon("position") }}
+            </th>
+            <th
+              (click)="sortBy('etv')"
+              class="sortable"
+              *ngIf="keywords[0]?.etv"
+            >
+              Est. Traffic Value {{ getSortIcon("etv") }}
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            *ngFor="let keyword of displayedKeywords"
+            [class.top-position]="keyword.position <= 3"
+            [class.first-page]="keyword.position > 3 && keyword.position <= 10"
+          >
+            <td class="keyword-cell">
+              <span class="keyword-text">{{ keyword.keyword }}</span>
+              <span class="badge top-3" *ngIf="keyword.position <= 3"
+                >Top 3</span
+              >
+              <span
+                class="badge first-page"
+                *ngIf="keyword.position > 3 && keyword.position <= 10"
+                >Page 1</span
+              >
+            </td>
+            <td class="volume-cell">{{ keyword.searchVolume | number }}</td>
+            <td class="difficulty-cell">
+              <div class="difficulty-bar">
+                <div
+                  class="difficulty-fill"
+                  [style.width.%]="keyword.difficulty"
+                  [class.easy]="keyword.difficulty < 30"
+                  [class.medium]="
+                    keyword.difficulty >= 30 && keyword.difficulty < 70
+                  "
+                  [class.hard]="keyword.difficulty >= 70"
+                ></div>
+              </div>
+              <span class="difficulty-value">{{ keyword.difficulty }}</span>
+            </td>
+            <td class="position-cell">
+              <span
+                class="position-badge"
+                [class.top]="keyword.position <= 3"
+                [class.good]="keyword.position > 3 && keyword.position <= 10"
+                [class.okay]="keyword.position > 10"
+              >
+                #{{ keyword.position }}
+              </span>
+            </td>
+            <td class="etv-cell" *ngIf="keyword.etv">
+              ${{ keyword.etv | number: "1.2-2" }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="load-more-container" *ngIf="hasMoreKeywords">
+      <button class="btn-load-more" (click)="loadMore()">
+        Load More Keywords ({{
+          keywords.length - displayedKeywords.length
+        }}
+        remaining)
+      </button>
+    </div>
+  </section>
+
+  <!-- Empty State -->
+  <section
+    class="empty-state"
+    *ngIf="hasAnalyzed && keywords.length === 0 && !errorMessage"
+  >
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+    <h3>No Keywords Found</h3>
+    <p>This domain doesn't appear to have any ranking keywords yet.</p>
+    <p class="hint">
+      This could mean the domain is new, not indexed, or you may have entered an
+      incorrect domain.
+    </p>
+  </section>
+</div>
