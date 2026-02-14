@@ -25,3 +25,22 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
+## TODO
+### Process
+[] git in dev container
+[] refactoring/consolidation of scss
+[] refactoring of some business logic ("top 3" logic)
+[] unit tests
+[] unit test coverage
+[] deployment to netlify
+
+### Bugs
+[] Switching domains doesn't clear competitors
+[] "Find Your Competitors" section doesn't show cache age
+
+### Features
+[] Persist competitor selection
+[] Estimated cost tracking
+[] Click "Change Selection" should pre-populate the competitors list
