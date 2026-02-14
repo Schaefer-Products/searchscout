@@ -6,6 +6,7 @@ import { environment } from '../../environments/environment';
 import { StorageService, ApiCredentials } from './storage.service';
 import { CacheService } from './cache.service';
 import { Logger } from '../utils/logger';
+import { Competitor, DataForSeoCompetitorsResponse } from '../models/competitor.model';
 import { DomainKeywordRanking, DataForSeoRankedKeywordsResponse } from '../models/keyword.model';
 
 
@@ -246,6 +247,133 @@ export class DataforseoService {
    */
   clearDomainCache(domain: string): void {
     const cacheKey = `domain_keywords_${domain}`;
+    this.cache.remove(cacheKey);
+  }
+
+  /**
+ * Fetch competitor domains for a given domain
+ * Uses cache if available, otherwise calls API
+ */
+  discoverCompetitors(domain: string, useCache: boolean = true): Observable<Competitor[]> {
+    const cacheKey = `competitors_${domain}`;
+
+    // Check cache first
+    if (useCache) {
+      const cached = this.cache.get<Competitor[]>(cacheKey);
+      if (cached) {
+        Logger.debug('Using cached competitors for:', domain);
+        return of(cached);
+      }
+    }
+
+    Logger.debug('Fetching competitors from API for:', domain);
+
+    const url = `${environment.dataforSeoApiUrl}/dataforseo_labs/google/competitors_domain/live`;
+
+    const body = [{
+      target: domain,
+      location_name: 'United States',
+      language_name: 'English',
+      limit: 1000, // Fetch maximum competitors in one call
+      filters: [
+        ['intersections', '>=', 10] // Must have at least 10 overlapping keywords
+      ],
+      order_by: ['intersections,desc'], // Sort by keyword overlap
+      exclude_top_domains: true,
+      exclude_domains: environment.excludedCompetitorDomains
+    }];
+
+    const headers = this.getAuthHeaders();
+    if (!headers) {
+      return throwError(() => ({ error: 'No API credentials found' }));
+    }
+
+    return this.http.post<DataForSeoCompetitorsResponse>(url, body, { headers }).pipe(
+      map(response => {
+        const competitors = this.parseCompetitorsResponse(response);
+        // Sort by keyword overlap (in case order_by doesn't work)
+        return competitors.sort((a, b) => b.keywordOverlap - a.keywordOverlap);
+      }),
+      tap(competitors => {
+        // Cache the results
+        this.cache.save(cacheKey, competitors);
+        Logger.debug('Cached', competitors.length, 'competitors for:', domain);
+      }),
+      catchError(error => {
+        Logger.error('Error fetching competitors:', error);
+
+        let errorMessage = 'Failed to discover competitors';
+
+        if (error.status === 401 || error.status === 40100) {
+          errorMessage = 'Invalid API credentials. Please update them in settings.';
+        } else if (error.status === 0) {
+          errorMessage = 'Network error. Please check your internet connection.';
+        } else if (error.error?.status_message) {
+          errorMessage = error.error.status_message;
+        }
+
+        return throwError(() => ({ error: errorMessage }));
+      })
+    );
+  }
+
+  /**
+   * Parse DataForSEO competitors API response into our Competitor model
+   */
+  private parseCompetitorsResponse(response: DataForSeoCompetitorsResponse): Competitor[] {
+    Logger.debug('Parsing DataForSEO competitors response:', response);
+
+    // Check main status code
+    if (response.status_code !== 20000) {
+      Logger.error('API returned non-success status:', response.status_code);
+      throw new Error(response.status_message || 'API request failed');
+    }
+
+    const tasks = response.tasks || [];
+    if (tasks.length === 0) {
+      Logger.warn('No tasks in response');
+      return [];
+    }
+
+    // Check task-level status code
+    const task = tasks[0];
+    if (task.status_code && task.status_code !== 20000) {
+      Logger.error('Task returned error:', task.status_code, task.status_message);
+      throw new Error(task.status_message || `Task failed with code: ${task.status_code}`);
+    }
+
+    const result = task.result?.[0];
+    if (!result || !result.items) {
+      Logger.warn('No items in result');
+      return [];
+    }
+
+    const competitors: Competitor[] = result.items.map(item => ({
+      domain: item.domain,
+      keywordOverlap: item.metrics.organic.intersections,
+      totalKeywords: item.metrics.organic.count,
+      etv: item.metrics.organic.etv,
+      averagePosition: item.avg_position,
+      isManual: false
+    }));
+
+    Logger.debug('Parsed', competitors.length, 'competitors');
+    return competitors;
+  }
+
+  /**
+   * Get cache metadata for competitors
+   */
+  getCompetitorsCacheMetadata(domain: string): { timestamp: number; ageInDays: number } | null {
+    const cacheKey = `competitors_${domain}`;
+    return this.cache.getMetadata(cacheKey);
+  }
+
+  /**
+   * Clear cache for competitors of a specific domain
+   */
+  clearCompetitorsCache(domain: string): void {
+    const cacheKey = `competitors_${domain}`;
     this.cache.remove(cacheKey);
   }
 }

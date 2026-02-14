@@ -3,12 +3,14 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataforseoService } from '../../services/dataforseo.service';
 import { DomainKeywordRanking } from '../../models/keyword.model';
+import { Competitor } from '../../models/competitor.model';
+import { CompetitorSelectionComponent } from '../competitor-selection/competitor-selection.component';
 import { Logger } from '../../utils/logger';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, CompetitorSelectionComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -33,6 +35,10 @@ export class DashboardComponent implements OnInit {
   // Sorting state
   sortColumn: keyof DomainKeywordRanking = 'position';
   sortDirection: 'asc' | 'desc' = 'asc';
+
+  // Competitor state
+  selectedCompetitors: Competitor[] = [];
+  showCompetitorSelection: boolean = false;
 
   ngOnInit(): void {
     // Check if user came from successful API key setup
@@ -173,5 +179,17 @@ export class DashboardComponent implements OnInit {
 
   get topThreeCount(): number {
     return this.keywords.filter(k => k.position <= 3).length;
+  }
+
+  onCompetitorsSelected(competitors: Competitor[]): void {
+    Logger.debug('Competitors selected:', competitors);
+    this.selectedCompetitors = competitors;
+    this.showCompetitorSelection = false;
+
+    // Here you would proceed to Feature 4 (analyze competitor keywords)
+    // For now, just log and hide the selection
+    Logger.debug('Ready to analyze competitors:', this.selectedCompetitors);
+
+    this.cdr.detectChanges();
   }
 }

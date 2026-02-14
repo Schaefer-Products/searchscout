@@ -304,11 +304,67 @@
     </div>
     <div class="load-more-container" *ngIf="hasMoreKeywords">
       <button class="btn-load-more" (click)="loadMore()">
-        Load More Keywords ({{
-          keywords.length - displayedKeywords.length
-        }}
+        Load More Keywords ({{ keywords.length - displayedKeywords.length }}
         remaining)
       </button>
+    </div>
+  </section>
+
+  <!-- Competitor Selection Section -->
+  <section
+    class="competitor-section"
+    *ngIf="hasAnalyzed && keywords.length > 0 && !showCompetitorSelection"
+  >
+    <div class="competitor-prompt">
+      <h3>Ready for the next step?</h3>
+      <p>Discover and analyze your competitors to find keyword opportunities</p>
+      <button
+        class="btn-discover-competitors"
+        (click)="showCompetitorSelection = true"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+          />
+        </svg>
+        Find Competitors
+      </button>
+    </div>
+  </section>
+
+  <!-- Competitor Selection Component -->
+  <app-competitor-selection
+    *ngIf="showCompetitorSelection"
+    [userDomain]="domain"
+    (competitorsSelected)="onCompetitorsSelected($event)"
+  ></app-competitor-selection>
+
+  <!-- Selected Competitors Display -->
+  <section
+    class="selected-competitors-section"
+    *ngIf="selectedCompetitors.length > 0"
+  >
+    <div class="selected-header">
+      <h3>Selected Competitors ({{ selectedCompetitors.length }})</h3>
+      <button class="btn-change" (click)="showCompetitorSelection = true">
+        Change Selection
+      </button>
+    </div>
+    <div class="selected-list">
+      <div class="selected-chip" *ngFor="let competitor of selectedCompetitors">
+        {{ competitor.domain }}
+        <span class="overlap" *ngIf="!competitor.isManual">
+          {{ competitor.keywordOverlap }} shared
+        </span>
+      </div>
     </div>
   </section>
 
