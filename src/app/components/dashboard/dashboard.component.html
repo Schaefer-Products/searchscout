@@ -11,10 +11,7 @@
   <section class="domain-input-section">
     <div class="input-card">
       <h2>Analyze Your Domain</h2>
-      <p class="description">
-        Enter your website domain to see what keywords you're currently ranking
-        for
-      </p>
+      <p class="description">Enter your website domain to see what keywords you're currently ranking for</p>
 
       <form (ngSubmit)="analyzeDomain()" class="domain-form">
         <div class="input-group">
@@ -27,11 +24,7 @@
             class="domain-input"
             required
           />
-          <button
-            type="submit"
-            class="btn-primary"
-            [disabled]="isAnalyzing || !domain.trim()"
-          >
+          <button type="submit" class="btn-primary" [disabled]="isAnalyzing || !domain.trim()">
             <span *ngIf="!isAnalyzing">Analyze Domain</span>
             <span *ngIf="isAnalyzing">
               <span class="spinner"></span>
@@ -43,12 +36,7 @@
 
       <!-- Error Message -->
       <div class="error-message" *ngIf="errorMessage && !isAnalyzing">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -66,12 +54,7 @@
     <!-- Cache Info & Actions -->
     <div class="results-header">
       <div class="cache-info" *ngIf="cacheMetadata">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -82,32 +65,13 @@
         <span>Data from cache ({{ cacheMetadata.ageInDays }} days old)</span>
       </div>
       <div class="cache-info fresh" *ngIf="!cacheMetadata">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M5 13l4 4L19 7"
-          />
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
         </svg>
         <span>Fresh data</span>
       </div>
-      <button
-        class="btn-refresh"
-        (click)="refreshData()"
-        [disabled]="isAnalyzing"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
+      <button class="btn-refresh" (click)="refreshData()" [disabled]="isAnalyzing">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -123,12 +87,7 @@
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-icon">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -145,12 +104,7 @@
 
       <div class="stat-card">
         <div class="stat-icon">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -167,12 +121,7 @@
 
       <div class="stat-card">
         <div class="stat-icon">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -189,12 +138,7 @@
 
       <div class="stat-card highlight">
         <div class="stat-icon">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -214,41 +158,19 @@
     <div class="table-container">
       <!-- Add this scroll hint for mobile -->
       <div class="scroll-hint" *ngIf="keywords.length > 0">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M13 5l7 7-7 7M5 5l7 7-7 7"
-          />
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
         </svg>
         <span>Scroll to see more →</span>
       </div>
       <table class="keywords-table">
         <thead>
           <tr>
-            <th (click)="sortBy('keyword')" class="sortable">
-              Keyword {{ getSortIcon("keyword") }}
-            </th>
-            <th (click)="sortBy('searchVolume')" class="sortable">
-              Search Volume {{ getSortIcon("searchVolume") }}
-            </th>
-            <th (click)="sortBy('difficulty')" class="sortable">
-              Difficulty {{ getSortIcon("difficulty") }}
-            </th>
-            <th (click)="sortBy('position')" class="sortable">
-              Position {{ getSortIcon("position") }}
-            </th>
-            <th
-              (click)="sortBy('etv')"
-              class="sortable"
-              *ngIf="keywords[0]?.etv"
-            >
+            <th (click)="sortBy('keyword')" class="sortable">Keyword {{ getSortIcon("keyword") }}</th>
+            <th (click)="sortBy('searchVolume')" class="sortable">Search Volume {{ getSortIcon("searchVolume") }}</th>
+            <th (click)="sortBy('difficulty')" class="sortable">Difficulty {{ getSortIcon("difficulty") }}</th>
+            <th (click)="sortBy('position')" class="sortable">Position {{ getSortIcon("position") }}</th>
+            <th (click)="sortBy('etv')" class="sortable" *ngIf="keywords[0]?.etv">
               Est. Traffic Value {{ getSortIcon("etv") }}
             </th>
           </tr>
@@ -261,14 +183,8 @@
           >
             <td class="keyword-cell">
               <span class="keyword-text">{{ keyword.keyword }}</span>
-              <span class="badge top-3" *ngIf="keyword.position <= 3"
-                >Top 3</span
-              >
-              <span
-                class="badge first-page"
-                *ngIf="keyword.position > 3 && keyword.position <= 10"
-                >Page 1</span
-              >
+              <span class="badge top-3" *ngIf="keyword.position <= 3">Top 3</span>
+              <span class="badge first-page" *ngIf="keyword.position > 3 && keyword.position <= 10">Page 1</span>
             </td>
             <td class="volume-cell">{{ keyword.searchVolume | number }}</td>
             <td class="difficulty-cell">
@@ -277,9 +193,7 @@
                   class="difficulty-fill"
                   [style.width.%]="keyword.difficulty"
                   [class.easy]="keyword.difficulty < 30"
-                  [class.medium]="
-                    keyword.difficulty >= 30 && keyword.difficulty < 70
-                  "
+                  [class.medium]="keyword.difficulty >= 30 && keyword.difficulty < 70"
                   [class.hard]="keyword.difficulty >= 70"
                 ></div>
               </div>
@@ -295,9 +209,7 @@
                 #{{ keyword.position }}
               </span>
             </td>
-            <td class="etv-cell" *ngIf="keyword.etv">
-              ${{ keyword.etv | number: "1.2-2" }}
-            </td>
+            <td class="etv-cell" *ngIf="keyword.etv">${{ keyword.etv | number: "1.2-2" }}</td>
           </tr>
         </tbody>
       </table>
@@ -311,23 +223,12 @@
   </section>
 
   <!-- Competitor Selection Section -->
-  <section
-    class="competitor-section"
-    *ngIf="hasAnalyzed && keywords.length > 0 && !showCompetitorSelection"
-  >
+  <section class="competitor-section" *ngIf="hasAnalyzed && keywords.length > 0 && !showCompetitorSelection">
     <div class="competitor-prompt">
       <h3>Ready for the next step?</h3>
       <p>Discover and analyze your competitors to find keyword opportunities</p>
-      <button
-        class="btn-discover-competitors"
-        (click)="showCompetitorSelection = true"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
+      <button class="btn-discover-competitors" (click)="showCompetitorSelection = true">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -348,37 +249,22 @@
   ></app-competitor-selection>
 
   <!-- Selected Competitors Display -->
-  <section
-    class="selected-competitors-section"
-    *ngIf="selectedCompetitors.length > 0"
-  >
+  <section class="selected-competitors-section" *ngIf="selectedCompetitors.length > 0">
     <div class="selected-header">
       <h3>Selected Competitors ({{ selectedCompetitors.length }})</h3>
-      <button class="btn-change" (click)="showCompetitorSelection = true">
-        Change Selection
-      </button>
+      <button class="btn-change" (click)="showCompetitorSelection = true">Change Selection</button>
     </div>
     <div class="selected-list">
       <div class="selected-chip" *ngFor="let competitor of selectedCompetitors">
         {{ competitor.domain }}
-        <span class="overlap" *ngIf="!competitor.isManual">
-          {{ competitor.keywordOverlap }} shared
-        </span>
+        <span class="overlap" *ngIf="!competitor.isManual"> {{ competitor.keywordOverlap }} shared </span>
       </div>
     </div>
   </section>
 
   <!-- Empty State -->
-  <section
-    class="empty-state"
-    *ngIf="hasAnalyzed && keywords.length === 0 && !errorMessage"
-  >
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
+  <section class="empty-state" *ngIf="hasAnalyzed && keywords.length === 0 && !errorMessage">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -388,9 +274,6 @@
     </svg>
     <h3>No Keywords Found</h3>
     <p>This domain doesn't appear to have any ranking keywords yet.</p>
-    <p class="hint">
-      This could mean the domain is new, not indexed, or you may have entered an
-      incorrect domain.
-    </p>
+    <p class="hint">This could mean the domain is new, not indexed, or you may have entered an incorrect domain.</p>
   </section>
 </div>

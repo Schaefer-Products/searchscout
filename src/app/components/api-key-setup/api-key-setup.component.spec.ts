@@ -10,7 +10,7 @@ describe('ApiKeySetupComponent', () => {
     await TestBed.configureTestingModule({
       imports: [ApiKeySetupComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(ApiKeySetupComponent);
     component = fixture.componentInstance;

@@ -28,19 +28,22 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 
 ## TODO
-### Process
-[] git in dev container
-[] refactoring/consolidation of scss
-[] refactoring of some business logic ("top 3" logic)
-[] unit tests
-[] unit test coverage
-[] deployment to netlify
+### Development and CI/CD
+- [x] git in dev container
+- [ ] deployment to netlify
 
 ### Bugs
-[] Switching domains doesn't clear competitors
-[] "Find Your Competitors" section doesn't show cache age
+- [ ] Switching domains doesn't clear competitors
+- [ ] "Find Your Competitors" section doesn't show cache age
 
 ### Features
-[] Persist competitor selection
-[] Estimated cost tracking
-[] Click "Change Selection" should pre-populate the competitors list
+- [ ] Persist competitor selection
+- [ ] Estimated cost tracking
+- [ ] Click "Change Selection" should pre-populate the competitors list
+
+## Tech Debt
+- [ ] refactoring/consolidation of scss
+- [ ] refactoring of some business logic ("top 3" logic)
+- [ ] unit tests
+- [ ] unit test coverage
+- [ ] merge environment files with default

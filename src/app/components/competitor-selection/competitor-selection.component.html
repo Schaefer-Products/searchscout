@@ -7,18 +7,9 @@
 
   <!-- Discover Button (if not yet discovered) -->
   <div class="discover-section" *ngIf="!discoveryComplete">
-    <button
-      class="btn-discover"
-      (click)="discoverCompetitors()"
-      [disabled]="isDiscovering"
-    >
+    <button class="btn-discover" (click)="discoverCompetitors()" [disabled]="isDiscovering">
       <span *ngIf="!isDiscovering">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -37,12 +28,7 @@
 
   <!-- Error Message -->
   <div class="error-message" *ngIf="errorMessage && !isDiscovering">
-    <svg
-      xmlns="http://www.w3.org/2000/svg"
-      fill="none"
-      viewBox="0 0 24 24"
-      stroke="currentColor"
-    >
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -54,16 +40,12 @@
   </div>
 
   <!-- Discovered Competitors List -->
-  <div
-    class="competitors-list"
-    *ngIf="discoveryComplete && allCompetitors.length > 0"
-  >
+  <div class="competitors-list" *ngIf="discoveryComplete && allCompetitors.length > 0">
     <div class="list-header">
       <h4>Select Competitors to Analyze ({{ selectedCount }} selected)</h4>
       <p class="hint">
-        Found {{ totalCompetitorsCount }} competitors. Showing
-        {{ displayedCompetitors.length }}. We recommend selecting 2-5
-        competitors for the best results.
+        Found {{ totalCompetitorsCount }} competitors. Showing {{ displayedCompetitors.length }}. We recommend selecting
+        2-5 competitors for the best results.
       </p>
     </div>
 
@@ -94,12 +76,7 @@
 
           <div class="metrics" *ngIf="!competitor.isManual">
             <div class="metric">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -110,12 +87,7 @@
               <span>{{ competitor.keywordOverlap }} shared keywords</span>
             </div>
             <div class="metric">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -123,17 +95,12 @@
                   d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
                 />
               </svg>
-              <span
-                >{{ competitor.totalKeywords | number }} total keywords</span
-              >
+              <span>{{ competitor.totalKeywords | number }} total keywords</span>
             </div>
           </div>
 
           <div class="manual-note" *ngIf="competitor.isManual">
-            <p>
-              Manually added competitor - metrics will be calculated during
-              analysis
-            </p>
+            <p>Manually added competitor - metrics will be calculated during analysis</p>
           </div>
         </div>
 
@@ -141,41 +108,19 @@
         <button
           *ngIf="competitor.isManual"
           class="btn-remove"
-          (click)="
-            removeCompetitor(competitor.domain); $event.stopPropagation()
-          "
+          (click)="removeCompetitor(competitor.domain); $event.stopPropagation()"
           title="Remove competitor"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M6 18L18 6M6 6l12 12"
-            />
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
       </div>
     </div>
     <div class="load-more-container" *ngIf="hasMoreCompetitors">
       <button class="btn-load-more" (click)="loadMore()">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-            d="M19 9l-7 7-7-7"
-          />
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
         </svg>
         Load More Competitors ({{ remainingCount }} remaining)
       </button>
@@ -197,18 +142,8 @@
           class="manual-input"
         />
         <button type="submit" class="btn-add">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M12 6v6m0 0v6m0-6h6m-6 0H6"
-            />
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
           </svg>
           Add
         </button>
@@ -222,11 +157,7 @@
 
   <!-- Confirm Button -->
   <div class="actions-section" *ngIf="discoveryComplete">
-    <button
-      class="btn-confirm"
-      (click)="confirmSelection()"
-      [disabled]="selectedCount === 0"
-    >
+    <button class="btn-confirm" (click)="confirmSelection()" [disabled]="selectedCount === 0">
       Analyze {{ selectedCount }} Competitor{{ selectedCount !== 1 ? "s" : "" }}
     </button>
   </div>

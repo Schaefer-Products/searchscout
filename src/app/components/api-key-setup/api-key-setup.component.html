@@ -9,13 +9,7 @@
     <!-- Info Section -->
     <div class="info-section">
       <div class="info-box">
-        <svg
-          class="icon"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -26,20 +20,13 @@
         <div class="info-content">
           <h3>Why do I need this?</h3>
           <p>
-            SearchScout uses the DataForSEO API to fetch SEO data. You'll need
-            your own API credentials to use the app.
+            SearchScout uses the DataForSEO API to fetch SEO data. You'll need your own API credentials to use the app.
           </p>
         </div>
       </div>
 
       <div class="info-box">
-        <svg
-          class="icon"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
+        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -49,10 +36,7 @@
         </svg>
         <div class="info-content">
           <h3>Your data is secure</h3>
-          <p>
-            Your API credentials are encrypted and stored only on your device.
-            We never send them to our servers.
-          </p>
+          <p>Your API credentials are encrypted and stored only on your device. We never send them to our servers.</p>
         </div>
       </div>
     </div>
@@ -60,13 +44,7 @@
     <!-- Don't have an account -->
     <div class="signup-prompt">
       <p>Don't have a DataForSEO account?</p>
-      <button
-        type="button"
-        class="btn-secondary"
-        (click)="openDataForSeoSignup()"
-      >
-        Sign Up for DataForSEO
-      </button>
+      <button type="button" class="btn-secondary" (click)="openDataForSeoSignup()">Sign Up for DataForSEO</button>
     </div>
 
     <!-- Form -->
@@ -98,12 +76,7 @@
             autocomplete="current-password"
             required
           />
-          <button
-            type="button"
-            class="toggle-password"
-            (click)="togglePasswordVisibility()"
-            [disabled]="isValidating"
-          >
+          <button type="button" class="toggle-password" (click)="togglePasswordVisibility()" [disabled]="isValidating">
             <svg
               *ngIf="!showPassword"
               xmlns="http://www.w3.org/2000/svg"
@@ -144,12 +117,7 @@
 
       <!-- Error Message -->
       <div class="error-message" *ngIf="errorMessage">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-        >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -161,11 +129,7 @@
       </div>
 
       <!-- Submit Button -->
-      <button
-        type="submit"
-        class="btn-primary"
-        [disabled]="isValidating || !login.trim() || !password.trim()"
-      >
+      <button type="submit" class="btn-primary" [disabled]="isValidating || !login.trim() || !password.trim()">
         <span *ngIf="!isValidating">Validate & Save Credentials</span>
         <span *ngIf="isValidating">
           <span class="spinner"></span>
@@ -177,10 +141,7 @@
     <!-- Help Text -->
     <div class="help-text">
       <p><strong>Where do I find my credentials?</strong></p>
-      <p>
-        Log into your DataForSEO account, go to Settings → API Access, and copy
-        your Login and Password.
-      </p>
+      <p>Log into your DataForSEO account, go to Settings → API Access, and copy your Login and Password.</p>
     </div>
   </div>
 </div>
