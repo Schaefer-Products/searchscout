@@ -22,10 +22,12 @@ export class CompetitorSelectionComponent {
   // Discovery state
   isDiscovering: boolean = false;
   discoveryComplete: boolean = false;
-  allCompetitors: Competitor[] = []; // ALL fetched competitors
-  displayedCompetitors: Competitor[] = []; // Currently displayed
-  displayLimit: number = 20; // Show 20 at a time
+  allCompetitors: Competitor[] = [];
+  displayedCompetitors: Competitor[] = [];
+  displayLimit: number = 20;
   selectedCompetitors: Set<string> = new Set();
+
+  cacheMetadata: { timestamp: number; ageInDays: number } | null = null;
 
   // Manual entry
   manualDomain: string = '';
@@ -48,9 +50,11 @@ export class CompetitorSelectionComponent {
       next: (competitors) => {
         Logger.debug('Discovered competitors:', competitors.length);
         this.allCompetitors = competitors;
-        this.displayedCompetitors = competitors.slice(0, this.displayLimit); // Show first 20
+        this.displayedCompetitors = competitors.slice(0, this.displayLimit);
         this.discoveryComplete = true;
         this.isDiscovering = false;
+
+        this.cacheMetadata = this.dataforseoService.getCompetitorsCacheMetadata(this.userDomain);
 
         // Auto-select top 5 competitors
         competitors.slice(0, 5).forEach(comp => {
@@ -70,6 +74,23 @@ export class CompetitorSelectionComponent {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  refreshCompetitors(): void {
+    if (!this.userDomain) return;
+
+    // Clear cache and fetch fresh data
+    this.dataforseoService.clearCompetitorsCache(this.userDomain);
+    this.cacheMetadata = null;
+
+    // Reset state
+    this.discoveryComplete = false;
+    this.allCompetitors = [];
+    this.displayedCompetitors = [];
+    this.selectedCompetitors.clear();
+
+    // Re-discover
+    this.discoverCompetitors();
   }
 
   // Load more competitors

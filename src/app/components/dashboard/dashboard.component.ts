@@ -61,6 +61,9 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
+    this.selectedCompetitors = [];
+    this.showCompetitorSelection = false;
+
     this.isAnalyzing = true;
     this.hasAnalyzed = false;
     Logger.debug('Analyzing domain:', cleanDomain);

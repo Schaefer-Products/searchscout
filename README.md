@@ -33,8 +33,8 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - [ ] deployment to netlify
 
 ### Bugs
-- [ ] Switching domains doesn't clear competitors
-- [ ] "Find Your Competitors" section doesn't show cache age
+- [x] Switching domains doesn't clear competitors
+- [x] "Find Your Competitors" section doesn't show cache age
 
 ### Features
 - [ ] Persist competitor selection
