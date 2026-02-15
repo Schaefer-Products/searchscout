@@ -5,12 +5,13 @@ import { DataforseoService } from '../../services/dataforseo.service';
 import { DomainKeywordRanking } from '../../models/keyword.model';
 import { Competitor } from '../../models/competitor.model';
 import { CompetitorSelectionComponent } from '../competitor-selection/competitor-selection.component';
+import { CompetitorAnalysisComponent } from '../competitor-analysis/competitor-analysis.component';
 import { Logger } from '../../utils/logger';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, CompetitorSelectionComponent],
+  imports: [CommonModule, FormsModule, CompetitorSelectionComponent, CompetitorAnalysisComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
@@ -39,6 +40,7 @@ export class DashboardComponent implements OnInit {
   // Competitor state
   selectedCompetitors: Competitor[] = [];
   showCompetitorSelection: boolean = false;
+  showCompetitorAnalysis: boolean = false;
 
   ngOnInit(): void {
     // Check if user came from successful API key setup
@@ -188,11 +190,9 @@ export class DashboardComponent implements OnInit {
     Logger.debug('Competitors selected:', competitors);
     this.selectedCompetitors = competitors;
     this.showCompetitorSelection = false;
+    this.showCompetitorAnalysis = true;
 
-    // Here you would proceed to Feature 4 (analyze competitor keywords)
-    // For now, just log and hide the selection
-    Logger.debug('Ready to analyze competitors:', this.selectedCompetitors);
-
+    Logger.debug('Starting competitor analysis...');
     this.cdr.detectChanges();
   }
 }

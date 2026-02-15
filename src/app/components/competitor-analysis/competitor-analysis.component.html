@@ -1,0 +1,258 @@
+<div class="competitor-analysis-container">
+  <!-- Header -->
+  <div class="analysis-header">
+    <h3>Competitor Keyword Analysis</h3>
+    <p>Analyzing keywords from {{ competitors.length }} competitor{{ competitors.length !== 1 ? "s" : "" }}</p>
+  </div>
+
+  <!-- Loading State -->
+  <div class="loading-state" *ngIf="isAnalyzing">
+    <div class="spinner-large"></div>
+    <p>Analyzing competitor keywords...</p>
+    <p class="hint">This may take a moment as we fetch data from multiple domains</p>
+  </div>
+
+  <!-- Error State -->
+  <div class="error-message" *ngIf="errorMessage && !isAnalyzing">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+    {{ errorMessage }}
+  </div>
+
+  <!-- Results -->
+  <div class="results-container" *ngIf="analysisComplete && results">
+    <!-- Cache Info & Refresh -->
+    <div class="cache-header">
+      <div class="cache-info" *ngIf="cacheMetadata">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+          />
+        </svg>
+        <span>Data from cache ({{ cacheMetadata.ageInDays }} days old)</span>
+      </div>
+      <div class="cache-info fresh" *ngIf="!cacheMetadata">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+        </svg>
+        <span>Fresh data</span>
+      </div>
+      <button class="btn-refresh" (click)="refreshAnalysis()" [disabled]="isAnalyzing">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+          />
+        </svg>
+        Refresh
+      </button>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="stats-grid">
+      <div class="stat-card highlight" (click)="setViewMode('opportunities')">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Opportunities</div>
+          <div class="stat-value">{{ results.opportunities.length }}</div>
+          <div class="stat-hint">Keywords to target</div>
+        </div>
+      </div>
+
+      <div class="stat-card" (click)="setViewMode('shared')">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"
+            />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Shared Keywords</div>
+          <div class="stat-value">{{ results.shared.length }}</div>
+          <div class="stat-hint">You & competitors rank</div>
+        </div>
+      </div>
+
+      <div class="stat-card" (click)="setViewMode('unique')">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"
+            />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Your Unique Keywords</div>
+          <div class="stat-value">{{ results.uniqueToUser.length }}</div>
+          <div class="stat-hint">Only you rank for</div>
+        </div>
+      </div>
+
+      <div class="stat-card" (click)="setViewMode('all')">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"
+            />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Total Keywords</div>
+          <div class="stat-value">{{ results.totalKeywords }}</div>
+          <div class="stat-hint">All analyzed keywords</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- View Mode Tabs -->
+    <div class="view-tabs">
+      <button class="tab" [class.active]="viewMode === 'opportunities'" (click)="setViewMode('opportunities')">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+        </svg>
+        Opportunities ({{ results.opportunities.length }})
+      </button>
+      <button class="tab" [class.active]="viewMode === 'all'" (click)="setViewMode('all')">
+        All Keywords ({{ results.totalKeywords }})
+      </button>
+      <button class="tab" [class.active]="viewMode === 'shared'" (click)="setViewMode('shared')">
+        Shared ({{ results.shared.length }})
+      </button>
+      <button class="tab" [class.active]="viewMode === 'unique'" (click)="setViewMode('unique')">
+        Your Unique ({{ results.uniqueToUser.length }})
+      </button>
+    </div>
+
+    <!-- Keywords Table -->
+    <div class="table-container" *ngIf="displayedKeywords.length > 0">
+      <div class="scroll-hint">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
+        </svg>
+        <span>Scroll to see more →</span>
+      </div>
+
+      <div class="table-scroll-wrapper">
+        <table class="keywords-table">
+          <thead>
+            <tr>
+              <th (click)="sortBy('keyword')" class="sortable">Keyword {{ getSortIcon("keyword") }}</th>
+              <th (click)="sortBy('searchVolume')" class="sortable">Volume {{ getSortIcon("searchVolume") }}</th>
+              <th (click)="sortBy('difficulty')" class="sortable">Difficulty {{ getSortIcon("difficulty") }}</th>
+              <th (click)="sortBy('competitorCount')" class="sortable">
+                Competitors {{ getSortIcon("competitorCount") }}
+              </th>
+              <th *ngIf="viewMode !== 'opportunities'">Your Position</th>
+              <th *ngIf="viewMode === 'opportunities'" (click)="sortBy('opportunityScore')" class="sortable">
+                Opportunity Score {{ getSortIcon("opportunityScore") }}
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let keyword of displayedKeywords" [class.opportunity]="keyword.isOpportunity">
+              <td class="keyword-cell">
+                <span class="keyword-text">{{ keyword.keyword }}</span>
+                <span class="badge opportunity" *ngIf="keyword.isOpportunity">Opportunity</span>
+              </td>
+              <td class="volume-cell">{{ keyword.searchVolume | number }}</td>
+              <td class="difficulty-cell">
+                <div class="difficulty-bar">
+                  <div
+                    class="difficulty-fill"
+                    [style.width.%]="keyword.difficulty"
+                    [class.easy]="keyword.difficulty < 30"
+                    [class.medium]="keyword.difficulty >= 30 && keyword.difficulty < 70"
+                    [class.hard]="keyword.difficulty >= 70"
+                  ></div>
+                </div>
+                <span class="difficulty-value">{{ keyword.difficulty }}</span>
+              </td>
+              <td class="competitor-count-cell">
+                <span class="competitor-badge">{{ keyword.competitorCount }}</span>
+                <div class="competitor-domains">
+                  <span *ngFor="let comp of keyword.competitorRankings" class="domain-tag">
+                    {{ comp.domain }} (#{{ comp.position }})
+                  </span>
+                </div>
+              </td>
+              <td class="position-cell" *ngIf="viewMode !== 'opportunities'">
+                <span
+                  *ngIf="keyword.userRanking"
+                  class="position-badge"
+                  [class.top]="keyword.userRanking.position <= 3"
+                  [class.good]="keyword.userRanking.position > 3 && keyword.userRanking.position <= 10"
+                  [class.okay]="keyword.userRanking.position > 10"
+                >
+                  #{{ keyword.userRanking.position }}
+                </span>
+                <span *ngIf="!keyword.userRanking" class="no-ranking">—</span>
+              </td>
+              <td class="score-cell" *ngIf="viewMode === 'opportunities'">
+                <div
+                  class="score-badge"
+                  [class.high]="(keyword.opportunityScore || 0) >= 70"
+                  [class.medium]="(keyword.opportunityScore || 0) >= 40 && (keyword.opportunityScore || 0) < 70"
+                  [class.low]="(keyword.opportunityScore || 0) < 40"
+                >
+                  {{ keyword.opportunityScore }}
+                </div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Load More -->
+      <div class="load-more-container" *ngIf="hasMoreKeywords">
+        <button class="btn-load-more" (click)="loadMore()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+          Load More Keywords ({{ remainingCount }} remaining)
+        </button>
+      </div>
+    </div>
+
+    <!-- Empty State -->
+    <div class="empty-state" *ngIf="displayedKeywords.length === 0">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+        />
+      </svg>
+      <h4>No Keywords Found</h4>
+      <p *ngIf="viewMode === 'opportunities'">Great news! You're already ranking for most competitor keywords.</p>
+      <p *ngIf="viewMode === 'shared'">No keywords are shared between you and your competitors.</p>
+      <p *ngIf="viewMode === 'unique'">You don't have any unique keywords that competitors don't rank for.</p>
+      <p *ngIf="viewMode === 'all'">No keyword data available.</p>
+    </div>
+  </div>
+</div>
