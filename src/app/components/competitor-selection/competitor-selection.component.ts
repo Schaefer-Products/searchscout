@@ -17,6 +17,7 @@ export class CompetitorSelectionComponent {
   private cdr = inject(ChangeDetectorRef);
 
   @Input() userDomain: string = '';
+  @Input() preSelectedCompetitors: Competitor[] = [];
   @Output() competitorsSelected = new EventEmitter<Competitor[]>();
 
   // Discovery state
@@ -36,6 +37,21 @@ export class CompetitorSelectionComponent {
   // Error state
   errorMessage: string = '';
 
+  ngOnInit(): void {
+    // Pre-select competitors if provided
+    if (this.preSelectedCompetitors.length > 0) {
+      Logger.debug('Pre-selecting competitors:', this.preSelectedCompetitors);
+
+      // Add pre-selected competitors to the set
+      this.preSelectedCompetitors.forEach(comp => {
+        this.selectedCompetitors.add(comp.domain);
+      });
+
+      // If we have pre-selected competitors, auto-discover
+      this.discoverCompetitors();
+    }
+  }
+
   discoverCompetitors(): void {
     if (!this.userDomain) {
       this.errorMessage = 'No domain provided';
@@ -49,21 +65,47 @@ export class CompetitorSelectionComponent {
     this.dataforseoService.discoverCompetitors(this.userDomain).subscribe({
       next: (competitors) => {
         Logger.debug('Discovered competitors:', competitors.length);
-        this.allCompetitors = competitors;
-        this.displayedCompetitors = competitors.slice(0, this.displayLimit);
+
+        // Separate pre-selected competitors from newly discovered
+        const preSelectedDomains = new Set(this.preSelectedCompetitors.map(c => c.domain));
+
+        // Pre-selected competitors that were discovered (with updated data)
+        const preSelectedDiscovered = competitors.filter(c => preSelectedDomains.has(c.domain));
+
+        // Pre-selected manual competitors that weren't discovered
+        const preSelectedManual = this.preSelectedCompetitors.filter(
+          pc => !competitors.some(c => c.domain === pc.domain)
+        );
+
+        // Newly discovered competitors (not pre-selected)
+        const newlyDiscovered = competitors.filter(c => !preSelectedDomains.has(c.domain));
+
+        // Combine: pre-selected first (both discovered and manual), then new ones
+        this.allCompetitors = [
+          ...preSelectedDiscovered,
+          ...preSelectedManual,
+          ...newlyDiscovered
+        ];
+        this.displayedCompetitors = this.allCompetitors.slice(0, this.displayLimit);
         this.discoveryComplete = true;
         this.isDiscovering = false;
 
+        // Get cache metadata
         this.cacheMetadata = this.dataforseoService.getCompetitorsCacheMetadata(this.userDomain);
 
-        // Auto-select top 5 competitors
-        competitors.slice(0, 5).forEach(comp => {
-          this.selectedCompetitors.add(comp.domain);
-        });
+        // If no pre-selected competitors, auto-select top 5 discovered
+        if (this.preSelectedCompetitors.length === 0) {
+          competitors.slice(0, 5).forEach(comp => {
+            this.selectedCompetitors.add(comp.domain);
+          });
+        }
 
-        if (competitors.length === 0) {
+        // Pre-selected competitors are already in the Set from ngOnInit
+        if (this.allCompetitors.length === 0) {
           this.errorMessage = 'No competitors found. Try adding competitors manually.';
         }
+
+        Logger.debug('Competitors ordered - Pre-selected:', preSelectedDiscovered.length + preSelectedManual.length, 'New:', newlyDiscovered.length);
 
         this.cdr.detectChanges();
       },
@@ -83,11 +125,12 @@ export class CompetitorSelectionComponent {
     this.dataforseoService.clearCompetitorsCache(this.userDomain);
     this.cacheMetadata = null;
 
-    // Reset state
+    // Reset state but KEEP selected competitors
+    const currentlySelected = Array.from(this.selectedCompetitors);
     this.discoveryComplete = false;
     this.allCompetitors = [];
     this.displayedCompetitors = [];
-    this.selectedCompetitors.clear();
+    // Don't clear selectedCompetitors - keep current selection
 
     // Re-discover
     this.discoverCompetitors();

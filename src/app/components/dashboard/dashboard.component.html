@@ -222,8 +222,32 @@
     </div>
   </section>
 
+  <!-- Empty State -->
+  <section class="empty-state" *ngIf="hasAnalyzed && keywords.length === 0 && !errorMessage">
+    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+      />
+    </svg>
+    <h3>No Keywords Found</h3>
+    <p>This domain doesn't appear to have any ranking keywords yet.</p>
+    <p class="hint">This could mean the domain is new, not indexed, or you may have entered an incorrect domain.</p>
+  </section>
+
   <!-- Competitor Selection Section -->
-  <section class="competitor-section" *ngIf="hasAnalyzed && keywords.length > 0 && !showCompetitorSelection">
+  <section
+    class="competitor-section"
+    *ngIf="
+      hasAnalyzed &&
+      keywords.length > 0 &&
+      !showCompetitorSelection &&
+      !showCompetitorAnalysis &&
+      selectedCompetitors.length === 0
+    "
+  >
     <div class="competitor-prompt">
       <h3>Ready for the next step?</h3>
       <p>Discover and analyze your competitors to find keyword opportunities</p>
@@ -245,11 +269,12 @@
   <app-competitor-selection
     *ngIf="showCompetitorSelection"
     [userDomain]="domain"
+    [preSelectedCompetitors]="selectedCompetitors"
     (competitorsSelected)="onCompetitorsSelected($event)"
   ></app-competitor-selection>
 
   <!-- Selected Competitors Display -->
-  <section class="selected-competitors-section" *ngIf="selectedCompetitors.length > 0">
+  <section class="selected-competitors-section" *ngIf="selectedCompetitors.length > 0 && !showCompetitorSelection">
     <div class="selected-header">
       <h3>Selected Competitors ({{ selectedCompetitors.length }})</h3>
       <button class="btn-change" (click)="showCompetitorSelection = true">Change Selection</button>
@@ -260,7 +285,8 @@
         <span class="overlap" *ngIf="!competitor.isManual"> {{ competitor.keywordOverlap }} shared </span>
       </div>
     </div>
-    <div class="analyze-action">
+    <!-- Start Analysis Button (only shown before analysis) -->
+    <div *ngIf="!showCompetitorAnalysis" class="analyze-action">
       <button class="btn-analyze" (click)="showCompetitorAnalysis = true">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
@@ -281,19 +307,4 @@
     [userKeywords]="keywords"
     [competitors]="selectedCompetitors"
   ></app-competitor-analysis>
-
-  <!-- Empty State -->
-  <section class="empty-state" *ngIf="hasAnalyzed && keywords.length === 0 && !errorMessage">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
-      />
-    </svg>
-    <h3>No Keywords Found</h3>
-    <p>This domain doesn't appear to have any ranking keywords yet.</p>
-    <p class="hint">This could mean the domain is new, not indexed, or you may have entered an incorrect domain.</p>
-  </section>
 </div>
