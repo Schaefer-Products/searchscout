@@ -2,6 +2,7 @@ import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DataforseoService } from '../../services/dataforseo.service';
+import { StorageService } from '../../services/storage.service';
 import { DomainKeywordRanking } from '../../models/keyword.model';
 import { Competitor } from '../../models/competitor.model';
 import { CompetitorSelectionComponent } from '../competitor-selection/competitor-selection.component';
@@ -17,6 +18,7 @@ import { Logger } from '../../utils/logger';
 })
 export class DashboardComponent implements OnInit {
   private dataforseoService = inject(DataforseoService);
+  private storageService = inject(StorageService);
   private cdr = inject(ChangeDetectorRef);
 
   // Form state
@@ -43,8 +45,26 @@ export class DashboardComponent implements OnInit {
   showCompetitorAnalysis: boolean = false;
 
   ngOnInit(): void {
-    // Check if user came from successful API key setup
-    // Could load last analyzed domain from localStorage if desired
+    // Load saved domain and competitors on init
+    const savedDomain = this.storageService.getCurrentDomain();
+    if (savedDomain) {
+      this.domain = savedDomain;
+      Logger.debug('Restored domain from storage:', savedDomain);
+
+      // Load saved competitors for this domain
+      const savedCompetitors = this.storageService.getSelectedCompetitors(savedDomain);
+      if (savedCompetitors && savedCompetitors.length > 0) {
+        this.selectedCompetitors = savedCompetitors;
+        Logger.debug('Restored competitors from storage:', savedCompetitors);
+      }
+
+      // Auto-analyze if we have cached data
+      const cachedKeywords = this.dataforseoService.getDomainCacheMetadata(savedDomain);
+      if (cachedKeywords) {
+        Logger.debug('Found cached keywords, auto-analyzing...');
+        this.analyzeDomain();
+      }
+    }
   }
 
   analyzeDomain(): void {
@@ -63,8 +83,28 @@ export class DashboardComponent implements OnInit {
       return;
     }
 
-    this.selectedCompetitors = [];
-    this.showCompetitorSelection = false;
+    // Check if this is a DIFFERENT domain than what's saved
+    const savedDomain = this.storageService.getCurrentDomain();
+    const isDifferentDomain = savedDomain !== cleanDomain;
+
+    // Save current domain to storage (update to new domain)
+    this.storageService.saveCurrentDomain(cleanDomain);
+
+    // Load competitors for this domain (even if it's the same domain)
+    const savedCompetitors = this.storageService.getSelectedCompetitors(cleanDomain);
+
+    if (isDifferentDomain) {
+      Logger.debug('Different domain detected, loading saved competitors for:', cleanDomain);
+
+      // Load saved competitors for the new domain (or empty array if none)
+      this.selectedCompetitors = savedCompetitors || [];
+      this.showCompetitorSelection = false;
+      this.showCompetitorAnalysis = false;
+
+      Logger.debug('Loaded competitors:', this.selectedCompetitors);
+    } else {
+      Logger.debug('Same domain, keeping current competitor state');
+    }
 
     this.isAnalyzing = true;
     this.hasAnalyzed = false;
@@ -80,7 +120,6 @@ export class DashboardComponent implements OnInit {
         this.hasAnalyzed = true;
         this.isAnalyzing = false;
 
-        // Get cache metadata
         this.cacheMetadata = this.dataforseoService.getDomainCacheMetadata(cleanDomain);
 
         if (keywords.length === 0) {
@@ -96,6 +135,20 @@ export class DashboardComponent implements OnInit {
         this.cdr.detectChanges();
       }
     });
+  }
+
+  onCompetitorsSelected(competitors: Competitor[]): void {
+    Logger.debug('Competitors selected:', competitors);
+    this.selectedCompetitors = competitors;
+    this.showCompetitorSelection = false;
+    this.showCompetitorAnalysis = true;
+
+    // Save selected competitors to storage
+    const cleanDomain = this.cleanDomain(this.domain);
+    this.storageService.saveSelectedCompetitors(cleanDomain, competitors);
+    Logger.debug('Saved competitors to storage');
+
+    this.cdr.detectChanges();
   }
 
   refreshData(): void {
@@ -184,15 +237,5 @@ export class DashboardComponent implements OnInit {
 
   get topThreeCount(): number {
     return this.keywords.filter(k => k.position <= 3).length;
-  }
-
-  onCompetitorsSelected(competitors: Competitor[]): void {
-    Logger.debug('Competitors selected:', competitors);
-    this.selectedCompetitors = competitors;
-    this.showCompetitorSelection = false;
-    this.showCompetitorAnalysis = true;
-
-    Logger.debug('Starting competitor analysis...');
-    this.cdr.detectChanges();
   }
 }
