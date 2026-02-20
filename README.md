@@ -37,9 +37,13 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - [x] "Find Your Competitors" section doesn't show cache age
 
 ### Features
-- [ ] Persist competitor selection
+- [x] Persist competitor selection
 - [ ] Estimated cost tracking
-- [ ] Click "Change Selection" should pre-populate the competitors list
+- [x] Click "Change Selection" should pre-populate the competitors list
+- [ ] Allow user to explicitly select relevant keywords and exclude irrelevant keywords
+      - Persist the selection
+      - Prioritize relevant keywords in the "Blog Topics" generator
+      - Star the relevant keywords
 
 ## Tech Debt
 - [ ] refactoring/consolidation of scss

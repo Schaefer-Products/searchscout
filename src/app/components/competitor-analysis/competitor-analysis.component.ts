@@ -4,10 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Competitor } from '../../models/competitor.model';
 import { DomainKeywordRanking } from '../../models/keyword.model';
 import { AggregatedKeyword, CompetitorAnalysisResults } from '../../models/aggregated-keyword.model';
+import { BlogTopic } from '../../models/blog-topic.model';
 import { CompetitorAnalysisService } from '../../services/competitor-analysis.service';
+import { BlogTopicGeneratorService } from '../../services/blog-topic-generator.service';
 import { Logger } from '../../utils/logger';
 
-type ViewMode = 'opportunities' | 'all' | 'shared' | 'unique';
+type ViewMode = 'opportunities' | 'all' | 'shared' | 'unique' | 'blog-topics';
 
 @Component({
   selector: 'app-competitor-analysis',
@@ -18,6 +20,7 @@ type ViewMode = 'opportunities' | 'all' | 'shared' | 'unique';
 })
 export class CompetitorAnalysisComponent implements OnInit {
   private analysisService = inject(CompetitorAnalysisService);
+  private blogTopicService = inject(BlogTopicGeneratorService);
   private cdr = inject(ChangeDetectorRef);
 
   @Input() userDomain: string = '';
@@ -30,9 +33,13 @@ export class CompetitorAnalysisComponent implements OnInit {
   results: CompetitorAnalysisResults | null = null;
   errorMessage: string = '';
 
+  // Blog topics
+  blogTopics: BlogTopic[] = [];
+
   // Display state
   viewMode: ViewMode = 'opportunities';
   displayedKeywords: AggregatedKeyword[] = [];
+  displayedTopics: BlogTopic[] = [];
   displayLimit: number = 50;
 
   // Sorting
@@ -68,7 +75,12 @@ export class CompetitorAnalysisComponent implements OnInit {
         this.analysisComplete = true;
         this.isAnalyzing = false;
 
-        // Get cache metadata
+        // Generate blog topics from opportunities
+        if (results.opportunities.length > 0) {
+          this.blogTopics = this.blogTopicService.generateTopics(results.opportunities, 20);
+          Logger.debug('Generated blog topics:', this.blogTopics.length);
+        }
+
         this.cacheMetadata = this.analysisService.getCacheMetadata(
           this.userDomain,
           this.competitors
@@ -76,7 +88,6 @@ export class CompetitorAnalysisComponent implements OnInit {
 
         // Set initial display (opportunities)
         this.updateDisplayedKeywords();
-
         this.cdr.detectChanges();
       },
       error: (error) => {
@@ -97,7 +108,12 @@ export class CompetitorAnalysisComponent implements OnInit {
 
   setViewMode(mode: ViewMode): void {
     this.viewMode = mode;
-    this.updateDisplayedKeywords();
+
+    if (mode === 'blog-topics') {
+      this.displayedTopics = this.blogTopics.slice(0, 20);
+    } else {
+      this.updateDisplayedKeywords();
+    }
   }
 
   updateDisplayedKeywords(): void {
@@ -118,6 +134,9 @@ export class CompetitorAnalysisComponent implements OnInit {
       case 'unique':
         keywords = this.results.uniqueToUser;
         break;
+      case 'blog-topics':
+        // Handled separately
+        return;
     }
 
     // Apply sorting
@@ -214,5 +233,19 @@ export class CompetitorAnalysisComponent implements OnInit {
     }
 
     return totalCount - this.displayedKeywords.length;
+  }
+
+  getCategoryLabel(category: string): string {
+    const labels: { [key: string]: string } = {
+      'how-to': 'How-to',
+      'list': 'List',
+      'best-of': 'Best Of',
+      'guide': 'Guide',
+      'tips': 'Tips',
+      'comparison': 'Comparison',
+      'ultimate': 'Ultimate',
+      'vs': 'Versus'
+    };
+    return labels[category] || category;
   }
 }

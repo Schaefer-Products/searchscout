@@ -74,6 +74,24 @@
         </div>
       </div>
 
+      <div class="stat-card blog-topics" (click)="setViewMode('blog-topics')" *ngIf="blogTopics.length > 0">
+        <div class="stat-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+            />
+          </svg>
+        </div>
+        <div class="stat-content">
+          <div class="stat-label">Blog Topics</div>
+          <div class="stat-value">{{ blogTopics.length }}</div>
+          <div class="stat-hint">Ready-to-use titles</div>
+        </div>
+      </div>
+
       <div class="stat-card" (click)="setViewMode('shared')">
         <div class="stat-icon">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -137,6 +155,22 @@
         </svg>
         Opportunities ({{ results.opportunities.length }})
       </button>
+      <button
+        class="tab blog-tab"
+        [class.active]="viewMode === 'blog-topics'"
+        (click)="setViewMode('blog-topics')"
+        *ngIf="blogTopics.length > 0"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+          />
+        </svg>
+        Blog Topics ({{ blogTopics.length }})
+      </button>
       <button class="tab" [class.active]="viewMode === 'all'" (click)="setViewMode('all')">
         All Keywords ({{ results.totalKeywords }})
       </button>
@@ -148,8 +182,114 @@
       </button>
     </div>
 
+    <!-- Blog Topics Table -->
+    <div class="blog-topics-container" *ngIf="viewMode === 'blog-topics' && displayedTopics.length > 0">
+      <div class="topics-intro">
+        <h4>Ready-to-Use Blog Post Titles</h4>
+        <p>
+          These titles are generated from your keyword opportunities using proven blog post templates. Pick the ones you
+          like and start creating content!
+        </p>
+        <div class="score-legend">
+          <div class="legend-title">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
+            </svg>
+            <strong>Recommendation Score (0-100):</strong>
+          </div>
+          <div class="legend-items">
+            <span class="legend-item">
+              <span class="legend-badge high">70+</span>
+              High Priority - Great opportunity with good volume and low difficulty
+            </span>
+            <span class="legend-item">
+              <span class="legend-badge medium">40-69</span>
+              Medium Priority - Solid opportunity worth considering
+            </span>
+            <span class="legend-item">
+              <span class="legend-badge low">&lt;40</span>
+              Lower Priority - May require more effort to rank
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="topics-grid">
+        <div class="topic-card" *ngFor="let topic of displayedTopics; let i = index">
+          <div class="topic-header">
+            <div class="topic-rank">#{{ i + 1 }}</div>
+            <div class="topic-score">
+              <span
+                class="score-value"
+                [class.high]="topic.recommendationScore >= 70"
+                [class.medium]="topic.recommendationScore >= 40 && topic.recommendationScore < 70"
+                [class.low]="topic.recommendationScore < 40"
+              >
+                {{ topic.recommendationScore }}
+              </span>
+            </div>
+          </div>
+
+          <h5 class="topic-title">{{ topic.title }}</h5>
+
+          <div class="topic-meta">
+            <span class="meta-item keyword">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"
+                />
+              </svg>
+              {{ topic.keyword }}
+            </span>
+            <span
+              class="meta-item category"
+              [class.how-to]="topic.templateCategory === 'how-to'"
+              [class.list]="topic.templateCategory === 'list'"
+              [class.best-of]="topic.templateCategory === 'best-of'"
+              [class.guide]="topic.templateCategory === 'guide'"
+              [class.tips]="topic.templateCategory === 'tips'"
+              [class.comparison]="topic.templateCategory === 'comparison'"
+              [class.ultimate]="topic.templateCategory === 'ultimate'"
+            >
+              {{ getCategoryLabel(topic.templateCategory) }}
+            </span>
+          </div>
+
+          <div class="topic-stats">
+            <div class="stat">
+              <span class="stat-label">Volume</span>
+              <span class="stat-value">{{ topic.searchVolume | number }}</span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Difficulty</span>
+              <span
+                class="stat-value"
+                [class.easy]="topic.difficulty < 30"
+                [class.medium]="topic.difficulty >= 30 && topic.difficulty < 70"
+                [class.hard]="topic.difficulty >= 70"
+              >
+                {{ topic.difficulty }}
+              </span>
+            </div>
+            <div class="stat">
+              <span class="stat-label">Competitors</span>
+              <span class="stat-value">{{ topic.competitorCount }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
     <!-- Keywords Table -->
-    <div class="table-container" *ngIf="displayedKeywords.length > 0">
+    <div class="table-container" *ngIf="viewMode !== 'blog-topics' && displayedKeywords.length > 0">
       <div class="scroll-hint">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -239,7 +379,7 @@
     </div>
 
     <!-- Empty State -->
-    <div class="empty-state" *ngIf="displayedKeywords.length === 0">
+    <div class="empty-state" *ngIf="viewMode !== 'blog-topics' && displayedKeywords.length === 0">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path
           stroke-linecap="round"
