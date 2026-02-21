@@ -20,5 +20,5 @@
     }
   },
   "forwardPorts": [4200],
-  "postCreateCommand": "npm install"
+  "postCreateCommand": "npm install && npm install -g @anthropic-ai/claude-code"
 }
