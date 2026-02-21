@@ -286,6 +286,15 @@
           </div>
         </div>
       </div>
+
+      <div class="load-more-topics" *ngIf="hasMoreTopics">
+        <button class="btn-load-more" (click)="loadMoreTopics()">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+          </svg>
+          Load More Blog Topics ({{ remainingTopicsCount }} remaining)
+        </button>
+      </div>
     </div>
 
     <!-- Keywords Table -->

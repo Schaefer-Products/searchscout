@@ -77,7 +77,12 @@ export class CompetitorAnalysisComponent implements OnInit {
 
         // Generate blog topics from opportunities
         if (results.opportunities.length > 0) {
-          this.blogTopics = this.blogTopicService.generateTopics(results.opportunities, 20);
+          // Generate topics for ALL opportunities (no limit)
+          // The service will handle scoring and sorting
+          this.blogTopics = this.blogTopicService.generateTopics(
+            results.opportunities,
+            results.opportunities.length // Generate for all opportunities
+          );
           Logger.debug('Generated blog topics:', this.blogTopics.length);
         }
 
@@ -233,6 +238,21 @@ export class CompetitorAnalysisComponent implements OnInit {
     }
 
     return totalCount - this.displayedKeywords.length;
+  }
+
+  loadMoreTopics(): void {
+    const currentLength = this.displayedTopics.length;
+    const newLimit = Math.min(currentLength + 20, this.blogTopics.length);
+    this.displayedTopics = this.blogTopics.slice(0, newLimit);
+    this.cdr.detectChanges();
+  }
+
+  get hasMoreTopics(): boolean {
+    return this.displayedTopics.length < this.blogTopics.length;
+  }
+
+  get remainingTopicsCount(): number {
+    return this.blogTopics.length - this.displayedTopics.length;
   }
 
   getCategoryLabel(category: string): string {

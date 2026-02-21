@@ -878,4 +878,36 @@
       }
     }
   }
+
+  .load-more-topics {
+    text-align: center;
+    padding: 2rem 0 1rem;
+
+    .btn-load-more {
+      padding: 0.875rem 2rem;
+      background: white;
+      border: 2px solid #48bb78;
+      color: #48bb78;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+
+      svg {
+        width: 16px;
+        height: 16px;
+      }
+
+      &:hover {
+        background: #48bb78;
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 8px rgba(72, 187, 120, 0.3);
+      }
+    }
+  }
 }
