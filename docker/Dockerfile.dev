@@ -6,6 +6,7 @@ RUN apk add \
     g++ \
     git \
     make \
+    openssh \
     python3 \
     --no-cache
 
