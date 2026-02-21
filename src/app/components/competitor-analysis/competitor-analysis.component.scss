@@ -576,14 +576,13 @@
 
     .view-tabs {
       .tab {
-        flex: 1;
-        justify-content: center;
-        min-width: 0;
-        font-size: 0.75rem;
-        padding: 0.5rem 0.75rem;
+        flex: 0 1 auto;
+        padding: 0.625rem 0.75rem;
+        font-size: 0.8rem;
 
         svg {
-          display: none;
+          width: 14px;
+          height: 14px;
         }
       }
     }
