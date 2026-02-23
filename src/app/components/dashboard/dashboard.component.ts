@@ -141,6 +141,12 @@ export class DashboardComponent implements OnInit {
     Logger.debug('Competitors selected:', competitors);
     this.selectedCompetitors = competitors;
     this.showCompetitorSelection = false;
+
+    // Reset to false first so *ngIf destroys the existing component instance,
+    // ensuring ngOnInit fires fresh when it is recreated with the new competitor set.
+    this.showCompetitorAnalysis = false;
+    this.cdr.detectChanges();
+
     this.showCompetitorAnalysis = true;
 
     // Save selected competitors to storage
