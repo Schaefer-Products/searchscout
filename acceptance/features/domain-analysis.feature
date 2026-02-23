@@ -50,3 +50,13 @@ Feature: Domain Keyword Analysis
     And I see a "Load More Keywords" button showing the remaining count
     When I click "Load More Keywords"
     Then the next 100 keywords are appended below the existing results
+
+  Scenario: Previously saved competitors are not shown before domain analysis runs
+    Given I have previously analyzed "example.com" and saved a competitor selection
+    And my API credentials have expired and I have re-entered them
+    When I arrive at the dashboard
+    Then the domain input is pre-filled with "example.com"
+    But the selected competitors section is not visible
+    When I click "Analyze Domain"
+    Then the keyword results appear
+    And the selected competitors section becomes visible

@@ -36,7 +36,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - [x] Switching domains doesn't clear competitors
 - [x] "Find Your Competitors" section doesn't show cache age
 - [x] Changing competitors doesn't refresh the data
-- [ ] Given I have to re-enter credentials, when the "Analyze Your Domain" section appears, then the selected competitors section should not appear until I've clicked "Analyze Domain"
+- [x] Given I have to re-enter credentials, when the "Analyze Your Domain" section appears, then the selected competitors section should not appear until I've clicked "Analyze Domain"
 
 ### Features
 - [x] Persist competitor selection

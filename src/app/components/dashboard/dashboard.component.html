@@ -274,7 +274,7 @@
   ></app-competitor-selection>
 
   <!-- Selected Competitors Display -->
-  <section class="selected-competitors-section" *ngIf="selectedCompetitors.length > 0 && !showCompetitorSelection">
+  <section class="selected-competitors-section" *ngIf="selectedCompetitors.length > 0 && !showCompetitorSelection && hasAnalyzed">
     <div class="selected-header">
       <h3>Selected Competitors ({{ selectedCompetitors.length }})</h3>
       <button class="btn-change" (click)="showCompetitorSelection = true">Change Selection</button>
