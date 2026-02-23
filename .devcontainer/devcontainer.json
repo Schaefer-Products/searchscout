@@ -10,6 +10,7 @@
     "vscode": {
       "extensions": [
         "angular.ng-template",
+        "Anthropic.claude-code",
         "dbaeumer.vscode-eslint",
         "esbenp.prettier-vscode"
       ],
