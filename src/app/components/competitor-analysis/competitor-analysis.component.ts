@@ -7,6 +7,7 @@ import { AggregatedKeyword, CompetitorAnalysisResults } from '../../models/aggre
 import { BlogTopic } from '../../models/blog-topic.model';
 import { CompetitorAnalysisService } from '../../services/competitor-analysis.service';
 import { BlogTopicGeneratorService } from '../../services/blog-topic-generator.service';
+import { ExportService } from '../../services/export.service';
 import { Logger } from '../../utils/logger';
 
 type ViewMode = 'opportunities' | 'all' | 'shared' | 'unique' | 'blog-topics';
@@ -21,6 +22,7 @@ type ViewMode = 'opportunities' | 'all' | 'shared' | 'unique' | 'blog-topics';
 export class CompetitorAnalysisComponent implements OnInit {
   private analysisService = inject(CompetitorAnalysisService);
   private blogTopicService = inject(BlogTopicGeneratorService);
+  private exportService = inject(ExportService);
   private cdr = inject(ChangeDetectorRef);
 
   @Input() userDomain: string = '';
@@ -267,5 +269,26 @@ export class CompetitorAnalysisComponent implements OnInit {
       'vs': 'Versus'
     };
     return labels[category] || category;
+  }
+
+  exportCurrentView(): void {
+    if (!this.results) return;
+    const competitorDomains = this.competitors.map(c => c.domain);
+
+    if (this.viewMode === 'blog-topics') {
+      this.exportService.exportBlogTopics(this.blogTopics, this.userDomain, competitorDomains);
+    } else if (this.viewMode === 'opportunities') {
+      this.exportService.exportOpportunities(this.results.opportunities, this.userDomain, competitorDomains);
+    } else {
+      this.exportService.exportAllKeywords(this.results, this.userDomain, competitorDomains);
+    }
+  }
+
+  get exportButtonLabel(): string {
+    switch (this.viewMode) {
+      case 'blog-topics': return 'Export Blog Topics';
+      case 'opportunities': return 'Export Opportunities';
+      default: return 'Export All Keywords';
+    }
   }
 }
