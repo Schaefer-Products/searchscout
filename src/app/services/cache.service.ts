@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import * as LZString from 'lz-string';
 import { environment } from '../../environments/environment';
 import { Logger } from '../utils/logger';
 
@@ -49,7 +50,8 @@ export class CacheService {
     };
 
     try {
-      localStorage.setItem(cacheKey, JSON.stringify(entry));
+      const compressed = LZString.compressToUTF16(JSON.stringify(entry));
+      localStorage.setItem(cacheKey, compressed);
       Logger.debug('Cached data:', key, 'expires in', days, 'days');
     } catch (error) {
       Logger.error('Failed to cache data:', error);
@@ -78,7 +80,13 @@ export class CacheService {
     }
 
     try {
-      const entry: CacheEntry<T> = JSON.parse(item);
+      const decompressed = LZString.decompressFromUTF16(item);
+      if (!decompressed) {
+        Logger.debug('Cache decompression failed (stale uncompressed entry), evicting:', key);
+        this.remove(key);
+        return null;
+      }
+      const entry: CacheEntry<T> = JSON.parse(decompressed);
 
       // Check if expired
       if (entry.expiresAt < Date.now()) {
@@ -134,7 +142,9 @@ export class CacheService {
     }
 
     try {
-      const entry: CacheEntry<any> = JSON.parse(item);
+      const decompressed = LZString.decompressFromUTF16(item);
+      if (!decompressed) return null;
+      const entry: CacheEntry<any> = JSON.parse(decompressed);
       return {
         timestamp: entry.timestamp,
         ageInDays: this.getAgeInDays(entry.timestamp)
@@ -202,8 +212,11 @@ export class CacheService {
         const item = localStorage.getItem(key);
         if (item) {
           try {
-            const entry = JSON.parse(item);
-            entries.push({ key, timestamp: entry.timestamp });
+            const decompressed = LZString.decompressFromUTF16(item);
+            if (decompressed) {
+              const entry = JSON.parse(decompressed);
+              entries.push({ key, timestamp: entry.timestamp });
+            }
           } catch {
             // Not a recognised cache entry, leave it alone
           }
