@@ -17,7 +17,7 @@ export interface CacheConfig {
   providedIn: 'root'
 })
 export class CacheService {
-  private readonly CACHE_PREFIX = 'searchscout_';
+  private readonly CACHE_PREFIX = 'searchscout_cache_';
   private readonly CONFIG_KEY = 'searchscout_cache_config';
 
   constructor() {
@@ -205,8 +205,7 @@ export class CacheService {
             const entry = JSON.parse(item);
             entries.push({ key, timestamp: entry.timestamp });
           } catch {
-            // Invalid entry, add to removal list
-            localStorage.removeItem(key);
+            // Not a recognised cache entry, leave it alone
           }
         }
       }
