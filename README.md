@@ -30,11 +30,13 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ## TODO
 ### Development and CI/CD
 - [x] git in dev container
-- [ ] deployment to netlify
+- [x] deployment to netlify
 
 ### Bugs
 - [x] Switching domains doesn't clear competitors
 - [x] "Find Your Competitors" section doesn't show cache age
+- [ ] Changing competitors doesn't refresh the data
+- [ ] Given I have to re-enter credentials, when the "Analyze Your Domain" section appears, then the selected competitors section should not appear until I've clicked "Analyze Domain"
 
 ### Features
 - [x] Persist competitor selection
@@ -51,3 +53,4 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - [ ] unit tests
 - [ ] unit test coverage
 - [ ] merge environment files with default
+- [ ] save competitor keywords in separate files
