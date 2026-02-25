@@ -441,6 +441,65 @@ describe('CompetitorAnalysisComponent', () => {
       component.sortBy('searchVolume'); // new column → desc
       expect(component.displayedKeywords[0].searchVolume).toBe(500);
     });
+
+    it('should sort by keyword string ascending (localeCompare)', () => {
+      const keywords = [
+        makeKeyword({ keyword: 'zebra keyword' }),
+        makeKeyword({ keyword: 'apple keyword' }),
+        makeKeyword({ keyword: 'mango keyword' }),
+      ];
+      component.results = makeResults({ opportunities: keywords });
+      component.viewMode = 'opportunities';
+      component.sortColumn = 'keyword';
+      component.sortDirection = 'asc';
+      component.updateDisplayedKeywords();
+      expect(component.displayedKeywords[0].keyword).toBe('apple keyword');
+      expect(component.displayedKeywords[2].keyword).toBe('zebra keyword');
+    });
+
+    it('should sort by keyword string descending (localeCompare)', () => {
+      const keywords = [
+        makeKeyword({ keyword: 'apple keyword' }),
+        makeKeyword({ keyword: 'zebra keyword' }),
+        makeKeyword({ keyword: 'mango keyword' }),
+      ];
+      component.results = makeResults({ opportunities: keywords });
+      component.viewMode = 'opportunities';
+      component.sortColumn = 'keyword';
+      component.sortDirection = 'desc';
+      component.updateDisplayedKeywords();
+      expect(component.displayedKeywords[0].keyword).toBe('zebra keyword');
+      expect(component.displayedKeywords[2].keyword).toBe('apple keyword');
+    });
+
+    it('should sort by userRanking position (desc), treating null as position 999', () => {
+      const keywords = [
+        makeKeyword({ keyword: 'a', userRanking: { position: 3 } }),
+        makeKeyword({ keyword: 'b', userRanking: null }),
+        makeKeyword({ keyword: 'c', userRanking: { position: 10 } }),
+      ];
+      component.results = makeResults({ opportunities: keywords });
+      component.viewMode = 'opportunities';
+      component.sortColumn = 'searchVolume';
+      component.sortBy('userRanking'); // new column → desc (999 first)
+      expect(component.displayedKeywords[0].keyword).toBe('b'); // null → 999
+      expect(component.displayedKeywords[1].keyword).toBe('c'); // 10
+      expect(component.displayedKeywords[2].keyword).toBe('a'); // 3
+    });
+
+    it('should return stable order when values are neither string nor number', () => {
+      // isOpportunity is boolean → hits the return 0 fallback branch
+      const keywords = [
+        makeKeyword({ keyword: 'first', isOpportunity: true }),
+        makeKeyword({ keyword: 'second', isOpportunity: false }),
+      ];
+      component.results = makeResults({ opportunities: keywords });
+      component.viewMode = 'opportunities';
+      component.sortColumn = 'isOpportunity' as keyof AggregatedKeyword;
+      component.sortDirection = 'desc';
+      component.updateDisplayedKeywords();
+      expect(component.displayedKeywords.length).toBe(2);
+    });
   });
 
   // ---------------------------------------------------------------------------
@@ -491,6 +550,30 @@ describe('CompetitorAnalysisComponent', () => {
       component.displayedKeywords = keywords;
       expect(component.hasMoreKeywords).toBeFalse();
     });
+
+    it('should use allKeywords total when viewMode is "all"', () => {
+      const many = Array.from({ length: 60 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
+      component.results = makeResults({ allKeywords: many });
+      component.viewMode = 'all';
+      component.displayedKeywords = many.slice(0, 50);
+      expect(component.hasMoreKeywords).toBeTrue();
+    });
+
+    it('should use shared total when viewMode is "shared"', () => {
+      const many = Array.from({ length: 60 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
+      component.results = makeResults({ shared: many });
+      component.viewMode = 'shared';
+      component.displayedKeywords = many.slice(0, 50);
+      expect(component.hasMoreKeywords).toBeTrue();
+    });
+
+    it('should use uniqueToUser total when viewMode is "unique"', () => {
+      const many = Array.from({ length: 60 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
+      component.results = makeResults({ uniqueToUser: many });
+      component.viewMode = 'unique';
+      component.displayedKeywords = many.slice(0, 50);
+      expect(component.hasMoreKeywords).toBeTrue();
+    });
   });
 
   describe('remainingCount', () => {
@@ -503,6 +586,30 @@ describe('CompetitorAnalysisComponent', () => {
       const keywords = Array.from({ length: 10 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
       component.results = makeResults({ opportunities: keywords });
       component.viewMode = 'opportunities';
+      component.displayedKeywords = keywords.slice(0, 6);
+      expect(component.remainingCount).toBe(4);
+    });
+
+    it('should use allKeywords total when viewMode is "all"', () => {
+      const keywords = Array.from({ length: 10 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
+      component.results = makeResults({ allKeywords: keywords });
+      component.viewMode = 'all';
+      component.displayedKeywords = keywords.slice(0, 6);
+      expect(component.remainingCount).toBe(4);
+    });
+
+    it('should use shared total when viewMode is "shared"', () => {
+      const keywords = Array.from({ length: 10 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
+      component.results = makeResults({ shared: keywords });
+      component.viewMode = 'shared';
+      component.displayedKeywords = keywords.slice(0, 6);
+      expect(component.remainingCount).toBe(4);
+    });
+
+    it('should use uniqueToUser total when viewMode is "unique"', () => {
+      const keywords = Array.from({ length: 10 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
+      component.results = makeResults({ uniqueToUser: keywords });
+      component.viewMode = 'unique';
       component.displayedKeywords = keywords.slice(0, 6);
       expect(component.remainingCount).toBe(4);
     });
@@ -529,6 +636,33 @@ describe('CompetitorAnalysisComponent', () => {
       component.displayedKeywords = keywords.slice(0, 50);
       component.loadMore();
       expect(component.displayedKeywords.length).toBe(60);
+    });
+
+    it('should load more from allKeywords when viewMode is "all"', () => {
+      const keywords = Array.from({ length: 120 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
+      component.results = makeResults({ allKeywords: keywords });
+      component.viewMode = 'all';
+      component.displayedKeywords = keywords.slice(0, 50);
+      component.loadMore();
+      expect(component.displayedKeywords.length).toBe(100);
+    });
+
+    it('should load more from shared when viewMode is "shared"', () => {
+      const keywords = Array.from({ length: 120 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
+      component.results = makeResults({ shared: keywords });
+      component.viewMode = 'shared';
+      component.displayedKeywords = keywords.slice(0, 50);
+      component.loadMore();
+      expect(component.displayedKeywords.length).toBe(100);
+    });
+
+    it('should load more from uniqueToUser when viewMode is "unique"', () => {
+      const keywords = Array.from({ length: 120 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
+      component.results = makeResults({ uniqueToUser: keywords });
+      component.viewMode = 'unique';
+      component.displayedKeywords = keywords.slice(0, 50);
+      component.loadMore();
+      expect(component.displayedKeywords.length).toBe(100);
     });
   });
 
