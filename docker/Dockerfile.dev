@@ -3,12 +3,15 @@ FROM node:20-alpine
 WORKDIR /app
 
 RUN apk add \
+    chromium \
     g++ \
     git \
     make \
     openssh \
     python3 \
     --no-cache
+
+ENV CHROME_BIN=/usr/bin/chromium-browser
 
 COPY package*.json ./
 

@@ -9,6 +9,8 @@ services:
       - ./angular.json:/app/angular.json
       - ./tsconfig.json:/app/tsconfig.json
       - ./tsconfig.app.json:/app/tsconfig.app.json
+      - ./tsconfig.spec.json:/app/tsconfig.spec.json
+      - ./karma.conf.js:/app/karma.conf.js
       - ./package.json:/app/package.json
       - ./package-lock.json:/app/package-lock.json
       - /app/node_modules
@@ -17,6 +19,7 @@ services:
     environment:
       - NODE_ENV=development
       - CHOKIDAR_USEPOLLING=true
+      - CHROME_BIN=/usr/bin/chromium-browser
     command: npx ng serve --host 0.0.0.0 --poll 2000
     stdin_open: true
     tty: true

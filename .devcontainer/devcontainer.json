@@ -5,6 +5,9 @@
     "docker-compose.devcontainer.yml"
   ],
   "service": "angular-app",
+  "containerEnv": {
+    "SHELL": "/bin/sh"
+  },
   "workspaceFolder": "/app",
   "customizations": {
     "vscode": {
