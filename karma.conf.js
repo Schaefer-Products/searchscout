@@ -13,7 +13,7 @@ module.exports = function (config) {
     coverageReporter: {
       dir: require('path').join(__dirname, './coverage/searchscout'),
       subdir: '.',
-      reporters: [{ type: 'html' }, { type: 'text-summary' }],
+      reporters: [{ type: 'html' }, { type: 'text' }],
     },
     reporters: ['progress', 'kjhtml'],
     browsers: ['ChromeHeadlessNoSandbox'],
