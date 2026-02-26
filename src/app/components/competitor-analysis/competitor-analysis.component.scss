@@ -1,4 +1,5 @@
 @use 'variables' as *;
+@use 'mixins' as *;
 
 .competitor-analysis-container {
   margin-top: $space-8;
@@ -56,20 +57,14 @@
 
 // Error Message
 .error-message {
-  display: flex;
-  align-items: center;
-  gap: $space-2;
-  padding: $space-4;
-  background: $color-error-bg;
-  border: 1px solid $color-error-border;
+  @include error-message;
+  padding: $space-4; // slightly larger than default for this component
   border-radius: $radius-md;
-  color: $color-error-text;
   margin-bottom: $space-8;
 
   svg {
     width: 20px;
     height: 20px;
-    flex-shrink: 0;
   }
 }
 
@@ -82,55 +77,7 @@
     flex-wrap: wrap;
     gap: $space-4;
 
-    .cache-info {
-      display: flex;
-      align-items: center;
-      gap: $space-2;
-      padding: $space-2 $space-4;
-      background: $color-bg-subtle;
-      border-radius: $radius-sm;
-      font-size: $font-size-sm;
-      color: $color-text-body;
-
-      &.fresh {
-        background: $color-fresh-bg;
-        color: $color-fresh-text;
-      }
-
-      svg {
-        width: 16px;
-        height: 16px;
-      }
-    }
-
-    .btn-refresh {
-      display: flex;
-      align-items: center;
-      gap: $space-2;
-      padding: $space-2 $space-4;
-      background: $color-white;
-      border: 2px solid $color-primary;
-      color: $color-primary;
-      border-radius: $radius-sm;
-      font-size: $font-size-sm;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-
-      svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      &:hover:not(:disabled) {
-        background: $color-bg-page;
-      }
-
-      &:disabled {
-        opacity: 0.5;
-        cursor: not-allowed;
-      }
-    }
+    @include cache-header-controls;
   }
 
   .export-row {
@@ -165,18 +112,10 @@
 
   // Stats Grid
   .stats-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: $space-6;
-    margin-bottom: $space-8;
+    @include stats-grid;
 
     .stat-card {
-      background: $color-white;
-      border-radius: $radius-lg;
-      padding: $space-6;
-      box-shadow: $shadow-xs;
-      display: flex;
-      gap: $space-4;
+      @include stat-card-layout;
       cursor: pointer;
       transition: all 0.2s;
       border: 2px solid transparent;
@@ -188,56 +127,13 @@
       }
 
       &.highlight {
-        background: $gradient-primary;
-        color: $color-white;
-
-        .stat-icon {
-          background: rgba(white, 0.2);
-          color: $color-white;
-        }
-
-        .stat-content .stat-label,
-        .stat-content .stat-value,
-        .stat-content .stat-hint {
-          color: $color-white;
-        }
+        @include stat-card-gradient($gradient-primary);
       }
 
-      .stat-icon {
-        width: 48px;
-        height: 48px;
-        background: $color-bg-subtle;
-        border-radius: $radius-md;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-shrink: 0;
-        color: $color-primary;
-
-        svg {
-          width: 24px;
-          height: 24px;
-        }
-      }
-
-      .stat-content {
-        .stat-label {
-          font-size: $font-size-sm;
-          color: $color-text-mid;
-          margin-bottom: $space-1;
-        }
-
-        .stat-value {
-          font-size: $font-size-3xl;
-          font-weight: 700;
-          color: $color-text-dark;
-          margin-bottom: $space-1;
-        }
-
-        .stat-hint {
-          font-size: $font-size-xs;
-          color: $color-text-muted;
-        }
+      // Extra field present only in this component
+      .stat-content .stat-hint {
+        font-size: $font-size-xs;
+        color: $color-text-muted;
       }
     }
   }
@@ -320,7 +216,7 @@
       border-collapse: collapse;
 
       @media (max-width: $bp-md) {
-        min-width: 900px;
+        min-width: $table-min-width-md;
       }
 
       thead {
@@ -334,7 +230,7 @@
           color: $color-text-dark;
           font-size: $font-size-sm;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
+          letter-spacing: $letter-spacing-caps;
 
           &.sortable {
             cursor: pointer;
@@ -400,33 +296,7 @@
       }
 
       .difficulty-cell {
-        display: flex;
-        align-items: center;
-        gap: $space-3;
-
-        .difficulty-bar {
-          flex: 1;
-          height: 8px;
-          background: $color-border;
-          border-radius: $radius-xs;
-          overflow: hidden;
-          max-width: 120px;
-
-          .difficulty-fill {
-            height: 100%;
-            transition: width 0.3s;
-
-            &.easy   { background: $color-easy; }
-            &.medium { background: $color-medium; }
-            &.hard   { background: $color-hard; }
-          }
-        }
-
-        .difficulty-value {
-          font-weight: 600;
-          min-width: 30px;
-          text-align: right;
-        }
+        @include difficulty-cell;
       }
 
       .competitor-count-cell {
@@ -447,7 +317,7 @@
 
           .domain-tag {
             font-size: $font-size-xs;
-            padding: 0.125rem $space-2;
+            padding: $space-px $space-2;
             background: $color-bg-page;
             border-radius: $radius-xs;
             color: $color-text-mid;
@@ -497,30 +367,7 @@
     border-top: 1px solid $color-border;
 
     .btn-load-more {
-      padding: $space-3 $space-8;
-      background: $color-white;
-      border: 2px solid $color-primary;
-      color: $color-primary;
-      border-radius: $radius-md;
-      font-size: $font-size-sm;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: $space-2;
-
-      svg {
-        width: 16px;
-        height: 16px;
-      }
-
-      &:hover {
-        background: $color-primary;
-        color: $color-white;
-        transform: translateY(-1px);
-        box-shadow: $shadow-hover-load;
-      }
+      @include btn-load-more;
     }
   }
 
@@ -574,20 +421,11 @@
 }
 
 // Blog Topics Stat Card
+// Full context path required: compiled specificity must exceed the
+// .results-container .stats-grid .stat-card .stat-content .stat-label
+// rule (0-5-0) → 6 classes beats it cleanly.
 .results-container .stats-grid .stat-card.blog-topics {
-  background: $gradient-green;
-  color: $color-white;
-
-  .stat-icon {
-    background: rgba(white, 0.2);
-    color: $color-white;
-  }
-
-  .stat-content .stat-label,
-  .stat-content .stat-value,
-  .stat-content .stat-hint {
-    color: $color-white;
-  }
+  @include stat-card-gradient($gradient-green);
 }
 
 // Blog Topics Tab
@@ -796,7 +634,7 @@
           color: $color-text-muted;
           margin-bottom: $space-1;
           text-transform: uppercase;
-          letter-spacing: 0.05em;
+          letter-spacing: $letter-spacing-caps;
         }
 
         .stat-value {
@@ -818,28 +656,12 @@
     padding: $space-8 0 $space-4;
 
     .btn-load-more {
-      padding: 0.875rem $space-8;
-      background: $color-white;
-      border: 2px solid $color-green;
+      @include btn-load-more;
+      border-color: $color-green;
       color: $color-green;
-      border-radius: $radius-md;
-      font-size: $font-size-sm;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: inline-flex;
-      align-items: center;
-      gap: $space-2;
-
-      svg {
-        width: 16px;
-        height: 16px;
-      }
 
       &:hover {
         background: $color-green;
-        color: $color-white;
-        transform: translateY(-1px);
         box-shadow: 0 4px 8px rgba($color-green, 0.3);
       }
     }

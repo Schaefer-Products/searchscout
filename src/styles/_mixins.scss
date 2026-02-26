@@ -1,0 +1,243 @@
+// =============================================================================
+// Mixins — reusable style patterns shared across components.
+// Import in component stylesheets with: @use 'mixins' as *;
+// =============================================================================
+
+@use 'variables' as *;
+
+// -----------------------------------------------------------------------------
+// Error message banner
+// Used in: all 4 components
+// -----------------------------------------------------------------------------
+@mixin error-message {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  padding: $space-3 $space-4;
+  background: $color-error-bg;
+  border: 1px solid $color-error-border;
+  border-radius: $radius-sm;
+  color: $color-error-text;
+  font-size: $font-size-sm;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Spinning loader
+// Used in: dashboard, competitor-selection, api-key-setup
+// -----------------------------------------------------------------------------
+@mixin spinner($size: 14px) {
+  display: inline-block;
+  width: $size;
+  height: $size;
+  border: 2px solid rgba(white, 0.3);
+  border-top-color: $color-white;
+  border-radius: $radius-full;
+  animation: spin 0.6s linear infinite;
+}
+
+// -----------------------------------------------------------------------------
+// Load-more button
+// Used in: dashboard, competitor-analysis, competitor-selection
+// -----------------------------------------------------------------------------
+@mixin btn-load-more {
+  padding: $space-3 $space-8;
+  background: $color-white;
+  border: 2px solid $color-primary;
+  color: $color-primary;
+  border-radius: $radius-md;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+
+  svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background: $color-primary;
+    color: $color-white;
+    transform: translateY(-1px);
+    box-shadow: $shadow-hover-load;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Cache info badge + refresh button — placed inside the parent flex row
+// Used in: dashboard (.results-header), competitor-selection (.cache-header),
+//          competitor-analysis (.cache-header)
+// -----------------------------------------------------------------------------
+@mixin cache-header-controls {
+  .cache-info {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-4;
+    background: $color-bg-subtle;
+    border-radius: $radius-sm;
+    font-size: $font-size-sm;
+    color: $color-text-body;
+
+    &.fresh {
+      background: $color-fresh-bg;
+      color: $color-fresh-text;
+    }
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  .btn-refresh {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-4;
+    background: $color-white;
+    border: 2px solid $color-primary;
+    color: $color-primary;
+    border-radius: $radius-sm;
+    font-size: $font-size-sm;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+
+    &:hover:not(:disabled) {
+      background: $color-bg-page;
+    }
+
+    &:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Stats grid container
+// Used in: dashboard, competitor-analysis
+// -----------------------------------------------------------------------------
+@mixin stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: $space-6;
+  margin-bottom: $space-8;
+}
+
+// -----------------------------------------------------------------------------
+// Stat card base — icon column + content column
+// Used in: dashboard, competitor-analysis
+// Component adds hover, transition, and optional .stat-hint overrides.
+// -----------------------------------------------------------------------------
+@mixin stat-card-layout {
+  background: $color-white;
+  border-radius: $radius-lg;
+  padding: $space-6;
+  box-shadow: $shadow-xs;
+  display: flex;
+  gap: $space-4;
+
+  .stat-icon {
+    width: 48px;
+    height: 48px;
+    background: $color-bg-subtle;
+    border-radius: $radius-md;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    color: $color-primary;
+
+    svg {
+      width: 24px;
+      height: 24px;
+    }
+  }
+
+  .stat-content {
+    .stat-label {
+      font-size: $font-size-sm;
+      color: $color-text-mid;
+      margin-bottom: $space-1;
+    }
+
+    .stat-value {
+      font-size: $font-size-3xl;
+      font-weight: 700;
+      color: $color-text-dark;
+      margin-bottom: $space-1;
+    }
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Gradient highlight state for stat cards (primary or green variant)
+// Uses full .stat-content path for specificity — beats .stat-content .stat-label
+// defined after the card block (equal depth without this would lose to last-write).
+// Used in: dashboard (&.highlight), competitor-analysis (&.highlight, &.blog-topics)
+// -----------------------------------------------------------------------------
+@mixin stat-card-gradient($gradient) {
+  background: $gradient;
+  color: $color-white;
+
+  .stat-icon {
+    background: rgba(white, 0.2);
+    color: $color-white;
+  }
+
+  .stat-content .stat-label,
+  .stat-content .stat-value,
+  .stat-content .stat-hint {
+    color: $color-white;
+  }
+}
+
+// -----------------------------------------------------------------------------
+// Difficulty bar + numeric value
+// Used in: dashboard, competitor-analysis
+// -----------------------------------------------------------------------------
+@mixin difficulty-cell {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+
+  .difficulty-bar {
+    flex: 1;
+    height: 8px;
+    background: $color-border;
+    border-radius: $radius-xs;
+    overflow: hidden;
+    max-width: 120px;
+
+    .difficulty-fill {
+      height: 100%;
+      transition: width 0.3s;
+
+      &.easy   { background: $color-easy; }
+      &.medium { background: $color-medium; }
+      &.hard   { background: $color-hard; }
+    }
+  }
+
+  .difficulty-value {
+    font-weight: 600;
+    min-width: 30px;
+    text-align: right;
+  }
+}

@@ -53,7 +53,6 @@ $color-border:        #e2e8f0;  // all standard borders / dividers
 $gradient-primary: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
 $gradient-green:   linear-gradient(135deg, $color-green   0%, $color-green-dark   100%);
 $gradient-page:    linear-gradient(135deg, #f5f7fa        0%, #c3cfe2             100%);
-$gradient-login:   linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
 
 // -----------------------------------------------------------------------------
 // Shadows
@@ -84,19 +83,23 @@ $radius-full: 50%;
 // -----------------------------------------------------------------------------
 // Typography
 // -----------------------------------------------------------------------------
-$font-size-xs:  0.75rem;   // 12px — badges, hints
-$font-size-sm:  0.875rem;  // 14px — table cells, labels, secondary text
-$font-size-md:  1rem;      // 16px — base / inputs
-$font-size-lg:  1.125rem;  // 18px — card subtitles
-$font-size-xl:  1.25rem;   // 20px — section headings
-$font-size-2xl: 1.5rem;    // 24px — card headings
-$font-size-3xl: 1.75rem;   // 28px — stat values, component headings
-$font-size-4xl: 2rem;      // 32px — page headings
-$font-size-5xl: 2.5rem;    // 40px — dashboard hero heading
+$font-size-xs:         0.75rem;   // 12px — badges, hints
+$font-size-sm:         0.875rem;  // 14px — table cells, labels, secondary text
+$font-size-form-label: 0.95rem;   // form labels (api-key-setup)
+$font-size-md:         1rem;      // 16px — base / inputs
+$font-size-lg:         1.125rem;  // 18px — card subtitles
+$font-size-xl:         1.25rem;   // 20px — section headings
+$font-size-2xl:        1.5rem;    // 24px — card headings
+$font-size-3xl:        1.75rem;   // 28px — stat values, component headings
+$font-size-4xl:        2rem;      // 32px — page headings
+$font-size-5xl:        2.5rem;    // 40px — dashboard hero heading
+
+$letter-spacing-caps:  0.05em;    // uppercase column headers
 
 // -----------------------------------------------------------------------------
 // Spacing
 // -----------------------------------------------------------------------------
+$space-px: 0.125rem;  // ~2px — tiny badge/chip internal padding
 $space-1:  0.25rem;
 $space-2:  0.5rem;
 $space-3:  0.75rem;
@@ -108,8 +111,15 @@ $space-10: 2.5rem;
 $space-12: 3rem;
 $space-16: 4rem;
 
+// Input / tall-button vertical padding (sits between space-3 and space-4)
+$padding-input: 0.875rem;
+
 // -----------------------------------------------------------------------------
 // Breakpoints
 // -----------------------------------------------------------------------------
 $bp-sm: 640px;   // small — single-column form layouts
 $bp-md: 768px;   // medium — table scroll, grid collapse
+
+// Table minimum widths — prevents column crush when container is narrow
+$table-min-width-sm: 800px;   // keyword table in dashboard
+$table-min-width-md: 900px;   // keyword table in competitor-analysis
