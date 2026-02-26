@@ -49,8 +49,8 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
       - Star the relevant keywords
 
 ## Tech Debt
-- [ ] unit tests
-- [ ] unit test coverage
+- [x] unit tests
+- [x] unit test coverage
 - [ ] refactoring/consolidation of scss
 - [ ] refactoring of some business logic ("top 3" logic)
 - [ ] merge environment files with default
