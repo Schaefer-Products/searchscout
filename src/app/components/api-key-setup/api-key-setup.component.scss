@@ -1,67 +1,69 @@
+@use 'variables' as *;
+
 .api-key-setup-container {
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem;
+  background: $gradient-primary;
+  padding: $space-8;
 }
 
 .setup-card {
-  background: white;
-  border-radius: 12px;
-  padding: 3rem;
+  background: $color-white;
+  border-radius: $radius-lg;
+  padding: $space-12;
   max-width: 600px;
   width: 100%;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  box-shadow: $shadow-lg;
 }
 
 .header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: $space-8;
 
   h1 {
-    font-size: 2rem;
-    color: #1a202c;
-    margin-bottom: 0.5rem;
+    font-size: $font-size-4xl;
+    color: #1a202c; // one-off darkest shade — not in the shared palette
+    margin-bottom: $space-2;
   }
 
   .subtitle {
-    color: #718096;
-    font-size: 1rem;
+    color: $color-text-mid;
+    font-size: $font-size-md;
   }
 }
 
 .info-section {
-  margin-bottom: 2rem;
+  margin-bottom: $space-8;
 }
 
 .info-box {
   display: flex;
-  gap: 1rem;
-  padding: 1rem;
-  background: #f7fafc;
-  border-radius: 8px;
-  margin-bottom: 1rem;
+  gap: $space-4;
+  padding: $space-4;
+  background: $color-bg-page;
+  border-radius: $radius-md;
+  margin-bottom: $space-4;
 
   .icon {
     width: 24px;
     height: 24px;
     flex-shrink: 0;
-    color: #667eea;
+    color: $color-primary;
   }
 
   .info-content {
     h3 {
       font-size: 0.95rem;
       font-weight: 600;
-      color: #2d3748;
-      margin-bottom: 0.25rem;
+      color: $color-text-dark;
+      margin-bottom: $space-1;
     }
 
     p {
-      font-size: 0.875rem;
-      color: #718096;
+      font-size: $font-size-sm;
+      color: $color-text-mid;
       margin: 0;
     }
   }
@@ -69,45 +71,45 @@
 
 .signup-prompt {
   text-align: center;
-  padding: 1.5rem;
-  background: #edf2f7;
-  border-radius: 8px;
-  margin-bottom: 2rem;
+  padding: $space-6;
+  background: $color-bg-subtle;
+  border-radius: $radius-md;
+  margin-bottom: $space-8;
 
   p {
-    margin-bottom: 0.75rem;
-    color: #4a5568;
+    margin-bottom: $space-3;
+    color: $color-text-body;
   }
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: $space-6;
 
   label {
     display: block;
     font-weight: 500;
-    color: #2d3748;
-    margin-bottom: 0.5rem;
+    color: $color-text-dark;
+    margin-bottom: $space-2;
     font-size: 0.95rem;
   }
 
-  input[type="text"],
-  input[type="password"] {
+  input[type='text'],
+  input[type='password'] {
     width: 100%;
-    padding: 0.75rem 1rem;
-    border: 2px solid #e2e8f0;
-    border-radius: 6px;
-    font-size: 1rem;
+    padding: $space-3 $space-4;
+    border: 2px solid $color-border;
+    border-radius: $radius-sm;
+    font-size: $font-size-md;
     transition: all 0.2s;
 
     &:focus {
       outline: none;
-      border-color: #667eea;
-      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+      border-color: $color-primary;
+      box-shadow: $focus-ring;
     }
 
     &:disabled {
-      background-color: #f7fafc;
+      background-color: $color-bg-page;
       cursor: not-allowed;
     }
   }
@@ -117,23 +119,23 @@
   position: relative;
 
   input {
-    padding-right: 3rem;
+    padding-right: $space-12;
   }
 
   .toggle-password {
     position: absolute;
-    right: 0.75rem;
+    right: $space-3;
     top: 50%;
     transform: translateY(-50%);
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0.5rem;
-    color: #718096;
+    padding: $space-2;
+    color: $color-text-mid;
     transition: color 0.2s;
 
     &:hover {
-      color: #2d3748;
+      color: $color-text-dark;
     }
 
     &:disabled {
@@ -151,14 +153,14 @@
 .error-message {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: #fed7d7;
-  border: 1px solid #fc8181;
-  border-radius: 6px;
-  color: #c53030;
-  font-size: 0.875rem;
-  margin-bottom: 1rem;
+  gap: $space-2;
+  padding: $space-3 $space-4;
+  background: $color-error-bg;
+  border: 1px solid $color-error-border;
+  border-radius: $radius-sm;
+  color: $color-error-text;
+  font-size: $font-size-sm;
+  margin-bottom: $space-4;
 
   svg {
     width: 18px;
@@ -170,17 +172,17 @@
 .btn-primary,
 .btn-secondary {
   width: 100%;
-  padding: 0.875rem 1.5rem;
+  padding: 0.875rem $space-6;
   border: none;
-  border-radius: 6px;
-  font-size: 1rem;
+  border-radius: $radius-sm;
+  font-size: $font-size-md;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 0.5rem;
+  gap: $space-2;
 
   &:disabled {
     opacity: 0.6;
@@ -189,12 +191,12 @@
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: $gradient-primary;
+  color: $color-white;
 
   &:hover:not(:disabled) {
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+    box-shadow: $shadow-hover-primary;
   }
 
   &:active:not(:disabled) {
@@ -203,12 +205,12 @@
 }
 
 .btn-secondary {
-  background: white;
-  color: #667eea;
-  border: 2px solid #667eea;
+  background: $color-white;
+  color: $color-primary;
+  border: 2px solid $color-primary;
 
   &:hover:not(:disabled) {
-    background: #f7fafc;
+    background: $color-bg-page;
   }
 }
 
@@ -216,41 +218,34 @@
   display: inline-block;
   width: 14px;
   height: 14px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: white;
-  border-radius: 50%;
+  border: 2px solid rgba(white, 0.3);
+  border-top-color: $color-white;
+  border-radius: $radius-full;
   animation: spin 0.6s linear infinite;
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 .help-text {
-  margin-top: 2rem;
-  padding-top: 2rem;
-  border-top: 1px solid #e2e8f0;
-  font-size: 0.875rem;
-  color: #718096;
+  margin-top: $space-8;
+  padding-top: $space-8;
+  border-top: 1px solid $color-border;
+  font-size: $font-size-sm;
+  color: $color-text-mid;
 
   p {
-    margin-bottom: 0.5rem;
+    margin-bottom: $space-2;
 
     strong {
-      color: #2d3748;
+      color: $color-text-dark;
     }
   }
 }
 
-// Responsive
-@media (max-width: 640px) {
+@media (max-width: $bp-sm) {
   .setup-card {
-    padding: 2rem 1.5rem;
+    padding: $space-8 $space-6;
   }
 
   .header h1 {
-    font-size: 1.5rem;
+    font-size: $font-size-2xl;
   }
 }

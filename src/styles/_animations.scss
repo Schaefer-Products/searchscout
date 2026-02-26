@@ -1,0 +1,22 @@
+// =============================================================================
+// Global animations — defined once, available everywhere via styles.scss.
+// Component files no longer need their own @keyframes declarations.
+// =============================================================================
+
+// Spinner rotation — used by .spinner and .spinner-large
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+// Horizontal nudge — used by the scroll-hint arrow icon
+@keyframes slideRight {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(4px);
+  }
+}

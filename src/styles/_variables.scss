@@ -1,0 +1,115 @@
+// =============================================================================
+// Design Tokens — single source of truth for the entire application.
+// Import in component stylesheets with: @use 'variables' as *;
+// =============================================================================
+
+// -----------------------------------------------------------------------------
+// Brand colours
+// -----------------------------------------------------------------------------
+$color-primary:       #667eea;  // indigo — buttons, links, accents
+$color-primary-dark:  #764ba2;  // purple — gradient endpoint
+$color-primary-hover: #5568d3;  // solid hover for filled primary buttons
+
+$color-green:         #48bb78;  // success / blog-topics accent
+$color-green-dark:    #38a169;  // gradient endpoint for green buttons
+
+// -----------------------------------------------------------------------------
+// Semantic colours
+// -----------------------------------------------------------------------------
+$color-error-bg:      #fed7d7;
+$color-error-border:  #fc8181;
+$color-error-text:    #c53030;
+
+$color-warning-bg:    #fff3cd;
+$color-warning-border:#ffc107;
+$color-warning-text:  #856404;
+
+$color-fresh-bg:      #c6f6d5;  // "data is fresh" cache badge
+$color-fresh-text:    #22543d;
+
+// Difficulty / score tier colours (shared by difficulty bars, score badges, stat values)
+$color-easy:          #48bb78;  // green
+$color-medium:        #ed8936;  // orange
+$color-hard:          #f56565;  // red
+
+// -----------------------------------------------------------------------------
+// Neutral palette
+// -----------------------------------------------------------------------------
+$color-text-dark:     #2d3748;  // headings, strong labels
+$color-text-body:     #4a5568;  // body copy
+$color-text-mid:      #718096;  // secondary / descriptive text
+$color-text-muted:    #a0aec0;  // hints, placeholders
+$color-text-faint:    #cbd5e0;  // disabled / decorative
+
+$color-white:         #ffffff;
+
+$color-bg-page:       #f7fafc;  // card insets, table rows on hover
+$color-bg-subtle:     #edf2f7;  // icon backgrounds, inactive tabs, badges
+$color-border:        #e2e8f0;  // all standard borders / dividers
+
+// -----------------------------------------------------------------------------
+// Gradients
+// -----------------------------------------------------------------------------
+$gradient-primary: linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+$gradient-green:   linear-gradient(135deg, $color-green   0%, $color-green-dark   100%);
+$gradient-page:    linear-gradient(135deg, #f5f7fa        0%, #c3cfe2             100%);
+$gradient-login:   linear-gradient(135deg, $color-primary 0%, $color-primary-dark 100%);
+
+// -----------------------------------------------------------------------------
+// Shadows
+// -----------------------------------------------------------------------------
+$shadow-xs: 0 2px 4px  rgba(0, 0, 0, 0.10);
+$shadow-sm: 0 4px 6px  rgba(0, 0, 0, 0.10);
+$shadow-lg: 0 20px 60px rgba(0, 0, 0, 0.30);
+
+// Focus ring — used on all focusable inputs
+$focus-ring: 0 0 0 3px rgba($color-primary, 0.10);
+
+// Hover shadows for interactive cards/buttons
+$shadow-hover-card:   0 4px 8px  rgba(0, 0, 0, 0.15);
+$shadow-hover-primary:0 4px 12px rgba($color-primary, 0.40);
+$shadow-hover-green:  0 4px 12px rgba($color-green,   0.40);
+$shadow-hover-load:   0 4px 8px  rgba($color-primary, 0.30);
+
+// -----------------------------------------------------------------------------
+// Border radius
+// -----------------------------------------------------------------------------
+$radius-xs:   4px;
+$radius-sm:   6px;
+$radius-md:   8px;
+$radius-lg:   12px;
+$radius-pill: 20px;
+$radius-full: 50%;
+
+// -----------------------------------------------------------------------------
+// Typography
+// -----------------------------------------------------------------------------
+$font-size-xs:  0.75rem;   // 12px — badges, hints
+$font-size-sm:  0.875rem;  // 14px — table cells, labels, secondary text
+$font-size-md:  1rem;      // 16px — base / inputs
+$font-size-lg:  1.125rem;  // 18px — card subtitles
+$font-size-xl:  1.25rem;   // 20px — section headings
+$font-size-2xl: 1.5rem;    // 24px — card headings
+$font-size-3xl: 1.75rem;   // 28px — stat values, component headings
+$font-size-4xl: 2rem;      // 32px — page headings
+$font-size-5xl: 2.5rem;    // 40px — dashboard hero heading
+
+// -----------------------------------------------------------------------------
+// Spacing
+// -----------------------------------------------------------------------------
+$space-1:  0.25rem;
+$space-2:  0.5rem;
+$space-3:  0.75rem;
+$space-4:  1rem;
+$space-5:  1.25rem;
+$space-6:  1.5rem;
+$space-8:  2rem;
+$space-10: 2.5rem;
+$space-12: 3rem;
+$space-16: 4rem;
+
+// -----------------------------------------------------------------------------
+// Breakpoints
+// -----------------------------------------------------------------------------
+$bp-sm: 640px;   // small — single-column form layouts
+$bp-md: 768px;   // medium — table scroll, grid collapse

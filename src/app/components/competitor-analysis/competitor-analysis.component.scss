@@ -1,53 +1,55 @@
+@use 'variables' as *;
+
 .competitor-analysis-container {
-  margin-top: 2rem;
+  margin-top: $space-8;
 }
 
 // Header
 .analysis-header {
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  margin-bottom: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: $color-white;
+  border-radius: $radius-lg;
+  padding: $space-8;
+  margin-bottom: $space-8;
+  box-shadow: $shadow-sm;
   text-align: center;
 
   h3 {
-    font-size: 1.75rem;
-    color: #2d3748;
-    margin-bottom: 0.5rem;
+    font-size: $font-size-3xl;
+    color: $color-text-dark;
+    margin-bottom: $space-2;
   }
 
   p {
-    color: #718096;
-    font-size: 1.125rem;
+    color: $color-text-mid;
+    font-size: $font-size-lg;
   }
 }
 
 // Loading State
 .loading-state {
-  background: white;
-  border-radius: 12px;
-  padding: 4rem 2rem;
+  background: $color-white;
+  border-radius: $radius-lg;
+  padding: $space-16 $space-8;
   text-align: center;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: $shadow-sm;
 
   .spinner-large {
     width: 64px;
     height: 64px;
-    margin: 0 auto 1rem;
-    border: 4px solid #edf2f7;
-    border-top-color: #667eea;
-    border-radius: 50%;
+    margin: 0 auto $space-4;
+    border: 4px solid $color-bg-subtle;
+    border-top-color: $color-primary;
+    border-radius: $radius-full;
     animation: spin 0.8s linear infinite;
   }
 
   p {
-    color: #4a5568;
-    margin-bottom: 0.5rem;
+    color: $color-text-body;
+    margin-bottom: $space-2;
 
     &.hint {
-      font-size: 0.875rem;
-      color: #a0aec0;
+      font-size: $font-size-sm;
+      color: $color-text-muted;
     }
   }
 }
@@ -56,13 +58,13 @@
 .error-message {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 1rem;
-  background: #fed7d7;
-  border: 1px solid #fc8181;
-  border-radius: 8px;
-  color: #c53030;
-  margin-bottom: 2rem;
+  gap: $space-2;
+  padding: $space-4;
+  background: $color-error-bg;
+  border: 1px solid $color-error-border;
+  border-radius: $radius-md;
+  color: $color-error-text;
+  margin-bottom: $space-8;
 
   svg {
     width: 20px;
@@ -76,23 +78,23 @@
   .cache-header {
     display: flex;
     align-items: center;
-    margin-bottom: 2rem;
+    margin-bottom: $space-8;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: $space-4;
 
     .cache-info {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: #edf2f7;
-      border-radius: 6px;
-      font-size: 0.875rem;
-      color: #4a5568;
+      gap: $space-2;
+      padding: $space-2 $space-4;
+      background: $color-bg-subtle;
+      border-radius: $radius-sm;
+      font-size: $font-size-sm;
+      color: $color-text-body;
 
       &.fresh {
-        background: #c6f6d5;
-        color: #22543d;
+        background: $color-fresh-bg;
+        color: $color-fresh-text;
       }
 
       svg {
@@ -104,13 +106,13 @@
     .btn-refresh {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: white;
-      border: 2px solid #667eea;
-      color: #667eea;
-      border-radius: 6px;
-      font-size: 0.875rem;
+      gap: $space-2;
+      padding: $space-2 $space-4;
+      background: $color-white;
+      border: 2px solid $color-primary;
+      color: $color-primary;
+      border-radius: $radius-sm;
+      font-size: $font-size-sm;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
@@ -121,7 +123,7 @@
       }
 
       &:hover:not(:disabled) {
-        background: #f7fafc;
+        background: $color-bg-page;
       }
 
       &:disabled {
@@ -134,18 +136,18 @@
   .export-row {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 1rem;
+    margin-bottom: $space-4;
 
     .btn-export {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: white;
-      border: 2px solid #667eea;
-      color: #667eea;
-      border-radius: 6px;
-      font-size: 0.875rem;
+      gap: $space-2;
+      padding: $space-2 $space-4;
+      background: $color-white;
+      border: 2px solid $color-primary;
+      color: $color-primary;
+      border-radius: $radius-sm;
+      font-size: $font-size-sm;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
@@ -156,7 +158,7 @@
       }
 
       &:hover {
-        background: #f7fafc;
+        background: $color-bg-page;
       }
     }
   }
@@ -165,52 +167,52 @@
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: $space-6;
+    margin-bottom: $space-8;
 
     .stat-card {
-      background: white;
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background: $color-white;
+      border-radius: $radius-lg;
+      padding: $space-6;
+      box-shadow: $shadow-xs;
       display: flex;
-      gap: 1rem;
+      gap: $space-4;
       cursor: pointer;
       transition: all 0.2s;
       border: 2px solid transparent;
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        border-color: #667eea;
+        box-shadow: $shadow-hover-card;
+        border-color: $color-primary;
       }
 
       &.highlight {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        background: $gradient-primary;
+        color: $color-white;
 
         .stat-icon {
-          background: rgba(255, 255, 255, 0.2);
-          color: white;
+          background: rgba(white, 0.2);
+          color: $color-white;
         }
 
-        .stat-label,
-        .stat-value,
-        .stat-hint {
-          color: white;
+        .stat-content .stat-label,
+        .stat-content .stat-value,
+        .stat-content .stat-hint {
+          color: $color-white;
         }
       }
 
       .stat-icon {
         width: 48px;
         height: 48px;
-        background: #edf2f7;
-        border-radius: 8px;
+        background: $color-bg-subtle;
+        border-radius: $radius-md;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        color: #667eea;
+        color: $color-primary;
 
         svg {
           width: 24px;
@@ -220,21 +222,21 @@
 
       .stat-content {
         .stat-label {
-          font-size: 0.875rem;
-          color: #718096;
-          margin-bottom: 0.25rem;
+          font-size: $font-size-sm;
+          color: $color-text-mid;
+          margin-bottom: $space-1;
         }
 
         .stat-value {
-          font-size: 1.75rem;
+          font-size: $font-size-3xl;
           font-weight: 700;
-          color: #2d3748;
-          margin-bottom: 0.25rem;
+          color: $color-text-dark;
+          margin-bottom: $space-1;
         }
 
         .stat-hint {
-          font-size: 0.75rem;
-          color: #a0aec0;
+          font-size: $font-size-xs;
+          color: $color-text-muted;
         }
       }
     }
@@ -243,21 +245,21 @@
   // View Tabs
   .view-tabs {
     display: flex;
-    gap: 0.5rem;
-    margin-bottom: 1.5rem;
+    gap: $space-2;
+    margin-bottom: $space-6;
     flex-wrap: wrap;
 
     .tab {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1.5rem;
-      background: white;
-      border: 2px solid #e2e8f0;
-      border-radius: 8px;
-      font-size: 0.875rem;
+      gap: $space-2;
+      padding: $space-3 $space-6;
+      background: $color-white;
+      border: 2px solid $color-border;
+      border-radius: $radius-md;
+      font-size: $font-size-sm;
       font-weight: 600;
-      color: #4a5568;
+      color: $color-text-body;
       cursor: pointer;
       transition: all 0.2s;
 
@@ -267,34 +269,34 @@
       }
 
       &:hover {
-        border-color: #cbd5e0;
-        background: #f7fafc;
+        border-color: $color-text-faint;
+        background: $color-bg-page;
       }
 
       &.active {
-        background: #667eea;
-        border-color: #667eea;
-        color: white;
+        background: $color-primary;
+        border-color: $color-primary;
+        color: $color-white;
       }
     }
   }
 
-  // Table (reuse styles from dashboard with modifications)
+  // Table
   .table-container {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: $color-white;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-xs;
     overflow: hidden;
 
     .scroll-hint {
       display: none;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: #fff3cd;
-      border-bottom: 1px solid #ffc107;
-      font-size: 0.875rem;
-      color: #856404;
+      gap: $space-2;
+      padding: $space-2 $space-4;
+      background: $color-warning-bg;
+      border-bottom: 1px solid $color-warning-border;
+      font-size: $font-size-sm;
+      color: $color-warning-text;
       font-weight: 500;
 
       svg {
@@ -303,7 +305,7 @@
         animation: slideRight 1s ease-in-out infinite;
       }
 
-      @media (max-width: 768px) {
+      @media (max-width: $bp-md) {
         display: flex;
       }
     }
@@ -317,20 +319,20 @@
       width: 100%;
       border-collapse: collapse;
 
-      @media (max-width: 768px) {
+      @media (max-width: $bp-md) {
         min-width: 900px;
       }
 
       thead {
-        background: #f7fafc;
-        border-bottom: 2px solid #e2e8f0;
+        background: $color-bg-page;
+        border-bottom: 2px solid $color-border;
 
         th {
-          padding: 1rem;
+          padding: $space-4;
           text-align: left;
           font-weight: 600;
-          color: #2d3748;
-          font-size: 0.875rem;
+          color: $color-text-dark;
+          font-size: $font-size-sm;
           text-transform: uppercase;
           letter-spacing: 0.05em;
 
@@ -340,7 +342,7 @@
             transition: background 0.2s;
 
             &:hover {
-              background: #edf2f7;
+              background: $color-bg-subtle;
             }
           }
         }
@@ -348,65 +350,65 @@
 
       tbody {
         tr {
-          border-bottom: 1px solid #e2e8f0;
+          border-bottom: 1px solid $color-border;
           transition: background 0.2s;
 
           &:hover {
-            background: #f7fafc;
+            background: $color-bg-page;
           }
 
           &.opportunity {
-            background: rgba(102, 126, 234, 0.05);
+            background: rgba($color-primary, 0.05);
 
             &:hover {
-              background: rgba(102, 126, 234, 0.1);
+              background: rgba($color-primary, 0.1);
             }
           }
 
           td {
-            padding: 1rem;
-            font-size: 0.875rem;
+            padding: $space-4;
+            font-size: $font-size-sm;
           }
         }
       }
 
       .keyword-cell {
         font-weight: 500;
-        color: #2d3748;
+        color: $color-text-dark;
 
         .keyword-text {
-          margin-right: 0.5rem;
+          margin-right: $space-2;
         }
 
         .badge {
           display: inline-block;
-          padding: 0.25rem 0.5rem;
-          border-radius: 4px;
-          font-size: 0.75rem;
+          padding: $space-1 $space-2;
+          border-radius: $radius-xs;
+          font-size: $font-size-xs;
           font-weight: 600;
 
           &.opportunity {
-            background: #667eea;
-            color: white;
+            background: $color-primary;
+            color: $color-white;
           }
         }
       }
 
       .volume-cell {
-        color: #4a5568;
+        color: $color-text-body;
         font-weight: 500;
       }
 
       .difficulty-cell {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: $space-3;
 
         .difficulty-bar {
           flex: 1;
           height: 8px;
-          background: #e2e8f0;
-          border-radius: 4px;
+          background: $color-border;
+          border-radius: $radius-xs;
           overflow: hidden;
           max-width: 120px;
 
@@ -414,17 +416,9 @@
             height: 100%;
             transition: width 0.3s;
 
-            &.easy {
-              background: #48bb78;
-            }
-
-            &.medium {
-              background: #ed8936;
-            }
-
-            &.hard {
-              background: #f56565;
-            }
+            &.easy   { background: $color-easy; }
+            &.medium { background: $color-medium; }
+            &.hard   { background: $color-hard; }
           }
         }
 
@@ -438,25 +432,25 @@
       .competitor-count-cell {
         .competitor-badge {
           display: inline-block;
-          padding: 0.25rem 0.75rem;
-          background: #edf2f7;
-          border-radius: 12px;
+          padding: $space-1 $space-3;
+          background: $color-bg-subtle;
+          border-radius: $radius-lg;
           font-weight: 700;
-          color: #667eea;
-          margin-bottom: 0.5rem;
+          color: $color-primary;
+          margin-bottom: $space-2;
         }
 
         .competitor-domains {
           display: flex;
           flex-wrap: wrap;
-          gap: 0.25rem;
+          gap: $space-1;
 
           .domain-tag {
-            font-size: 0.75rem;
-            padding: 0.125rem 0.5rem;
-            background: #f7fafc;
-            border-radius: 4px;
-            color: #718096;
+            font-size: $font-size-xs;
+            padding: 0.125rem $space-2;
+            background: $color-bg-page;
+            border-radius: $radius-xs;
+            color: $color-text-mid;
           }
         }
       }
@@ -464,54 +458,32 @@
       .position-cell {
         .position-badge {
           display: inline-block;
-          padding: 0.25rem 0.75rem;
-          border-radius: 6px;
+          padding: $space-1 $space-3;
+          border-radius: $radius-sm;
           font-weight: 700;
 
-          &.top {
-            background: #667eea;
-            color: white;
-          }
-
-          &.good {
-            background: #48bb78;
-            color: white;
-          }
-
-          &.okay {
-            background: #edf2f7;
-            color: #4a5568;
-          }
+          &.top  { background: $color-primary; color: $color-white; }
+          &.good { background: $color-easy;    color: $color-white; }
+          &.okay { background: $color-bg-subtle; color: $color-text-body; }
         }
 
         .no-ranking {
-          color: #cbd5e0;
-          font-size: 1.25rem;
+          color: $color-text-faint;
+          font-size: $font-size-xl;
         }
       }
 
       .score-cell {
         .score-badge {
           display: inline-block;
-          padding: 0.5rem 1rem;
-          border-radius: 8px;
+          padding: $space-2 $space-4;
+          border-radius: $radius-md;
           font-weight: 700;
-          font-size: 1.125rem;
+          font-size: $font-size-lg;
 
-          &.high {
-            background: #48bb78;
-            color: white;
-          }
-
-          &.medium {
-            background: #ed8936;
-            color: white;
-          }
-
-          &.low {
-            background: #edf2f7;
-            color: #4a5568;
-          }
+          &.high   { background: $color-easy;   color: $color-white; }
+          &.medium { background: $color-medium; color: $color-white; }
+          &.low    { background: $color-bg-subtle; color: $color-text-body; }
         }
       }
     }
@@ -520,23 +492,23 @@
   // Load More
   .load-more-container {
     text-align: center;
-    padding: 1.5rem;
-    background: #f7fafc;
-    border-top: 1px solid #e2e8f0;
+    padding: $space-6;
+    background: $color-bg-page;
+    border-top: 1px solid $color-border;
 
     .btn-load-more {
-      padding: 0.75rem 2rem;
-      background: white;
-      border: 2px solid #667eea;
-      color: #667eea;
-      border-radius: 8px;
-      font-size: 0.875rem;
+      padding: $space-3 $space-8;
+      background: $color-white;
+      border: 2px solid $color-primary;
+      color: $color-primary;
+      border-radius: $radius-md;
+      font-size: $font-size-sm;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: $space-2;
 
       svg {
         width: 16px;
@@ -544,10 +516,10 @@
       }
 
       &:hover {
-        background: #667eea;
-        color: white;
+        background: $color-primary;
+        color: $color-white;
         transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        box-shadow: $shadow-hover-load;
       }
     }
   }
@@ -555,49 +527,32 @@
   // Empty State
   .empty-state {
     text-align: center;
-    padding: 4rem 2rem;
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: $space-16 $space-8;
+    background: $color-white;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-xs;
 
     svg {
       width: 64px;
       height: 64px;
-      color: #cbd5e0;
-      margin-bottom: 1rem;
+      color: $color-text-faint;
+      margin-bottom: $space-4;
     }
 
     h4 {
-      font-size: 1.25rem;
-      color: #2d3748;
-      margin-bottom: 0.5rem;
+      font-size: $font-size-xl;
+      color: $color-text-dark;
+      margin-bottom: $space-2;
     }
 
     p {
-      color: #718096;
+      color: $color-text-mid;
     }
-  }
-}
-
-// Animations
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@keyframes slideRight {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(4px);
   }
 }
 
 // Responsive
-@media (max-width: 768px) {
+@media (max-width: $bp-md) {
   .competitor-analysis-container {
     .stats-grid {
       grid-template-columns: 1fr;
@@ -606,7 +561,7 @@
     .view-tabs {
       .tab {
         flex: 0 1 auto;
-        padding: 0.625rem 0.75rem;
+        padding: 0.625rem $space-3;
         font-size: 0.8rem;
 
         svg {
@@ -619,114 +574,103 @@
 }
 
 // Blog Topics Stat Card
-.stat-card.blog-topics {
-  background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-  color: white;
+.results-container .stats-grid .stat-card.blog-topics {
+  background: $gradient-green;
+  color: $color-white;
 
   .stat-icon {
-    background: rgba(255, 255, 255, 0.2);
-    color: white;
+    background: rgba(white, 0.2);
+    color: $color-white;
   }
 
-  .stat-label,
-  .stat-value,
-  .stat-hint {
-    color: white;
+  .stat-content .stat-label,
+  .stat-content .stat-value,
+  .stat-content .stat-hint {
+    color: $color-white;
   }
 }
 
 // Blog Topics Tab
 .view-tabs .tab.blog-tab.active {
-  background: #48bb78;
-  border-color: #48bb78;
-  color: white;
+  background: $color-green;
+  border-color: $color-green;
+  color: $color-white;
 }
 
 // Blog Topics Container
 .blog-topics-container {
   .topics-intro {
-    background: #f7fafc;
-    border-radius: 8px;
-    padding: 1.5rem;
-    margin-bottom: 2rem;
-    border-left: 4px solid #48bb78;
+    background: $color-bg-page;
+    border-radius: $radius-md;
+    padding: $space-6;
+    margin-bottom: $space-8;
+    border-left: 4px solid $color-green;
 
     h4 {
-      font-size: 1.25rem;
-      color: #2d3748;
-      margin-bottom: 0.5rem;
+      font-size: $font-size-xl;
+      color: $color-text-dark;
+      margin-bottom: $space-2;
     }
 
     p {
-      color: #718096;
+      color: $color-text-mid;
       margin: 0;
     }
 
     .score-legend {
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid #e2e8f0;
+      margin-top: $space-4;
+      padding-top: $space-4;
+      border-top: 1px solid $color-border;
 
       .legend-title {
         display: flex;
         align-items: center;
-        gap: 0.5rem;
-        margin-bottom: 0.75rem;
-        color: #4a5568;
-        font-size: 0.875rem;
+        gap: $space-2;
+        margin-bottom: $space-3;
+        color: $color-text-body;
+        font-size: $font-size-sm;
 
         svg {
           width: 16px;
           height: 16px;
-          color: #48bb78;
+          color: $color-green;
           flex-shrink: 0;
         }
 
         strong {
-          color: #2d3748;
+          color: $color-text-dark;
         }
       }
 
       .legend-items {
         display: flex;
         flex-direction: column;
-        gap: 0.5rem;
+        gap: $space-2;
 
-        @media (min-width: 768px) {
+        @media (min-width: $bp-md) {
           flex-direction: row;
           flex-wrap: wrap;
-          gap: 1.5rem;
+          gap: $space-6;
         }
 
         .legend-item {
           display: flex;
           align-items: center;
-          gap: 0.5rem;
-          font-size: 0.875rem;
-          color: #718096;
+          gap: $space-2;
+          font-size: $font-size-sm;
+          color: $color-text-mid;
 
           .legend-badge {
             display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 12px;
+            padding: $space-1 $space-3;
+            border-radius: $radius-lg;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: $font-size-xs;
             flex-shrink: 0;
 
-            &.high {
-              background: #48bb78;
-              color: white;
-            }
-
-            &.medium {
-              background: #ed8936;
-              color: white;
-            }
-
-            &.low {
-              background: #edf2f7;
-              color: #4a5568;
-            }
+            &.high   { background: $color-easy;   color: $color-white; }
+            &.medium { background: $color-medium; color: $color-white; }
+            &.low    { background: $color-bg-subtle; color: $color-text-body; }
           }
         }
       }
@@ -736,24 +680,24 @@
   .topics-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
-    gap: 1.5rem;
+    gap: $space-6;
 
-    @media (max-width: 768px) {
+    @media (max-width: $bp-md) {
       grid-template-columns: 1fr;
     }
   }
 
   .topic-card {
-    background: white;
-    border: 2px solid #e2e8f0;
-    border-radius: 12px;
-    padding: 1.5rem;
+    background: $color-white;
+    border: 2px solid $color-border;
+    border-radius: $radius-lg;
+    padding: $space-6;
     transition: all 0.2s;
     position: relative;
 
     &:hover {
-      border-color: #48bb78;
-      box-shadow: 0 4px 12px rgba(72, 187, 120, 0.15);
+      border-color: $color-green;
+      box-shadow: 0 4px 12px rgba($color-green, 0.15);
       transform: translateY(-2px);
     }
 
@@ -761,65 +705,54 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 1rem;
+      margin-bottom: $space-4;
 
       .topic-rank {
-        font-size: 0.875rem;
+        font-size: $font-size-sm;
         font-weight: 700;
-        color: #a0aec0;
-        background: #f7fafc;
-        padding: 0.25rem 0.75rem;
-        border-radius: 12px;
+        color: $color-text-muted;
+        background: $color-bg-page;
+        padding: $space-1 $space-3;
+        border-radius: $radius-lg;
       }
 
       .topic-score {
         .score-value {
           display: inline-block;
-          padding: 0.25rem 0.75rem;
-          border-radius: 12px;
+          padding: $space-1 $space-3;
+          border-radius: $radius-lg;
           font-weight: 700;
-          font-size: 0.875rem;
+          font-size: $font-size-sm;
 
-          &.high {
-            background: #48bb78;
-            color: white;
-          }
-
-          &.medium {
-            background: #ed8936;
-            color: white;
-          }
-
-          &.low {
-            background: #edf2f7;
-            color: #4a5568;
-          }
+          &.high   { background: $color-easy;   color: $color-white; }
+          &.medium { background: $color-medium; color: $color-white; }
+          &.low    { background: $color-bg-subtle; color: $color-text-body; }
         }
       }
     }
 
     .topic-title {
-      font-size: 1.125rem;
+      font-size: $font-size-lg;
       font-weight: 600;
-      color: #2d3748;
+      color: $color-text-dark;
       line-height: 1.4;
-      margin-bottom: 1rem;
+      margin-bottom: $space-4;
       min-height: 3rem;
     }
 
     .topic-meta {
       display: flex;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
+      gap: $space-3;
+      margin-bottom: $space-4;
       flex-wrap: wrap;
 
       .meta-item {
         display: inline-flex;
         align-items: center;
-        gap: 0.25rem;
-        padding: 0.25rem 0.75rem;
-        border-radius: 6px;
-        font-size: 0.75rem;
+        gap: $space-1;
+        padding: $space-1 $space-3;
+        border-radius: $radius-sm;
+        font-size: $font-size-xs;
         font-weight: 600;
 
         svg {
@@ -828,49 +761,30 @@
         }
 
         &.keyword {
-          background: #edf2f7;
-          color: #4a5568;
+          background: $color-bg-subtle;
+          color: $color-text-body;
         }
 
         &.category {
-          color: white;
+          color: $color-white;
 
-          &.how-to {
-            background: #667eea;
-          }
-
-          &.list {
-            background: #ed8936;
-          }
-
-          &.best-of {
-            background: #48bb78;
-          }
-
-          &.guide {
-            background: #9f7aea;
-          }
-
-          &.tips {
-            background: #38b2ac;
-          }
-
-          &.comparison {
-            background: #f56565;
-          }
-
-          &.ultimate {
-            background: #d69e2e;
-          }
+          // Per-category accent colours — intentionally one-off values
+          &.how-to     { background: $color-primary; }
+          &.list       { background: $color-medium; }
+          &.best-of    { background: $color-green; }
+          &.guide      { background: #9f7aea; }
+          &.tips       { background: #38b2ac; }
+          &.comparison { background: $color-hard; }
+          &.ultimate   { background: #d69e2e; }
         }
       }
     }
 
     .topic-stats {
       display: flex;
-      gap: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid #e2e8f0;
+      gap: $space-4;
+      padding-top: $space-4;
+      border-top: 1px solid $color-border;
 
       .stat {
         flex: 1;
@@ -878,30 +792,22 @@
 
         .stat-label {
           display: block;
-          font-size: 0.75rem;
-          color: #a0aec0;
-          margin-bottom: 0.25rem;
+          font-size: $font-size-xs;
+          color: $color-text-muted;
+          margin-bottom: $space-1;
           text-transform: uppercase;
           letter-spacing: 0.05em;
         }
 
         .stat-value {
           display: block;
-          font-size: 1rem;
+          font-size: $font-size-md;
           font-weight: 700;
-          color: #2d3748;
+          color: $color-text-dark;
 
-          &.easy {
-            color: #48bb78;
-          }
-
-          &.medium {
-            color: #ed8936;
-          }
-
-          &.hard {
-            color: #f56565;
-          }
+          &.easy   { color: $color-easy; }
+          &.medium { color: $color-medium; }
+          &.hard   { color: $color-hard; }
         }
       }
     }
@@ -909,21 +815,21 @@
 
   .load-more-topics {
     text-align: center;
-    padding: 2rem 0 1rem;
+    padding: $space-8 0 $space-4;
 
     .btn-load-more {
-      padding: 0.875rem 2rem;
-      background: white;
-      border: 2px solid #48bb78;
-      color: #48bb78;
-      border-radius: 8px;
-      font-size: 0.875rem;
+      padding: 0.875rem $space-8;
+      background: $color-white;
+      border: 2px solid $color-green;
+      color: $color-green;
+      border-radius: $radius-md;
+      font-size: $font-size-sm;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: $space-2;
 
       svg {
         width: 16px;
@@ -931,10 +837,10 @@
       }
 
       &:hover {
-        background: #48bb78;
-        color: white;
+        background: $color-green;
+        color: $color-white;
         transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(72, 187, 120, 0.3);
+        box-shadow: 0 4px 8px rgba($color-green, 0.3);
       }
     }
   }

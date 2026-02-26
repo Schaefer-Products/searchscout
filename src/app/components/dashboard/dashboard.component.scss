@@ -1,25 +1,27 @@
+@use 'variables' as *;
+
 .dashboard-container {
   min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-  padding: 2rem;
+  background: $gradient-page;
+  padding: $space-8;
 }
 
 // Header
 .dashboard-header {
-  margin-bottom: 2rem;
+  margin-bottom: $space-8;
 
   .header-content {
     text-align: center;
 
     h1 {
-      font-size: 2.5rem;
-      color: #667eea;
-      margin-bottom: 0.5rem;
+      font-size: $font-size-5xl;
+      color: $color-primary;
+      margin-bottom: $space-2;
       font-weight: 700;
     }
 
     .tagline {
-      color: #718096;
+      color: $color-text-mid;
       font-size: 1.1rem;
     }
   }
@@ -28,73 +30,73 @@
 // Domain Input Section
 .domain-input-section {
   max-width: 800px;
-  margin: 0 auto 3rem;
+  margin: 0 auto $space-12;
 
   .input-card {
-    background: white;
-    border-radius: 12px;
-    padding: 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: $color-white;
+    border-radius: $radius-lg;
+    padding: $space-8;
+    box-shadow: $shadow-sm;
 
     h2 {
-      font-size: 1.5rem;
-      color: #2d3748;
-      margin-bottom: 0.5rem;
+      font-size: $font-size-2xl;
+      color: $color-text-dark;
+      margin-bottom: $space-2;
     }
 
     .description {
-      color: #718096;
-      margin-bottom: 1.5rem;
+      color: $color-text-mid;
+      margin-bottom: $space-6;
     }
 
     .domain-form {
       .input-group {
         display: flex;
-        gap: 1rem;
+        gap: $space-4;
 
-        @media (max-width: 640px) {
+        @media (max-width: $bp-sm) {
           flex-direction: column;
         }
       }
 
       .domain-input {
         flex: 1;
-        padding: 0.875rem 1rem;
-        border: 2px solid #e2e8f0;
-        border-radius: 8px;
-        font-size: 1rem;
+        padding: 0.875rem $space-4;
+        border: 2px solid $color-border;
+        border-radius: $radius-md;
+        font-size: $font-size-md;
         transition: all 0.2s;
 
         &:focus {
           outline: none;
-          border-color: #667eea;
-          box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+          border-color: $color-primary;
+          box-shadow: $focus-ring;
         }
 
         &:disabled {
-          background: #f7fafc;
+          background: $color-bg-page;
           cursor: not-allowed;
         }
       }
 
       .btn-primary {
-        padding: 0.875rem 2rem;
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        padding: 0.875rem $space-8;
+        background: $gradient-primary;
+        color: $color-white;
         border: none;
-        border-radius: 8px;
-        font-size: 1rem;
+        border-radius: $radius-md;
+        font-size: $font-size-md;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.2s;
         display: flex;
         align-items: center;
-        gap: 0.5rem;
+        gap: $space-2;
         white-space: nowrap;
 
         &:hover:not(:disabled) {
           transform: translateY(-2px);
-          box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+          box-shadow: $shadow-hover-primary;
         }
 
         &:disabled {
@@ -107,25 +109,25 @@
           display: inline-block;
           width: 14px;
           height: 14px;
-          border: 2px solid rgba(255, 255, 255, 0.3);
-          border-top-color: white;
-          border-radius: 50%;
+          border: 2px solid rgba(white, 0.3);
+          border-top-color: $color-white;
+          border-radius: $radius-full;
           animation: spin 0.6s linear infinite;
         }
       }
     }
 
     .error-message {
-      margin-top: 1rem;
+      margin-top: $space-4;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.75rem 1rem;
-      background: #fed7d7;
-      border: 1px solid #fc8181;
-      border-radius: 6px;
-      color: #c53030;
-      font-size: 0.875rem;
+      gap: $space-2;
+      padding: $space-3 $space-4;
+      background: $color-error-bg;
+      border: 1px solid $color-error-border;
+      border-radius: $radius-sm;
+      color: $color-error-text;
+      font-size: $font-size-sm;
 
       svg {
         width: 18px;
@@ -144,23 +146,23 @@
   .results-header {
     display: flex;
     align-items: center;
-    margin-bottom: 1.5rem;
+    margin-bottom: $space-6;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: $space-4;
 
     .cache-info {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: #edf2f7;
-      border-radius: 6px;
-      font-size: 0.875rem;
-      color: #4a5568;
+      gap: $space-2;
+      padding: $space-2 $space-4;
+      background: $color-bg-subtle;
+      border-radius: $radius-sm;
+      font-size: $font-size-sm;
+      color: $color-text-body;
 
       &.fresh {
-        background: #c6f6d5;
-        color: #22543d;
+        background: $color-fresh-bg;
+        color: $color-fresh-text;
       }
 
       svg {
@@ -172,13 +174,13 @@
     .btn-refresh {
       display: flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: white;
-      border: 2px solid #667eea;
-      color: #667eea;
-      border-radius: 6px;
-      font-size: 0.875rem;
+      gap: $space-2;
+      padding: $space-2 $space-4;
+      background: $color-white;
+      border: 2px solid $color-primary;
+      color: $color-primary;
+      border-radius: $radius-sm;
+      font-size: $font-size-sm;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
@@ -189,7 +191,7 @@
       }
 
       &:hover:not(:disabled) {
-        background: #f7fafc;
+        background: $color-bg-page;
       }
 
       &:disabled {
@@ -203,51 +205,51 @@
   .stats-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 2rem;
+    gap: $space-6;
+    margin-bottom: $space-8;
 
     .stat-card {
-      background: white;
-      border-radius: 12px;
-      padding: 1.5rem;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      background: $color-white;
+      border-radius: $radius-lg;
+      padding: $space-6;
+      box-shadow: $shadow-xs;
       display: flex;
-      gap: 1rem;
+      gap: $space-4;
       transition: transform 0.2s;
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        box-shadow: $shadow-hover-card;
       }
 
       &.highlight {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-        color: white;
+        background: $gradient-primary;
+        color: $color-white;
 
         .stat-icon {
-          background: rgba(255, 255, 255, 0.2);
-          color: white;
+          background: rgba(white, 0.2);
+          color: $color-white;
         }
 
-        .stat-label {
-          color: rgba(255, 255, 255, 1);
-        }
-
-        .stat-value {
-          color: white;
+        // Qualify with .stat-content to gain one extra class of specificity,
+        // ensuring these rules beat the .stat-card .stat-content .stat-label
+        // rule defined below (same depth = same specificity = last-write-wins).
+        .stat-content .stat-label,
+        .stat-content .stat-value {
+          color: $color-white;
         }
       }
 
       .stat-icon {
         width: 48px;
         height: 48px;
-        background: #edf2f7;
-        border-radius: 8px;
+        background: $color-bg-subtle;
+        border-radius: $radius-md;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-shrink: 0;
-        color: #667eea;
+        color: $color-primary;
 
         svg {
           width: 24px;
@@ -257,25 +259,15 @@
 
       .stat-content {
         .stat-label {
-          font-size: 0.875rem;
-          color: #718096;
-          margin-bottom: 0.25rem;
+          font-size: $font-size-sm;
+          color: $color-text-mid;
+          margin-bottom: $space-1;
         }
 
         .stat-value {
-          font-size: 1.75rem;
+          font-size: $font-size-3xl;
           font-weight: 700;
-          color: #2d3748;
-        }
-      }
-
-      &.highlight .stat-content {
-        .stat-label {
-          color: white;
-        }
-
-        .stat-value {
-          color: white;
+          color: $color-text-dark;
         }
       }
     }
@@ -283,9 +275,9 @@
 
   // Table
   .table-container {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: $color-white;
+    border-radius: $radius-lg;
+    box-shadow: $shadow-xs;
     overflow: hidden;
     position: relative;
 
@@ -294,15 +286,15 @@
       border-collapse: collapse;
 
       thead {
-        background: #f7fafc;
-        border-bottom: 2px solid #e2e8f0;
+        background: $color-bg-page;
+        border-bottom: 2px solid $color-border;
 
         th {
-          padding: 1rem;
+          padding: $space-4;
           text-align: left;
           font-weight: 600;
-          color: #2d3748;
-          font-size: 0.875rem;
+          color: $color-text-dark;
+          font-size: $font-size-sm;
           text-transform: uppercase;
           letter-spacing: 0.05em;
 
@@ -312,7 +304,7 @@
             transition: background 0.2s;
 
             &:hover {
-              background: #edf2f7;
+              background: $color-bg-subtle;
             }
           }
         }
@@ -320,78 +312,78 @@
 
       tbody {
         tr {
-          border-bottom: 1px solid #e2e8f0;
+          border-bottom: 1px solid $color-border;
           transition: background 0.2s;
 
           &:hover {
-            background: #f7fafc;
+            background: $color-bg-page;
           }
 
           &.top-position {
-            background: rgba(102, 126, 234, 0.08); // Changed from 0.05 to 0.08 for better contrast
+            background: rgba($color-primary, 0.08);
 
             &:hover {
-              background: rgba(102, 126, 234, 0.12); // Slightly darker on hover
+              background: rgba($color-primary, 0.12);
             }
           }
 
           &.first-page {
-            background: rgba(102, 126, 234, 0.03); // Slightly more visible
+            background: rgba($color-primary, 0.03);
 
             &:hover {
-              background: rgba(102, 126, 234, 0.06);
+              background: rgba($color-primary, 0.06);
             }
           }
 
           td {
-            padding: 1rem;
-            font-size: 0.875rem;
+            padding: $space-4;
+            font-size: $font-size-sm;
           }
         }
       }
 
       .keyword-cell {
         font-weight: 500;
-        color: #2d3748;
+        color: $color-text-dark;
 
         .keyword-text {
-          margin-right: 0.5rem;
+          margin-right: $space-2;
         }
 
         .badge {
           display: inline-block;
-          padding: 0.25rem 0.5rem;
-          border-radius: 4px;
-          font-size: 0.75rem;
+          padding: $space-1 $space-2;
+          border-radius: $radius-xs;
+          font-size: $font-size-xs;
           font-weight: 600;
 
           &.top-3 {
-            background: #667eea;
-            color: white;
+            background: $color-primary;
+            color: $color-white;
           }
 
           &.first-page {
-            background: #edf2f7;
-            color: #667eea;
+            background: $color-bg-subtle;
+            color: $color-primary;
           }
         }
       }
 
       .volume-cell {
-        color: #4a5568;
+        color: $color-text-body;
         font-weight: 500;
       }
 
       .difficulty-cell {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: $space-3;
 
         .difficulty-bar {
           flex: 1;
           height: 8px;
-          background: #e2e8f0;
-          border-radius: 4px;
+          background: $color-border;
+          border-radius: $radius-xs;
           overflow: hidden;
           max-width: 120px;
 
@@ -399,17 +391,9 @@
             height: 100%;
             transition: width 0.3s;
 
-            &.easy {
-              background: #48bb78;
-            }
-
-            &.medium {
-              background: #ed8936;
-            }
-
-            &.hard {
-              background: #f56565;
-            }
+            &.easy   { background: $color-easy; }
+            &.medium { background: $color-medium; }
+            &.hard   { background: $color-hard; }
           }
         }
 
@@ -423,56 +407,45 @@
       .position-cell {
         .position-badge {
           display: inline-block;
-          padding: 0.25rem 0.75rem;
-          border-radius: 6px;
+          padding: $space-1 $space-3;
+          border-radius: $radius-sm;
           font-weight: 700;
 
-          &.top {
-            background: #667eea;
-            color: white;
-          }
-
-          &.good {
-            background: #48bb78;
-            color: white;
-          }
-
-          &.okay {
-            background: #edf2f7;
-            color: #4a5568;
-          }
+          &.top  { background: $color-primary; color: $color-white; }
+          &.good { background: $color-easy;    color: $color-white; }
+          &.okay { background: $color-bg-subtle; color: $color-text-body; }
         }
       }
 
       .etv-cell {
-        color: #48bb78;
+        color: $color-easy;
         font-weight: 600;
       }
     }
   }
 
   .load-more-container {
-    padding: 1.5rem;
+    padding: $space-6;
     text-align: center;
-    background: #f7fafc;
-    border-top: 1px solid #e2e8f0;
+    background: $color-bg-page;
+    border-top: 1px solid $color-border;
 
     .btn-load-more {
-      padding: 0.75rem 2rem;
-      background: white;
-      border: 2px solid #667eea;
-      color: #667eea;
-      border-radius: 8px;
-      font-size: 0.875rem;
+      padding: $space-3 $space-8;
+      background: $color-white;
+      border: 2px solid $color-primary;
+      color: $color-primary;
+      border-radius: $radius-md;
+      font-size: $font-size-sm;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
 
       &:hover {
-        background: #667eea;
-        color: white;
+        background: $color-primary;
+        color: $color-white;
         transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+        box-shadow: $shadow-hover-load;
       }
     }
   }
@@ -481,12 +454,12 @@
 .scroll-hint {
   display: none;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.5rem 1rem;
-  background: #fff3cd;
-  border-bottom: 1px solid #e2e8f0;
-  font-size: 0.875rem;
-  color: #4a5568;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  background: $color-warning-bg;
+  border-bottom: 1px solid $color-border;
+  font-size: $font-size-sm;
+  color: $color-text-body;
   font-weight: 500;
 
   svg {
@@ -495,70 +468,53 @@
     animation: slideRight 1s ease-in-out infinite;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: $bp-md) {
     display: flex;
-  }
-}
-
-@keyframes slideRight {
-  0%,
-  100% {
-    transform: translateX(0);
-  }
-  50% {
-    transform: translateX(4px);
   }
 }
 
 // Empty State
 .empty-state {
   text-align: center;
-  padding: 4rem 2rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: $space-16 $space-8;
+  background: $color-white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-xs;
   max-width: 600px;
   margin: 0 auto;
 
   svg {
     width: 64px;
     height: 64px;
-    color: #cbd5e0;
-    margin-bottom: 1rem;
+    color: $color-text-faint;
+    margin-bottom: $space-4;
   }
 
   h3 {
-    font-size: 1.5rem;
-    color: #2d3748;
-    margin-bottom: 0.5rem;
+    font-size: $font-size-2xl;
+    color: $color-text-dark;
+    margin-bottom: $space-2;
   }
 
   p {
-    color: #718096;
-    margin-bottom: 0.5rem;
+    color: $color-text-mid;
+    margin-bottom: $space-2;
 
     &.hint {
-      font-size: 0.875rem;
-      color: #a0aec0;
+      font-size: $font-size-sm;
+      color: $color-text-muted;
     }
   }
 }
 
-// Animation
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 // Responsive
-@media (max-width: 768px) {
+@media (max-width: $bp-md) {
   .dashboard-container {
-    padding: 1rem;
+    padding: $space-4;
   }
 
   .dashboard-header h1 {
-    font-size: 2rem;
+    font-size: $font-size-4xl;
   }
 
   .results-section {
@@ -568,27 +524,26 @@
 
     .table-container {
       overflow-x: auto;
-      -webkit-overflow-scrolling: touch; // Smooth scrolling on iOS
+      -webkit-overflow-scrolling: touch;
 
       &::after {
         display: none;
       }
 
       .keywords-table {
-        min-width: 800px; // Ensures horizontal scroll
+        min-width: 800px;
         display: table;
       }
     }
 
-    // Add scroll indicator hint
     .table-container::after {
-      content: "";
+      content: '';
       position: absolute;
       right: 0;
       top: 0;
       bottom: 0;
       width: 40px;
-      background: linear-gradient(to left, rgba(255, 255, 255, 0.9), transparent);
+      background: linear-gradient(to left, rgba(white, 0.9), transparent);
       pointer-events: none;
     }
   }
@@ -597,40 +552,40 @@
 // Competitor Sections
 .competitor-section {
   max-width: 800px;
-  margin: 3rem auto;
+  margin: $space-12 auto;
   text-align: center;
 
   .competitor-prompt {
-    background: white;
-    border-radius: 12px;
-    padding: 3rem 2rem;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background: $color-white;
+    border-radius: $radius-lg;
+    padding: $space-12 $space-8;
+    box-shadow: $shadow-sm;
 
     h3 {
-      font-size: 1.75rem;
-      color: #2d3748;
-      margin-bottom: 0.5rem;
+      font-size: $font-size-3xl;
+      color: $color-text-dark;
+      margin-bottom: $space-2;
     }
 
     p {
-      color: #718096;
-      margin-bottom: 2rem;
-      font-size: 1.125rem;
+      color: $color-text-mid;
+      margin-bottom: $space-8;
+      font-size: $font-size-lg;
     }
 
     .btn-discover-competitors {
-      padding: 1rem 2rem;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      padding: $space-4 $space-8;
+      background: $gradient-primary;
+      color: $color-white;
       border: none;
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: $radius-md;
+      font-size: $font-size-md;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: $space-2;
 
       svg {
         width: 20px;
@@ -639,7 +594,7 @@
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        box-shadow: $shadow-hover-primary;
       }
     }
   }
@@ -647,36 +602,36 @@
 
 .selected-competitors-section {
   max-width: 1400px;
-  margin: 2rem auto;
-  background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin: $space-8 auto;
+  background: $color-white;
+  border-radius: $radius-lg;
+  padding: $space-8;
+  box-shadow: $shadow-sm;
 
   .selected-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: $space-4;
 
     h3 {
-      font-size: 1.25rem;
-      color: #2d3748;
+      font-size: $font-size-xl;
+      color: $color-text-dark;
     }
 
     .btn-change {
-      padding: 0.5rem 1rem;
-      background: white;
-      border: 2px solid #667eea;
-      color: #667eea;
-      border-radius: 6px;
-      font-size: 0.875rem;
+      padding: $space-2 $space-4;
+      background: $color-white;
+      border: 2px solid $color-primary;
+      color: $color-primary;
+      border-radius: $radius-sm;
+      font-size: $font-size-sm;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
 
       &:hover {
-        background: #f7fafc;
+        background: $color-bg-page;
       }
     }
   }
@@ -684,53 +639,49 @@
   .selected-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 0.75rem;
+    gap: $space-3;
 
     .selected-chip {
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: #edf2f7;
-      border-radius: 20px;
-      font-size: 0.875rem;
-      color: #2d3748;
+      gap: $space-2;
+      padding: $space-2 $space-4;
+      background: $color-bg-subtle;
+      border-radius: $radius-pill;
+      font-size: $font-size-sm;
+      color: $color-text-dark;
       font-weight: 500;
 
       .overlap {
-        padding: 0.125rem 0.5rem;
-        background: #667eea;
-        color: white;
+        padding: 0.125rem $space-2;
+        background: $color-primary;
+        color: $color-white;
         border-radius: 10px;
-        font-size: 0.75rem;
+        font-size: $font-size-xs;
       }
     }
   }
-}
 
-.selected-competitors-section {
-  // ... existing styles ...
-
-  // ADD THIS
+  // Merged from duplicate declaration below
   .analyze-action {
-    margin-top: 1.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid #e2e8f0;
+    margin-top: $space-6;
+    padding-top: $space-6;
+    border-top: 1px solid $color-border;
     text-align: center;
 
     .btn-analyze {
-      padding: 1rem 2rem;
-      background: linear-gradient(135deg, #48bb78 0%, #38a169 100%);
-      color: white;
+      padding: $space-4 $space-8;
+      background: $gradient-green;
+      color: $color-white;
       border: none;
-      border-radius: 8px;
-      font-size: 1rem;
+      border-radius: $radius-md;
+      font-size: $font-size-md;
       font-weight: 600;
       cursor: pointer;
       transition: all 0.2s;
       display: inline-flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: $space-2;
 
       svg {
         width: 20px;
@@ -739,7 +690,7 @@
 
       &:hover {
         transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(72, 187, 120, 0.4);
+        box-shadow: $shadow-hover-green;
       }
     }
   }
