@@ -9,6 +9,7 @@ import { CompetitorAnalysisService } from '../../services/competitor-analysis.se
 import { BlogTopicGeneratorService } from '../../services/blog-topic-generator.service';
 import { ExportService } from '../../services/export.service';
 import { Logger } from '../../utils/logger';
+import { PaginatedList } from '../../utils/paginated-list';
 
 type ViewMode = 'opportunities' | 'all' | 'shared' | 'unique' | 'blog-topics';
 
@@ -40,9 +41,30 @@ export class CompetitorAnalysisComponent implements OnInit {
 
   // Display state
   viewMode: ViewMode = 'opportunities';
-  displayedKeywords: AggregatedKeyword[] = [];
-  displayedTopics: BlogTopic[] = [];
-  displayLimit: number = 50;
+  keywordPagination = new PaginatedList<AggregatedKeyword>(50);
+  topicPagination = new PaginatedList<BlogTopic>(20);
+
+  get displayedKeywords(): AggregatedKeyword[] { return this.keywordPagination.displayed; }
+  set displayedKeywords(v: AggregatedKeyword[]) { this.keywordPagination.displayed = v; }
+
+  get displayedTopics(): BlogTopic[] { return this.topicPagination.displayed; }
+  set displayedTopics(v: BlogTopic[]) { this.topicPagination.displayed = v; }
+
+  get hasMoreKeywords(): boolean {
+    return this.keywordPagination.displayed.length < this.getKeywordsForCurrentView().length;
+  }
+
+  get remainingCount(): number {
+    return this.getKeywordsForCurrentView().length - this.keywordPagination.displayed.length;
+  }
+
+  get hasMoreTopics(): boolean {
+    return this.topicPagination.displayed.length < this.blogTopics.length;
+  }
+
+  get remainingTopicsCount(): number {
+    return this.blogTopics.length - this.topicPagination.displayed.length;
+  }
 
   // Sorting
   sortColumn: keyof AggregatedKeyword = 'opportunityScore';
@@ -117,7 +139,7 @@ export class CompetitorAnalysisComponent implements OnInit {
     this.viewMode = mode;
 
     if (mode === 'blog-topics') {
-      this.displayedTopics = this.blogTopics.slice(0, 20);
+      this.topicPagination.reset(this.blogTopics);
     } else {
       this.updateDisplayedKeywords();
     }
@@ -125,12 +147,12 @@ export class CompetitorAnalysisComponent implements OnInit {
 
   updateDisplayedKeywords(): void {
     if (!this.results || this.viewMode === 'blog-topics') return;
-    this.displayedKeywords = this.sortKeywords(this.getKeywordsForCurrentView()).slice(0, this.displayLimit);
+    this.keywordPagination.reset(this.sortKeywords(this.getKeywordsForCurrentView()));
   }
 
   loadMore(): void {
-    const newLimit = this.displayedKeywords.length + 50;
-    this.displayedKeywords = this.sortKeywords(this.getKeywordsForCurrentView()).slice(0, newLimit);
+    const newLimit = this.keywordPagination.displayed.length + this.keywordPagination.chunk;
+    this.keywordPagination.displayed = this.sortKeywords(this.getKeywordsForCurrentView()).slice(0, newLimit);
     this.cdr.detectChanges();
   }
 
@@ -188,27 +210,11 @@ export class CompetitorAnalysisComponent implements OnInit {
     return this.sortDirection === 'asc' ? '↑' : '↓';
   }
 
-  get hasMoreKeywords(): boolean {
-    return this.displayedKeywords.length < this.getKeywordsForCurrentView().length;
-  }
-
-  get remainingCount(): number {
-    return this.getKeywordsForCurrentView().length - this.displayedKeywords.length;
-  }
-
   loadMoreTopics(): void {
-    const currentLength = this.displayedTopics.length;
-    const newLimit = Math.min(currentLength + 20, this.blogTopics.length);
-    this.displayedTopics = this.blogTopics.slice(0, newLimit);
+    this.topicPagination.displayed = this.blogTopics.slice(
+      0, this.topicPagination.displayed.length + this.topicPagination.chunk
+    );
     this.cdr.detectChanges();
-  }
-
-  get hasMoreTopics(): boolean {
-    return this.displayedTopics.length < this.blogTopics.length;
-  }
-
-  get remainingTopicsCount(): number {
-    return this.blogTopics.length - this.displayedTopics.length;
   }
 
   getCategoryLabel(category: string): string {

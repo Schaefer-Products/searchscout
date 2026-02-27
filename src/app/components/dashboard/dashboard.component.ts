@@ -9,6 +9,7 @@ import { CompetitorSelectionComponent } from '../competitor-selection/competitor
 import { CompetitorAnalysisComponent } from '../competitor-analysis/competitor-analysis.component';
 import { Logger } from '../../utils/logger';
 import { cleanDomain, isValidDomain } from '../../utils/domain.utils';
+import { PaginatedList } from '../../utils/paginated-list';
 
 @Component({
   selector: 'app-dashboard',
@@ -29,9 +30,11 @@ export class DashboardComponent implements OnInit {
 
   // Results state
   keywords: DomainKeywordRanking[] = [];
-  displayedKeywords: DomainKeywordRanking[] = [];
-  displayLimit: number = 100;
+  pagination = new PaginatedList<DomainKeywordRanking>(100);
   hasAnalyzed: boolean = false;
+
+  get displayedKeywords(): DomainKeywordRanking[] { return this.pagination.displayed; }
+  set displayedKeywords(v: DomainKeywordRanking[]) { this.pagination.displayed = v; }
 
   // Cache state
   cacheMetadata: { timestamp: number; ageInDays: number } | null = null;
@@ -117,7 +120,7 @@ export class DashboardComponent implements OnInit {
         Logger.debug('First keyword:', keywords[0]);
 
         this.keywords = keywords;
-        this.displayedKeywords = keywords.slice(0, this.displayLimit);
+        this.pagination.reset(keywords);
         this.hasAnalyzed = true;
         this.isAnalyzing = false;
 
@@ -196,19 +199,17 @@ export class DashboardComponent implements OnInit {
       return 0;
     });
 
-    this.displayedKeywords = this.keywords.slice(0, this.displayLimit);
+    this.pagination.reset(this.keywords);
     this.cdr.detectChanges();
   }
 
   loadMore(): void {
-    const currentLength = this.displayedKeywords.length;
-    const newLimit = currentLength + 100;
-    this.displayedKeywords = this.keywords.slice(0, newLimit);
+    this.pagination.loadMore();
     this.cdr.detectChanges();
   }
 
   get hasMoreKeywords(): boolean {
-    return this.displayedKeywords.length < this.keywords.length;
+    return this.pagination.displayed.length < this.keywords.length;
   }
 
   getSortIcon(column: keyof DomainKeywordRanking): string {

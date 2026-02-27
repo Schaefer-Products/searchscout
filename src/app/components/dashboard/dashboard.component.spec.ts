@@ -481,14 +481,14 @@ describe('DashboardComponent', () => {
   describe('loadMore()', () => {
     it('should extend displayedKeywords by 100', () => {
       component.keywords = Array.from({ length: 250 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
-      component.displayedKeywords = component.keywords.slice(0, 100);
+      component.pagination.reset(component.keywords);
       component.loadMore();
       expect(component.displayedKeywords.length).toBe(200);
     });
 
     it('should not exceed total keywords', () => {
       component.keywords = Array.from({ length: 120 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
-      component.displayedKeywords = component.keywords.slice(0, 100);
+      component.pagination.reset(component.keywords);
       component.loadMore();
       expect(component.displayedKeywords.length).toBe(120);
     });

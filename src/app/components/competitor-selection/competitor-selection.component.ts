@@ -5,6 +5,7 @@ import { Competitor } from '../../models/competitor.model';
 import { DataforseoService } from '../../services/dataforseo.service';
 import { Logger } from '../../utils/logger';
 import { cleanDomain, isValidDomain } from '../../utils/domain.utils';
+import { PaginatedList } from '../../utils/paginated-list';
 
 @Component({
   selector: 'app-competitor-selection',
@@ -24,10 +25,20 @@ export class CompetitorSelectionComponent {
   // Discovery state
   isDiscovering: boolean = false;
   discoveryComplete: boolean = false;
-  allCompetitors: Competitor[] = [];
-  displayedCompetitors: Competitor[] = [];
-  displayLimit: number = 20;
+  pagination = new PaginatedList<Competitor>(20);
   selectedCompetitors: Set<string> = new Set();
+
+  get allCompetitors(): Competitor[] { return this.pagination.items; }
+  set allCompetitors(v: Competitor[]) { this.pagination.items = v; }
+
+  get displayedCompetitors(): Competitor[] { return this.pagination.displayed; }
+  set displayedCompetitors(v: Competitor[]) { this.pagination.displayed = v; }
+
+  get displayLimit(): number { return this.pagination.chunk; }
+
+  get hasMoreCompetitors(): boolean { return this.pagination.hasMore; }
+
+  get remainingCount(): number { return this.pagination.remaining; }
 
   cacheMetadata: { timestamp: number; ageInDays: number } | null = null;
 
@@ -82,12 +93,11 @@ export class CompetitorSelectionComponent {
         const newlyDiscovered = competitors.filter(c => !preSelectedDomains.has(c.domain));
 
         // Combine: pre-selected first (both discovered and manual), then new ones
-        this.allCompetitors = [
+        this.pagination.reset([
           ...preSelectedDiscovered,
           ...preSelectedManual,
           ...newlyDiscovered
-        ];
-        this.displayedCompetitors = this.allCompetitors.slice(0, this.displayLimit);
+        ]);
         this.discoveryComplete = true;
         this.isDiscovering = false;
 
@@ -128,8 +138,7 @@ export class CompetitorSelectionComponent {
 
     // Reset state but KEEP selected competitors
     this.discoveryComplete = false;
-    this.allCompetitors = [];
-    this.displayedCompetitors = [];
+    this.pagination.reset([]);
     // Don't clear selectedCompetitors - keep current selection
 
     // Re-discover
@@ -138,20 +147,8 @@ export class CompetitorSelectionComponent {
 
   // Load more competitors
   loadMore(): void {
-    const currentLength = this.displayedCompetitors.length;
-    const newLimit = Math.min(currentLength + 20, this.allCompetitors.length);
-    this.displayedCompetitors = this.allCompetitors.slice(0, newLimit);
+    this.pagination.loadMore();
     this.cdr.detectChanges();
-  }
-
-  // Check if more competitors available to load
-  get hasMoreCompetitors(): boolean {
-    return this.displayedCompetitors.length < this.allCompetitors.length;
-  }
-
-  // Get count of remaining competitors
-  get remainingCount(): number {
-    return this.allCompetitors.length - this.displayedCompetitors.length;
   }
 
   toggleCompetitor(domain: string): void {
