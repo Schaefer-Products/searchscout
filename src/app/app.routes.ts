@@ -4,7 +4,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { apiKeyGuard } from './guards/api-key.guard';
 
 export const routes: Routes = [
-    { path: '', redirectTo: '/dashboard', pathMatch: 'full' }, // Changed to dashboard
+    { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
     { path: 'setup', component: ApiKeySetupComponent },
     {
         path: 'dashboard',

@@ -127,7 +127,6 @@ export class CompetitorSelectionComponent {
     this.cacheMetadata = null;
 
     // Reset state but KEEP selected competitors
-    const currentlySelected = Array.from(this.selectedCompetitors);
     this.discoveryComplete = false;
     this.allCompetitors = [];
     this.displayedCompetitors = [];

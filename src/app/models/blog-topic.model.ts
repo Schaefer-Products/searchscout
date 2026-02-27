@@ -37,7 +37,7 @@ export interface TitleTemplate {
     template: string;
 
     /** Category of this template */
-    category: 'how-to' | 'list' | 'best-of' | 'comparison' | 'guide' | 'vs' | 'tips' | 'ultimate';
+    category: 'how-to' | 'list' | 'best-of' | 'comparison' | 'guide' | 'tips' | 'ultimate';
 
     /** Description of what this template is good for */
     description?: string;

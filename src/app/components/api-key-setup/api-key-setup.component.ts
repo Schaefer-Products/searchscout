@@ -53,8 +53,6 @@ export class ApiKeySetupComponent {
           });
           Logger.log('Credentials saved, navigating to dashboard...'); // Debug log
 
-          // Navigate to main app (dashboard doesn't exist yet, so this will show blank)
-          // We'll create dashboard in Feature 2
           this.router.navigate(['/dashboard']);
         } else {
           this.errorMessage = result.error || 'Validation failed';

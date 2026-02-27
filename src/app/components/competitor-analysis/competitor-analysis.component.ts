@@ -219,8 +219,7 @@ export class CompetitorAnalysisComponent implements OnInit {
       'guide': 'Guide',
       'tips': 'Tips',
       'comparison': 'Comparison',
-      'ultimate': 'Ultimate',
-      'vs': 'Versus'
+      'ultimate': 'Ultimate'
     };
     return labels[category] || category;
   }

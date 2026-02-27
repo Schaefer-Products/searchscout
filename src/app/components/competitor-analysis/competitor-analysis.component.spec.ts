@@ -718,7 +718,7 @@ describe('CompetitorAnalysisComponent', () => {
       ['tips', 'Tips'],
       ['comparison', 'Comparison'],
       ['ultimate', 'Ultimate'],
-      ['vs', 'Versus'],
+      ['vs', 'vs'], // 'vs' removed from valid categories; falls back to raw value
     ];
 
     cases.forEach(([input, expected]) => {
