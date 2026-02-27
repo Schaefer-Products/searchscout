@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { Competitor } from '../../models/competitor.model';
 import { DataforseoService } from '../../services/dataforseo.service';
 import { Logger } from '../../utils/logger';
+import { cleanDomain, isValidDomain } from '../../utils/domain.utils';
 
 @Component({
   selector: 'app-competitor-selection',
@@ -174,22 +175,22 @@ export class CompetitorSelectionComponent {
       return;
     }
 
-    const cleanDomain = this.cleanDomain(this.manualDomain);
+    const cleaned = cleanDomain(this.manualDomain);
 
-    if (!this.isValidDomain(cleanDomain)) {
+    if (!isValidDomain(cleaned)) {
       this.manualError = 'Invalid domain format';
       return;
     }
 
     // Check if already in list
-    if (this.allCompetitors.some(c => c.domain === cleanDomain)) {
+    if (this.allCompetitors.some(c => c.domain === cleaned)) {
       this.manualError = 'This competitor is already in the list';
       return;
     }
 
     // Add manual competitor
     const manualCompetitor: Competitor = {
-      domain: cleanDomain,
+      domain: cleaned,
       keywordOverlap: 0, // Unknown until we analyze
       totalKeywords: 0,
       isManual: true
@@ -197,10 +198,10 @@ export class CompetitorSelectionComponent {
 
     this.allCompetitors.push(manualCompetitor);
     this.displayedCompetitors.push(manualCompetitor);
-    this.selectedCompetitors.add(cleanDomain);
+    this.selectedCompetitors.add(cleaned);
     this.manualDomain = '';
 
-    Logger.debug('Added manual competitor:', cleanDomain);
+    Logger.debug('Added manual competitor:', cleaned);
   }
 
   removeCompetitor(domain: string): void {
@@ -216,18 +217,6 @@ export class CompetitorSelectionComponent {
 
     Logger.debug('Confirmed competitors:', selected);
     this.competitorsSelected.emit(selected);
-  }
-
-  private cleanDomain(input: string): string {
-    let cleaned = input.trim().toLowerCase();
-    cleaned = cleaned.replace(/^(https?:\/\/)?(www\.)?/, '');
-    cleaned = cleaned.replace(/\/.*$/, '');
-    return cleaned;
-  }
-
-  private isValidDomain(domain: string): boolean {
-    const domainRegex = /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i;
-    return domainRegex.test(domain);
   }
 
   get selectedCount(): number {

@@ -8,6 +8,7 @@ import { Competitor } from '../../models/competitor.model';
 import { CompetitorSelectionComponent } from '../competitor-selection/competitor-selection.component';
 import { CompetitorAnalysisComponent } from '../competitor-analysis/competitor-analysis.component';
 import { Logger } from '../../utils/logger';
+import { cleanDomain, isValidDomain } from '../../utils/domain.utils';
 
 @Component({
   selector: 'app-dashboard',
@@ -71,30 +72,30 @@ export class DashboardComponent implements OnInit {
     this.errorMessage = '';
 
     // Validate domain
-    const cleanDomain = this.cleanDomain(this.domain);
-    if (!cleanDomain) {
+    const cleaned = cleanDomain(this.domain);
+    if (!cleaned) {
       this.errorMessage = 'Please enter a valid domain (e.g., example.com)';
       return;
     }
 
     // Additional validation for garbage input
-    if (!this.isValidDomain(cleanDomain)) {
+    if (!isValidDomain(cleaned)) {
       this.errorMessage = 'Invalid domain format. Please enter a valid domain like example.com';
       return;
     }
 
     // Check if this is a DIFFERENT domain than what's saved
     const savedDomain = this.storageService.getCurrentDomain();
-    const isDifferentDomain = savedDomain !== cleanDomain;
+    const isDifferentDomain = savedDomain !== cleaned;
 
     // Save current domain to storage (update to new domain)
-    this.storageService.saveCurrentDomain(cleanDomain);
+    this.storageService.saveCurrentDomain(cleaned);
 
     // Load competitors for this domain (even if it's the same domain)
-    const savedCompetitors = this.storageService.getSelectedCompetitors(cleanDomain);
+    const savedCompetitors = this.storageService.getSelectedCompetitors(cleaned);
 
     if (isDifferentDomain) {
-      Logger.debug('Different domain detected, loading saved competitors for:', cleanDomain);
+      Logger.debug('Different domain detected, loading saved competitors for:', cleaned);
 
       // Load saved competitors for the new domain (or empty array if none)
       this.selectedCompetitors = savedCompetitors || [];
@@ -108,9 +109,9 @@ export class DashboardComponent implements OnInit {
 
     this.isAnalyzing = true;
     this.hasAnalyzed = false;
-    Logger.debug('Analyzing domain:', cleanDomain);
+    Logger.debug('Analyzing domain:', cleaned);
 
-    this.dataforseoService.fetchDomainKeywords(cleanDomain).subscribe({
+    this.dataforseoService.fetchDomainKeywords(cleaned).subscribe({
       next: (keywords) => {
         Logger.debug('Received keywords:', keywords.length);
         Logger.debug('First keyword:', keywords[0]);
@@ -120,7 +121,7 @@ export class DashboardComponent implements OnInit {
         this.hasAnalyzed = true;
         this.isAnalyzing = false;
 
-        this.cacheMetadata = this.dataforseoService.getDomainCacheMetadata(cleanDomain);
+        this.cacheMetadata = this.dataforseoService.getDomainCacheMetadata(cleaned);
 
         if (keywords.length === 0) {
           this.errorMessage = 'No ranking keywords found for this domain. This could mean the domain is new or not yet indexed.';
@@ -150,8 +151,7 @@ export class DashboardComponent implements OnInit {
     this.showCompetitorAnalysis = true;
 
     // Save selected competitors to storage
-    const cleanDomain = this.cleanDomain(this.domain);
-    this.storageService.saveSelectedCompetitors(cleanDomain, competitors);
+    this.storageService.saveSelectedCompetitors(cleanDomain(this.domain), competitors);
     Logger.debug('Saved competitors to storage');
 
     this.cdr.detectChanges();
@@ -160,11 +160,11 @@ export class DashboardComponent implements OnInit {
   refreshData(): void {
     if (!this.domain) return;
 
-    const cleanDomain = this.cleanDomain(this.domain);
-    if (!cleanDomain) return;
+    const cleaned = cleanDomain(this.domain);
+    if (!cleaned) return;
 
     // Clear cache and fetch fresh data
-    this.dataforseoService.clearDomainCache(cleanDomain);
+    this.dataforseoService.clearDomainCache(cleaned);
     this.cacheMetadata = null;
     this.analyzeDomain();
   }
@@ -214,21 +214,6 @@ export class DashboardComponent implements OnInit {
   getSortIcon(column: keyof DomainKeywordRanking): string {
     if (this.sortColumn !== column) return '↕️';
     return this.sortDirection === 'asc' ? '↑' : '↓';
-  }
-
-  // Add this new validation method
-  private isValidDomain(domain: string): boolean {
-    // Basic domain validation regex
-    const domainRegex = /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i;
-    return domainRegex.test(domain);
-  }
-
-  private cleanDomain(input: string): string {
-    // Remove protocol, www, trailing slashes
-    let cleaned = input.trim().toLowerCase();
-    cleaned = cleaned.replace(/^(https?:\/\/)?(www\.)?/, '');
-    cleaned = cleaned.replace(/\/.*$/, '');
-    return cleaned;
   }
 
   get totalSearchVolume(): number {
