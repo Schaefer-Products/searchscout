@@ -346,17 +346,14 @@ describe('DataforseoService', () => {
       expect(error).toBeTruthy();
     });
 
-    it('should return a minimal fallback item when parsing an individual keyword throws', () => {
+    it('should silently drop items that fail to parse rather than returning a sentinel', () => {
       const badItem = { keyword_data: null }; // accessing .keyword on null throws
       let result: any[];
       service.fetchDomainKeywords(TEST_DOMAIN, false).subscribe(r => (result = r));
 
       httpMock.expectOne(url).flush(makeSuccessResponse([badItem]));
 
-      expect(result!.length).toBe(1);
-      expect(result![0].keyword).toBe('Error parsing keyword');
-      expect(result![0].position).toBe(999);
-      expect(result![0].searchVolume).toBe(0);
+      expect(result!.length).toBe(0);
     });
 
     it('should throw with an "Invalid API credentials" message for HTTP 401', () => {

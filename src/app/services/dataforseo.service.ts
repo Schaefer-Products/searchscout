@@ -207,26 +207,20 @@ export class DataforseoService {
 
     Logger.debug('Items count:', result.items.length);
 
-    const keywords: DomainKeywordRanking[] = result.items.map((item, index) => {
+    const keywords: DomainKeywordRanking[] = result.items.flatMap((item, index) => {
       try {
-        return {
+        return [{
           keyword: item.keyword_data.keyword,
           searchVolume: item.keyword_data.keyword_info.search_volume || 0,
-          difficulty: Math.round((item.keyword_data.keyword_info.competition || 0) * 100), // Convert 0-1 to 0-100
+          difficulty: Math.round((item.keyword_data.keyword_info.competition || 0) * 100),
           position: item.ranked_serp_element.serp_item.rank_absolute,
           etv: item.ranked_serp_element.serp_item.etv,
           cpc: item.keyword_data.keyword_info.cpc
-        };
+        }];
       } catch (err) {
         Logger.error('Error parsing keyword at index', index, ':', err);
         Logger.error('Problematic item:', item);
-        // Return a minimal valid object to avoid breaking the whole array
-        return {
-          keyword: 'Error parsing keyword',
-          searchVolume: 0,
-          difficulty: 0,
-          position: 999
-        };
+        return [];
       }
     });
 
