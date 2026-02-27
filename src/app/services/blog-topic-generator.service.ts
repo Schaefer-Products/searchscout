@@ -114,7 +114,7 @@ export class BlogTopicGeneratorService {
         t.category === 'comparison' ||
         t.category === 'guide'
       );
-      return definitionTemplates[Math.floor(Math.random() * definitionTemplates.length)];
+      return definitionTemplates[this.hashKeyword(keyword) % definitionTemplates.length];
     }
 
     // Check for "how to" already in keyword → Don't add another "how to"
@@ -123,7 +123,7 @@ export class BlogTopicGeneratorService {
       const nonHowToTemplates = this.titleTemplates.filter(t =>
         t.category !== 'how-to'
       );
-      return nonHowToTemplates[Math.floor(Math.random() * nonHowToTemplates.length)];
+      return nonHowToTemplates[this.hashKeyword(keyword) % nonHowToTemplates.length];
     }
 
     // Check for verbs/actions → Good for how-to
@@ -134,29 +134,29 @@ export class BlogTopicGeneratorService {
 
     const hasActionVerb = actionVerbs.some(verb => lowerKeyword.includes(verb));
     if (hasActionVerb) {
-      return this.getRandomTemplate('how-to');
+      return this.getRandomTemplate('how-to', keyword);
     }
 
     // Check for comparison/versus keywords
     if (lowerKeyword.includes(' vs ') || lowerKeyword.includes(' versus ') ||
       lowerKeyword.includes(' or ') || lowerKeyword.includes('difference between')) {
-      return this.getRandomTemplate('comparison');
+      return this.getRandomTemplate('comparison', keyword);
     }
 
     // Check for "best" keywords
     if (lowerKeyword.startsWith('best ') || lowerKeyword.includes('top ')) {
-      return this.getRandomTemplate('best-of');
+      return this.getRandomTemplate('best-of', keyword);
     }
 
     // Check for plural nouns (likely lists)
     const listIndicators = ['tips', 'ways', 'ideas', 'examples', 'tools', 'strategies', 'methods'];
     if (listIndicators.some(indicator => lowerKeyword.includes(indicator))) {
-      return this.getRandomTemplate('list');
+      return this.getRandomTemplate('list', keyword);
     }
 
     // Check for guides/tutorials
     if (lowerKeyword.includes('guide') || lowerKeyword.includes('tutorial')) {
-      return this.getRandomTemplate('guide');
+      return this.getRandomTemplate('guide', keyword);
     }
 
     // Check for tool/product names (proper nouns) → Best-of or Guide
@@ -167,14 +167,14 @@ export class BlogTopicGeneratorService {
     if (hasCapitalizedWord) {
       // For proper nouns (Coinbase, Astronomer, etc.), prefer guide or best-of
       const properNounCategories: Array<TitleTemplate['category']> = ['guide', 'best-of', 'ultimate'];
-      const randomCategory = properNounCategories[Math.floor(Math.random() * properNounCategories.length)];
-      return this.getRandomTemplate(randomCategory);
+      const category = properNounCategories[this.hashKeyword(keyword) % properNounCategories.length];
+      return this.getRandomTemplate(category, keyword);
     }
 
     // Check for job titles/roles → Guide templates work best
     const jobTitleIndicators = ['engineer', 'developer', 'manager', 'designer', 'analyst', 'specialist'];
     if (jobTitleIndicators.some(indicator => lowerKeyword.includes(indicator))) {
-      return this.getRandomTemplate('guide');
+      return this.getRandomTemplate('guide', keyword);
     }
 
     // For generic keywords, prefer simple templates
@@ -182,22 +182,30 @@ export class BlogTopicGeneratorService {
     if (words.length <= 2) {
       // Short keywords → Simple templates
       const simpleCategories: Array<TitleTemplate['category']> = ['guide', 'best-of', 'ultimate'];
-      const randomCategory = simpleCategories[Math.floor(Math.random() * simpleCategories.length)];
-      return this.getRandomTemplate(randomCategory);
+      const category = simpleCategories[this.hashKeyword(keyword) % simpleCategories.length];
+      return this.getRandomTemplate(category, keyword);
     }
 
     // Default: Mix of templates, but avoid how-to for complex keywords
     const defaultCategories: Array<TitleTemplate['category']> = ['guide', 'best-of', 'list', 'ultimate'];
-    const randomCategory = defaultCategories[Math.floor(Math.random() * defaultCategories.length)];
-    return this.getRandomTemplate(randomCategory);
+    const category = defaultCategories[this.hashKeyword(keyword) % defaultCategories.length];
+    return this.getRandomTemplate(category, keyword);
   }
 
   /**
-   * Get a random template from a specific category
+   * Stable numeric hash derived from a keyword string.
+   * Same keyword always produces the same value, distributing evenly across template pools.
    */
-  private getRandomTemplate(category: TitleTemplate['category']): TitleTemplate {
+  private hashKeyword(keyword: string): number {
+    return keyword.split('').reduce((sum, char) => sum + char.charCodeAt(0), 0);
+  }
+
+  /**
+   * Pick a template from a category deterministically based on the keyword.
+   */
+  private getRandomTemplate(category: TitleTemplate['category'], keyword: string): TitleTemplate {
     const categoryTemplates = this.titleTemplates.filter(t => t.category === category);
-    return categoryTemplates[Math.floor(Math.random() * categoryTemplates.length)];
+    return categoryTemplates[this.hashKeyword(keyword) % categoryTemplates.length];
   }
 
   /**
@@ -210,8 +218,8 @@ export class BlogTopicGeneratorService {
     const capitalizedKeyword = this.capitalizeFirst(keyword);
     title = title.replace(/{keyword}/g, capitalizedKeyword);
 
-    // Replace {number} with random number 5-10
-    const randomNumber = Math.floor(Math.random() * 6) + 5; // 5-10
+    // Replace {number} with a stable number 5-10 derived from the keyword
+    const randomNumber = (this.hashKeyword(keyword) % 6) + 5;
     title = title.replace(/{number}/g, randomNumber.toString());
 
     // Replace {year} with current year
