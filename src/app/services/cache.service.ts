@@ -21,13 +21,6 @@ export class CacheService {
   private readonly CACHE_PREFIX = 'searchscout_cache_';
   private readonly CONFIG_KEY = 'searchscout_cache_config';
 
-  constructor() {
-    // Initialize default config if not set
-    if (!this.getConfig()) {
-      this.setConfig({ expirationDays: environment.cacheExpirationDays });
-    }
-  }
-
   /**
    * Save data to cache with expiration
    */
