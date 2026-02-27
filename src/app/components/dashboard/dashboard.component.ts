@@ -182,7 +182,7 @@ export class DashboardComponent implements OnInit {
       this.sortDirection = 'asc';
     }
 
-    this.keywords.sort((a, b) => {
+    this.keywords = [...this.keywords].sort((a, b) => {
       const aVal = a[column];
       const bVal = b[column];
 
