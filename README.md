@@ -56,6 +56,6 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - [ ] merge environment files with default
 - [ ] save competitor keywords in separate files
 - [ ] establish acceptance tests framework
-- [ ] increase cache storage capacity
+- [x] increase cache storage capacity
       - [x] implement lz-string for immediate gains
-      - [ ] switch cache storage to IndexDB
+      - [x] switch cache storage to IndexDB

@@ -24,7 +24,7 @@ SearchScout analyzes competitor keywords using the DataForSEO API and identifies
 - **Language:** TypeScript
 - **Styling:** SCSS
 - **API:** DataForSEO v3 REST API
-- **Storage:** Browser localStorage (encrypted credentials, plain JSON for data)
+- **Storage:** Browser IndexedDB (`searchscout` DB, `keyvalue` + `cache` object stores; `idb` library)
 - **Development:** Docker dev container (VSCode Remote Containers)
 - **Deployment:** Netlify (CI/CD via GitHub)
 
@@ -45,6 +45,7 @@ src/app/
 │   ├── competitor-selection/
 │   └── competitor-analysis/
 ├── services/            # Business logic & API calls
+│   ├── indexed-db.service.ts
 │   ├── dataforseo.service.ts
 │   ├── storage.service.ts
 │   ├── cache.service.ts
@@ -70,7 +71,6 @@ export const environment = {
   dataforSeoApiUrl: 'https://api.dataforseo.com/v3',
   dataforSeoSandboxUrl: 'https://sandbox.dataforseo.com/v3',
   cacheExpirationDays: 90,
-  maxCacheSize: 5 * 1024 * 1024, // 5MB
   excludedCompetitorDomains: [
     'wikipedia.org', 'youtube.com', 'amazon.com',
     'reddit.com', 'pinterest.com', 'facebook.com',
@@ -90,22 +90,21 @@ export const environment = {
 
 **Implementation:**
 - Onboarding flow with API key validation
-- AES encryption via crypto-js
-- Stored in localStorage as encrypted JSON
+- Credentials stored as plain JSON in IndexedDB (`keyvalue` store)
 - Validation using free `/serp/google/locations` endpoint
 - Route guard protects authenticated routes
 
 **Key Files:**
 - `components/api-key-setup/`
-- `services/encryption.service.ts`
 - `services/storage.service.ts`
+- `services/indexed-db.service.ts`
 - `services/dataforseo.service.ts`
 - `guards/api-key.guard.ts`
 
 **User Flow:**
 1. User enters DataForSEO login & password
 2. App validates via free endpoint
-3. Credentials encrypted and stored in localStorage
+3. Credentials stored in IndexedDB
 4. Redirects to dashboard
 
 ---
@@ -145,7 +144,7 @@ Body: [{
 2. App fetches keywords from API (or cache)
 3. Displays keywords in sortable table
 4. Shows aggregate stats
-5. Domain & keywords persist in localStorage
+5. Domain & keywords persist in IndexedDB
 
 ---
 
@@ -162,7 +161,7 @@ Body: [{
 - Display with pagination (20 at a time with "Load More")
 - Manual competitor entry option
 - Pre-select previously selected competitors
-- Selected competitors persist per domain in localStorage
+- Selected competitors persist per domain in IndexedDB
 
 **Key Files:**
 - `components/competitor-selection/`
@@ -191,7 +190,7 @@ Body: [{
 3. Top 5 auto-selected
 4. User can add/remove competitors manually
 5. Clicks "Analyze X Competitors"
-6. Selection saved to localStorage (keyed by domain)
+6. Selection saved to IndexedDB (keyed by domain)
 
 ---
 
@@ -406,13 +405,15 @@ Max: 1000 competitors per call
 - Full competitor analysis results (90 days)
 
 **Cache Keys:**
-- `searchscout_domain_keywords_{domain}`
-- `searchscout_competitors_{domain}`
-- `searchscout_competitor_analysis_{domain}_{competitors}`
+- `domain_keywords_{domain}`
+- `competitors_{domain}`
+- `competitor_analysis_{domain}_{competitors}`
 
 **Cache Service:**
+- Two-tier architecture: in-memory Map (sync reads) + IndexedDB `cache` store (async persistence)
+- `APP_INITIALIZER` pre-loads all non-expired entries into memory before first render
 - Configurable expiration (0, 7, 14, 30, 60, 90 days)
-- Auto-cleanup when quota exceeded
+- Expired entries evicted from IDB on startup
 - Metadata tracking (timestamp, age)
 - Manual refresh capability
 
@@ -420,15 +421,23 @@ Max: 1000 competitors per call
 
 ## User Data Persistence
 
-**localStorage Keys:**
-- `searchscout_api_credentials` - Encrypted API credentials
-- `searchscout_encryption_key` - AES encryption key
-- `searchscout_current_domain` - Last analyzed domain
-- `searchscout_selected_competitors_{domain}` - Selected competitors per domain
-- `searchscout_cache_config` - Cache settings
-- `searchscout_domain_keywords_{domain}` - Cached keyword data
-- `searchscout_competitors_{domain}` - Cached competitor data
-- `searchscout_competitor_analysis_{domain}_{competitors}` - Cached analysis
+**IndexedDB Database:** `searchscout` (v1)
+
+**`keyvalue` object store:**
+- `credentials` - API login & password
+- `currentDomain` - Last analyzed domain
+- `competitors_{domain}` - Selected competitors per domain
+- `cache_config` - Cache expiration settings
+
+**`cache` object store:**
+- `domain_keywords_{domain}` - Cached keyword data
+- `competitors_{domain}` - Cached competitor discovery results
+- `competitor_analysis_{domain}_{competitors}` - Cached full analysis
+
+**Startup behaviour:**
+- `APP_INITIALIZER` runs `StorageService.initialize()` and `CacheService.initialize()` in parallel before the root component renders
+- Both services read all data from IDB into memory; subsequent reads are fully synchronous
+- On first run, any legacy localStorage keys are migrated into IDB and then removed
 
 **Per-Domain State:**
 - Each domain remembers its own competitor selection
@@ -640,5 +649,5 @@ Logger.warn('Warning message');
 
 ---
 
-**Last Updated:** February 21, 2025
+**Last Updated:** February 28, 2026
 **Version:** 1.0.0 (MVP Complete)

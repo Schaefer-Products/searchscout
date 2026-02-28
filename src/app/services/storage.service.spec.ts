@@ -1,10 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 
 import { StorageService } from './storage.service';
+import { IndexedDbService } from './indexed-db.service';
 import { Competitor } from '../models/competitor.model';
 
 describe('StorageService', () => {
   let service: StorageService;
+  let mockDb: jasmine.SpyObj<IndexedDbService>;
 
   const sampleCredentials = { login: 'user@example.com', password: 'secret123' };
   const sampleCompetitors: Competitor[] = [
@@ -12,14 +14,19 @@ describe('StorageService', () => {
     { domain: 'competitor2.com', keywordOverlap: 30, totalKeywords: 150 }
   ];
 
-  beforeEach(() => {
-    localStorage.clear();
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(StorageService);
-  });
+  beforeEach(async () => {
+    mockDb = jasmine.createSpyObj('IndexedDbService', ['get', 'set', 'delete', 'getAll', 'clear']);
+    mockDb.getAll.and.resolveTo([]);
+    mockDb.set.and.resolveTo(undefined);
+    mockDb.delete.and.resolveTo(undefined);
+    mockDb.get.and.resolveTo(undefined);
+    mockDb.clear.and.resolveTo(undefined);
 
-  afterEach(() => {
-    localStorage.clear();
+    TestBed.configureTestingModule({
+      providers: [{ provide: IndexedDbService, useValue: mockDb }]
+    });
+    service = TestBed.inject(StorageService);
+    await service.initialize();
   });
 
   it('should be created', () => {
@@ -35,11 +42,6 @@ describe('StorageService', () => {
     });
 
     it('should return null when no credentials are stored', () => {
-      expect(service.getCredentials()).toBeNull();
-    });
-
-    it('should return null when stored credentials are malformed JSON', () => {
-      localStorage.setItem('searchscout_api_credentials', 'not-valid-json');
       expect(service.getCredentials()).toBeNull();
     });
   });
@@ -86,12 +88,6 @@ describe('StorageService', () => {
       expect(service.getSelectedCompetitors('domain1.com')).toEqual(sampleCompetitors);
       expect(service.getSelectedCompetitors('domain2.com')).toEqual([sampleCompetitors[0]]);
     });
-
-    it('should handle malformed JSON gracefully and return null', () => {
-      const key = 'searchscout_selected_competitors_bad.com';
-      localStorage.setItem(key, 'not-json');
-      expect(service.getSelectedCompetitors('bad.com')).toBeNull();
-    });
   });
 
   describe('clearSelectedCompetitors()', () => {
@@ -133,6 +129,61 @@ describe('StorageService', () => {
       service.saveCurrentDomain('example.com');
       service.clearCurrentDomain();
       expect(service.getCurrentDomain()).toBeNull();
+    });
+  });
+
+  // ─── initialize() ─────────────────────────────────────────────────────────
+
+  describe('initialize()', () => {
+    it('should load credentials from IDB on initialize', async () => {
+      mockDb.getAll.and.resolveTo([{ key: 'credentials', value: sampleCredentials }]);
+      const freshService = new StorageService(mockDb);
+      await freshService.initialize();
+      expect(freshService.getCredentials()).toEqual(sampleCredentials);
+    });
+
+    it('should load current domain from IDB on initialize', async () => {
+      mockDb.getAll.and.resolveTo([{ key: 'currentDomain', value: 'loaded.com' }]);
+      const freshService = new StorageService(mockDb);
+      await freshService.initialize();
+      expect(freshService.getCurrentDomain()).toBe('loaded.com');
+    });
+
+    it('should load selected competitors from IDB on initialize', async () => {
+      mockDb.getAll.and.resolveTo([
+        { key: 'competitors_example.com', value: sampleCompetitors }
+      ]);
+      const freshService = new StorageService(mockDb);
+      await freshService.initialize();
+      expect(freshService.getSelectedCompetitors('example.com')).toEqual(sampleCompetitors);
+    });
+
+    it('should migrate credentials from localStorage when IDB is empty', async () => {
+      localStorage.setItem('searchscout_api_credentials', JSON.stringify(sampleCredentials));
+      mockDb.getAll.and.resolveTo([]);
+
+      const freshService = new StorageService(mockDb);
+      await freshService.initialize();
+
+      expect(freshService.getCredentials()).toEqual(sampleCredentials);
+      expect(mockDb.set).toHaveBeenCalledWith('keyvalue', 'credentials', sampleCredentials);
+      expect(localStorage.getItem('searchscout_api_credentials')).toBeNull();
+
+      localStorage.clear();
+    });
+
+    it('should migrate current domain from localStorage when IDB is empty', async () => {
+      localStorage.setItem('searchscout_current_domain', 'migrated.com');
+      mockDb.getAll.and.resolveTo([]);
+
+      const freshService = new StorageService(mockDb);
+      await freshService.initialize();
+
+      expect(freshService.getCurrentDomain()).toBe('migrated.com');
+      expect(mockDb.set).toHaveBeenCalledWith('keyvalue', 'currentDomain', 'migrated.com');
+      expect(localStorage.getItem('searchscout_current_domain')).toBeNull();
+
+      localStorage.clear();
     });
   });
 });
