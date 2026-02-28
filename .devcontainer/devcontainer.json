@@ -6,7 +6,7 @@
   ],
   "service": "angular-app",
   "containerEnv": {
-    "SHELL": "/bin/sh"
+    "SHELL": "/bin/bash"
   },
   "workspaceFolder": "/app",
   "customizations": {
