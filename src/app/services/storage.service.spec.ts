@@ -1,12 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 
 import { StorageService } from './storage.service';
-import { EncryptionService } from './encryption.service';
 import { Competitor } from '../models/competitor.model';
 
 describe('StorageService', () => {
   let service: StorageService;
-  let mockEncryption: jasmine.SpyObj<EncryptionService>;
 
   const sampleCredentials = { login: 'user@example.com', password: 'secret123' };
   const sampleCompetitors: Competitor[] = [
@@ -16,16 +14,7 @@ describe('StorageService', () => {
 
   beforeEach(() => {
     localStorage.clear();
-    mockEncryption = jasmine.createSpyObj('EncryptionService', ['encrypt', 'decrypt']);
-    // Simple symmetric fake: prefix with "enc:"
-    mockEncryption.encrypt.and.callFake((text: string) => 'enc:' + text);
-    mockEncryption.decrypt.and.callFake((text: string) =>
-      text.startsWith('enc:') ? text.slice(4) : ''
-    );
-
-    TestBed.configureTestingModule({
-      providers: [{ provide: EncryptionService, useValue: mockEncryption }]
-    });
+    TestBed.configureTestingModule({});
     service = TestBed.inject(StorageService);
   });
 
@@ -45,30 +34,12 @@ describe('StorageService', () => {
       expect(service.getCredentials()).toEqual(sampleCredentials);
     });
 
-    it('should call encrypt when saving', () => {
-      service.saveCredentials(sampleCredentials);
-      expect(mockEncryption.encrypt).toHaveBeenCalled();
-    });
-
-    it('should call decrypt when retrieving', () => {
-      service.saveCredentials(sampleCredentials);
-      service.getCredentials();
-      expect(mockEncryption.decrypt).toHaveBeenCalled();
-    });
-
     it('should return null when no credentials are stored', () => {
       expect(service.getCredentials()).toBeNull();
     });
 
-    it('should return null when decrypt returns an empty string', () => {
-      localStorage.setItem('searchscout_api_credentials', 'enc:');
-      mockEncryption.decrypt.and.returnValue('');
-      expect(service.getCredentials()).toBeNull();
-    });
-
-    it('should return null when decrypted value is not valid JSON', () => {
-      localStorage.setItem('searchscout_api_credentials', 'enc:not-json');
-      mockEncryption.decrypt.and.returnValue('not-json');
+    it('should return null when stored credentials are malformed JSON', () => {
+      localStorage.setItem('searchscout_api_credentials', 'not-valid-json');
       expect(service.getCredentials()).toBeNull();
     });
   });

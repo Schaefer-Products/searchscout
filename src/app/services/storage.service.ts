@@ -1,5 +1,4 @@
-import { Injectable, inject } from '@angular/core';
-import { EncryptionService } from './encryption.service';
+import { Injectable } from '@angular/core';
 import { Competitor } from '../models/competitor.model';
 import { Logger } from '../utils/logger';
 
@@ -15,33 +14,26 @@ export class StorageService {
   private readonly API_CREDS_KEY = 'searchscout_api_credentials';
   private readonly SELECTED_COMPETITORS_KEY = 'searchscout_selected_competitors';
   private readonly CURRENT_DOMAIN_KEY = 'searchscout_current_domain';
-  private encryption = inject(EncryptionService);
 
   /**
-   * Save encrypted API credentials to localStorage
+   * Save API credentials to localStorage
    */
   saveCredentials(credentials: ApiCredentials): void {
-    const json = JSON.stringify(credentials);
-    const encrypted = this.encryption.encrypt(json);
-    localStorage.setItem(this.API_CREDS_KEY, encrypted);
+    localStorage.setItem(this.API_CREDS_KEY, JSON.stringify(credentials));
   }
 
   /**
-   * Retrieve and decrypt API credentials from localStorage
+   * Retrieve API credentials from localStorage
    */
   getCredentials(): ApiCredentials | null {
-    const encrypted = localStorage.getItem(this.API_CREDS_KEY);
+    const stored = localStorage.getItem(this.API_CREDS_KEY);
 
-    if (!encrypted) {
+    if (!stored) {
       return null;
     }
 
     try {
-      const decrypted = this.encryption.decrypt(encrypted);
-      if (!decrypted) {
-        return null;
-      }
-      return JSON.parse(decrypted) as ApiCredentials;
+      return JSON.parse(stored) as ApiCredentials;
     } catch (error) {
       Logger.error('Failed to retrieve credentials:', error);
       return null;
