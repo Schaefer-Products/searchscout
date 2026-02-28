@@ -1,6 +1,8 @@
 services:
   angular-app:
     command: ["sleep", "infinity"]
+    environment:
+      - DISPLAY=:99
     volumes:
       - ./:/app
       - /app/node_modules

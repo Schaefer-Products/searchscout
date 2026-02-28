@@ -5,11 +5,13 @@ WORKDIR /app
 RUN apk add \
     bash \
     chromium \
+    curl \
     g++ \
     git \
     make \
     openssh \
     python3 \
+    xvfb \
     --no-cache
 
 ENV CHROME_BIN=/usr/bin/chromium-browser

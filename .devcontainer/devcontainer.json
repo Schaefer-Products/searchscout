@@ -23,6 +23,6 @@
       }
     }
   },
-  "forwardPorts": [4200],
-  "postCreateCommand": "npm install && npm install -g @anthropic-ai/claude-code"
+  "forwardPorts": [4200, 9222],
+  "postCreateCommand": "npm install && npm install -g @anthropic-ai/claude-code && bash /app/docker/setup-claude-chrome.sh"
 }
