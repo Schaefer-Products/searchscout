@@ -43,6 +43,13 @@
       "script": "test:ci",
       "label": "test (no watch)",
       "problemMatcher": "$tsc"
+    },
+    {
+      "type": "shell",
+      "label": "claude --chrome",
+      "command": "claude --chrome",
+      "isBackground": true,
+      "problemMatcher": []
     }
   ]
 }

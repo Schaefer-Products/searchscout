@@ -31,6 +31,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 ### Development and CI/CD
 - [x] git in dev container
 - [x] deployment to netlify
+- [x] configure claude for development in a devcontainer
 
 ### Bugs
 - [x] Switching domains doesn't clear competitors

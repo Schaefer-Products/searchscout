@@ -5,14 +5,7 @@ services:
       dockerfile: docker/Dockerfile.dev
     container_name: seo-content-app-dev
     volumes:
-      - ./src:/app/src
-      - ./angular.json:/app/angular.json
-      - ./tsconfig.json:/app/tsconfig.json
-      - ./tsconfig.app.json:/app/tsconfig.app.json
-      - ./tsconfig.spec.json:/app/tsconfig.spec.json
-      - ./karma.conf.js:/app/karma.conf.js
-      - ./package.json:/app/package.json
-      - ./package-lock.json:/app/package-lock.json
+      - ./:/app/
       - /app/node_modules
     ports:
       - "4200:4200"
