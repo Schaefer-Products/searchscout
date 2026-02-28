@@ -50,6 +50,13 @@
       "command": "claude --chrome",
       "isBackground": true,
       "problemMatcher": []
+    },
+    {
+      "type": "shell",
+      "label": "start claude chrome",
+      "command": "bash docker/start-claude-chrome.sh",
+      "isBackground": true,
+      "problemMatcher": []
     }
   ]
 }
