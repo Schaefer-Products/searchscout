@@ -6,7 +6,8 @@
   ],
   "service": "angular-app",
   "containerEnv": {
-    "SHELL": "/bin/bash"
+    "SHELL": "/bin/bash",
+    "TERM": "xterm-256color"
   },
   "workspaceFolder": "/app",
   "customizations": {

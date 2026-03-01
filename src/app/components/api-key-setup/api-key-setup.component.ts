@@ -1,4 +1,4 @@
-import { Component, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +12,7 @@ import { Logger } from '../../utils/logger';
   templateUrl: './api-key-setup.component.html',
   styleUrls: ['./api-key-setup.component.scss']
 })
-export class ApiKeySetupComponent {
+export class ApiKeySetupComponent implements OnInit {
   private dataforseoService = inject(DataforseoService);
   private router = inject(Router);
   private cdr = inject(ChangeDetectorRef);
@@ -22,6 +22,21 @@ export class ApiKeySetupComponent {
   isValidating: boolean = false;
   errorMessage: string = '';
   showPassword: boolean = false;
+  hasExistingCredentials: boolean = false;
+
+  ngOnInit(): void {
+    this.hasExistingCredentials = this.dataforseoService.hasCredentials();
+  }
+
+  goToDashboard(): void {
+    this.router.navigate(['/dashboard']);
+  }
+
+  resetCredentials(): void {
+    this.dataforseoService.clearCredentials();
+    this.hasExistingCredentials = false;
+    Logger.debug('Credentials cleared, showing setup form');
+  }
 
   /**
    * Validate and save credentials

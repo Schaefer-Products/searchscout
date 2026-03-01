@@ -205,6 +205,50 @@
   @include spinner(14px);
 }
 
+.credentials-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: rgba($color-green, 0.1);
+  margin: 0 auto $space-4;
+
+  svg {
+    width: 36px;
+    height: 36px;
+    color: $color-green;
+  }
+}
+
+.credentials-actions {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+  margin-top: $space-8;
+}
+
+.btn-danger {
+  width: 100%;
+  padding: $padding-input $space-6;
+  border: 2px solid $color-error-text;
+  border-radius: $radius-sm;
+  font-size: $font-size-md;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: $color-white;
+  color: $color-error-text;
+
+  &:hover {
+    background: $color-error-bg;
+  }
+}
+
 .help-text {
   margin-top: $space-8;
   padding-top: $space-8;

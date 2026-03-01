@@ -1,5 +1,26 @@
 <div class="api-key-setup-container">
   <div class="setup-card">
+
+    <!-- Already Configured State -->
+    <ng-container *ngIf="hasExistingCredentials">
+      <div class="header">
+        <div class="credentials-badge">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h1>You're already set up</h1>
+        <p class="subtitle">Your DataForSEO credentials are saved and ready to use.</p>
+      </div>
+
+      <div class="credentials-actions">
+        <button type="button" class="btn-primary" (click)="goToDashboard()">Go to Dashboard</button>
+        <button type="button" class="btn-danger" (click)="resetCredentials()">Reset Credentials</button>
+      </div>
+    </ng-container>
+
+    <!-- Setup Form -->
+    <ng-container *ngIf="!hasExistingCredentials">
     <!-- Header -->
     <div class="header">
       <h1>Welcome to SearchScout</h1>
@@ -143,5 +164,7 @@
       <p><strong>Where do I find my credentials?</strong></p>
       <p>Log into your DataForSEO account, go to Settings → API Access, and copy your Login and Password.</p>
     </div>
+    </ng-container>
+
   </div>
 </div>

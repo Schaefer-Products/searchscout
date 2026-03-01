@@ -11,7 +11,13 @@ describe('ApiKeySetupComponent', () => {
   let routerSpy: jasmine.SpyObj<Router>;
 
   beforeEach(async () => {
-    dataforseoSpy = jasmine.createSpyObj('DataforseoService', ['validateCredentials', 'saveCredentials']);
+    dataforseoSpy = jasmine.createSpyObj('DataforseoService', [
+      'validateCredentials',
+      'saveCredentials',
+      'hasCredentials',
+      'clearCredentials',
+    ]);
+    dataforseoSpy.hasCredentials.and.returnValue(false);
     routerSpy = jasmine.createSpyObj('Router', ['navigate']);
 
     await TestBed.configureTestingModule({
@@ -36,6 +42,10 @@ describe('ApiKeySetupComponent', () => {
   // ---------------------------------------------------------------------------
 
   describe('initial state', () => {
+    it('should have hasExistingCredentials false when no credentials are stored', () => {
+      expect(component.hasExistingCredentials).toBeFalse();
+    });
+
     it('should have empty login', () => {
       expect(component.login).toBe('');
     });
@@ -368,6 +378,88 @@ describe('ApiKeySetupComponent', () => {
       const form = fixture.nativeElement.querySelector('form') as HTMLFormElement;
       form.dispatchEvent(new Event('submit'));
       expect(component.validateAndSave).toHaveBeenCalled();
+    });
+  });
+
+  // ---------------------------------------------------------------------------
+  // Existing credentials — "already set up" state
+  // ---------------------------------------------------------------------------
+
+  describe('when credentials are already saved', () => {
+    beforeEach(() => {
+      // Simulate credentials being present: update the spy and set component state
+      dataforseoSpy.hasCredentials.and.returnValue(true);
+      component.hasExistingCredentials = true;
+      fixture.detectChanges();
+    });
+
+    describe('ngOnInit()', () => {
+      it('should set hasExistingCredentials to true when credentials are present', () => {
+        // Call ngOnInit directly with the spy returning true
+        component.ngOnInit();
+        expect(component.hasExistingCredentials).toBeTrue();
+      });
+    });
+
+    describe('goToDashboard()', () => {
+      it('should navigate to /dashboard', () => {
+        component.goToDashboard();
+        expect(routerSpy.navigate).toHaveBeenCalledWith(['/dashboard']);
+      });
+    });
+
+    describe('resetCredentials()', () => {
+      it('should call clearCredentials on the service', () => {
+        component.resetCredentials();
+        expect(dataforseoSpy.clearCredentials).toHaveBeenCalled();
+      });
+
+      it('should set hasExistingCredentials to false', () => {
+        component.resetCredentials();
+        expect(component.hasExistingCredentials).toBeFalse();
+      });
+    });
+
+    describe('template — already configured view', () => {
+      it('should show "You\'re already set up" heading', () => {
+        const h1 = fixture.nativeElement.querySelector('h1') as HTMLElement;
+        expect(h1.textContent).toContain("You're already set up");
+      });
+
+      it('should not render the setup form', () => {
+        const form = fixture.nativeElement.querySelector('form');
+        expect(form).toBeNull();
+      });
+
+      it('should render a "Go to Dashboard" button', () => {
+        const buttons = fixture.nativeElement.querySelectorAll('button') as NodeListOf<HTMLButtonElement>;
+        const labels = Array.from(buttons).map(b => b.textContent?.trim());
+        expect(labels).toContain('Go to Dashboard');
+      });
+
+      it('should render a "Reset Credentials" button', () => {
+        const buttons = fixture.nativeElement.querySelectorAll('button') as NodeListOf<HTMLButtonElement>;
+        const labels = Array.from(buttons).map(b => b.textContent?.trim());
+        expect(labels).toContain('Reset Credentials');
+      });
+
+      it('should call goToDashboard when "Go to Dashboard" is clicked', () => {
+        spyOn(component, 'goToDashboard');
+        const btn = Array.from(
+          fixture.nativeElement.querySelectorAll('button') as NodeListOf<HTMLButtonElement>
+        ).find(b => b.textContent?.trim() === 'Go to Dashboard')!;
+        btn.click();
+        expect(component.goToDashboard).toHaveBeenCalled();
+      });
+
+      it('should show the setup form and hide "already set up" view after reset', () => {
+        component.resetCredentials();
+        fixture.detectChanges();
+        const form = fixture.nativeElement.querySelector('form');
+        const h1 = fixture.nativeElement.querySelector('h1') as HTMLElement;
+        expect(form).not.toBeNull();
+        expect(h1.textContent).toContain('Welcome to SearchScout');
+      });
     });
   });
 });
