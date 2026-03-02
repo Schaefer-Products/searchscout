@@ -744,5 +744,78 @@ describe('CompetitorSelectionComponent', () => {
       (fixture.nativeElement.querySelector('.btn-remove') as HTMLButtonElement).click();
       expect(component.removeCompetitor).toHaveBeenCalledWith('manual.com');
     });
+
+    // -------------------------------------------------------------------------
+    // Manual badge overflow — long domain names
+    // -------------------------------------------------------------------------
+
+    describe('Manual badge overflow — long domain names', () => {
+      // Attach the fixture to document.body so the browser computes real layout
+      // and CSS rules from ViewEncapsulation.Emulated are active.
+      beforeEach(() => {
+        document.body.appendChild(fixture.nativeElement);
+      });
+
+      afterEach(() => {
+        if (document.body.contains(fixture.nativeElement)) {
+          document.body.removeChild(fixture.nativeElement);
+        }
+      });
+
+      it('should apply min-width: 0 to .competitor-info so it can shrink below its content size', () => {
+        // Arrange: render a manual competitor card so .competitor-info exists in the DOM.
+        component.discoveryComplete = true;
+        component.allCompetitors = [
+          makeCompetitor('newsletter.pragmaticengineer.com', { isManual: true }),
+        ];
+        component.displayedCompetitors = [...component.allCompetitors];
+        fixture.detectChanges();
+
+        const competitorInfo = fixture.nativeElement.querySelector(
+          '.competitor-info'
+        ) as HTMLElement;
+        expect(competitorInfo).not.toBeNull();
+
+        // Assert: the CSS fix sets min-width: 0 on .competitor-info.
+        // Without the fix, CSS flexbox defaults to min-width: auto (reported as
+        // an empty string or 'auto' by getComputedStyle in ChromeHeadless).
+        // After the fix, the computed value resolves to '0px'.
+        const computedMinWidth = getComputedStyle(competitorInfo).minWidth;
+        expect(computedMinWidth).toBe('0px');
+      });
+
+      it('should allow .competitor-info to shrink by giving the badge a non-zero computed flex-shrink of 0 while .competitor-info has min-width 0px', () => {
+        // This test verifies the two-part contract that prevents badge overflow:
+        //   1. .badge has flex-shrink: 0 (it never compresses — the domain text must yield instead).
+        //   2. .competitor-info has min-width: 0px (it CAN shrink below its content size).
+        // Without (2) the flex container cannot reclaim space from .competitor-info, so
+        // the badge is pushed outside the card.  The test fails pre-fix because
+        // getComputedStyle(.competitor-info).minWidth returns 'auto', not '0px'.
+
+        component.discoveryComplete = true;
+        component.allCompetitors = [
+          makeCompetitor('newsletter.pragmaticengineer.com', { isManual: true }),
+        ];
+        component.displayedCompetitors = [...component.allCompetitors];
+        fixture.detectChanges();
+
+        const competitorInfo = fixture.nativeElement.querySelector(
+          '.competitor-info'
+        ) as HTMLElement;
+        const badge = fixture.nativeElement.querySelector(
+          '.domain-name .badge.manual'
+        ) as HTMLElement;
+        expect(competitorInfo).not.toBeNull();
+        expect(badge).not.toBeNull();
+
+        // The badge must never shrink (flex-shrink: 0 in SCSS) — this is already
+        // present in the buggy code and should always pass.
+        expect(getComputedStyle(badge).flexShrink).toBe('0');
+
+        // .competitor-info must be allowed to shrink (min-width: 0) — this is the
+        // CSS fix.  Without it, computed min-width is 'auto' and this assertion fails.
+        expect(getComputedStyle(competitorInfo).minWidth).toBe('0px');
+      });
+    });
   });
 });

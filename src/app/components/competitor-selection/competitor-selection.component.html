@@ -102,7 +102,7 @@
         <!-- Competitor Info -->
         <div class="competitor-info">
           <div class="domain-name">
-            {{ competitor.domain }}
+            <span [title]="competitor.domain">{{ competitor.domain }}</span>
             <span class="badge manual" *ngIf="competitor.isManual">Manual</span>
           </div>
 

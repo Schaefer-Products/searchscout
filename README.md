@@ -38,7 +38,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - [x] "Find Your Competitors" section doesn't show cache age
 - [x] Changing competitors doesn't refresh the data
 - [x] Given I have to re-enter credentials, when the "Analyze Your Domain" section appears, then the selected competitors section should not appear until I've clicked "Analyze Domain"
-- [ ] When the competitor domain name is long (e.g. newsletter.pragmaticengineer.com), the "Manual" label spills over outside the card
+- [x] When the competitor domain name is long (e.g. newsletter.pragmaticengineer.com), the "Manual" label spills over outside the card
 
 ### Features
 - [x] Persist competitor selection
