@@ -1,0 +1,66 @@
+{
+  "version": "0.1.20230725",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "0.5 sec.",
+  "cost": 0.01,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "task_1",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "0.4 sec.",
+      "cost": 0.01,
+      "result_count": 3,
+      "path": [],
+      "data": {},
+      "result": [
+        {
+          "se_type": "google",
+          "target": "example.com",
+          "location_code": 2840,
+          "language_code": "en",
+          "total_count": 3,
+          "items_count": 3,
+          "items": [
+            {
+              "domain": "competitor-a.com",
+              "avg_position": 5.2,
+              "metrics": {
+                "organic": {
+                  "intersections": 850,
+                  "count": 2100,
+                  "etv": 15000
+                }
+              }
+            },
+            {
+              "domain": "competitor-b.com",
+              "avg_position": 6.7,
+              "metrics": {
+                "organic": {
+                  "intersections": 620,
+                  "count": 1800,
+                  "etv": 9500
+                }
+              }
+            },
+            {
+              "domain": "competitor-c.com",
+              "avg_position": 8.1,
+              "metrics": {
+                "organic": {
+                  "intersections": 430,
+                  "count": 1200,
+                  "etv": 5000
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

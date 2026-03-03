@@ -1,0 +1,65 @@
+{
+  "version": "0.1.20230725",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "0.5 sec.",
+  "cost": 0.01,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "task_1",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "0.4 sec.",
+      "cost": 0.01,
+      "result_count": 2,
+      "path": [],
+      "data": {},
+      "result": [
+        {
+          "se_type": "google",
+          "target": "example.com",
+          "location_code": 2840,
+          "language_code": "en",
+          "total_count": 2,
+          "items_count": 2,
+          "items": [
+            {
+              "keyword_data": {
+                "keyword": "seo tools",
+                "keyword_info": {
+                  "search_volume": 12000,
+                  "competition": 0.45,
+                  "cpc": 2.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 4,
+                  "etv": 480
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "keyword research",
+                "keyword_info": {
+                  "search_volume": 8100,
+                  "competition": 0.38,
+                  "cpc": 1.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 2,
+                  "etv": 2700
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
