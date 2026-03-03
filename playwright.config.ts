@@ -18,7 +18,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         launchOptions: {
-          executablePath: process.env['CHROMIUM_PATH'] ?? '/usr/bin/chromium-browser',
+          executablePath: process.env['CHROME_BIN'] ?? '/usr/bin/chromium-browser',
           args: ['--no-sandbox', '--disable-dev-shm-usage'],
         },
       },

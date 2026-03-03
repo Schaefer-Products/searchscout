@@ -31,6 +31,8 @@ export class DashboardPage {
   get discoverCompetitorsButton() { return this.page.locator('.btn-discover-competitors'); }
   get selectedCompetitorsSection() { return this.page.locator('.selected-competitors-section'); }
   get selectedChips() { return this.page.locator('.selected-chip'); }
+  get startAnalysisButton() { return this.page.locator('.selected-competitors-section .btn-analyze'); }
+  get changeSelectionButton() { return this.page.locator('.selected-competitors-section .btn-change'); }
 
   // Actions
   async analyzeDomain(domain: string): Promise<void> {

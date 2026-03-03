@@ -67,3 +67,22 @@ export async function stubCompetitorDiscovery(page: Page): Promise<void> {
     });
   });
 }
+
+/**
+ * Stubs POST /ranked_keywords/live to return competitor keyword data.
+ * @param variant 'standard' — 3 keywords (link building, seo tools, backlink checker);
+ *                'many'     — 55 unique competitor keywords for pagination testing
+ */
+export async function stubCompetitorKeywords(
+  page: Page,
+  variant: 'standard' | 'many' = 'standard'
+): Promise<void> {
+  const filename = variant === 'many' ? 'ranked-keywords-many.json' : 'ranked-keywords-competitor.json';
+  await page.route('**/ranked_keywords/live', async (route) => {
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(loadFixture(filename)),
+    });
+  });
+}

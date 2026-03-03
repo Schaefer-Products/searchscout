@@ -56,7 +56,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - [x] refactoring of some business logic ("top 3" logic)
 - [ ] merge environment files with default
 - [ ] save competitor keywords in separate files
-- [ ] establish acceptance tests framework
+- [x] establish acceptance tests framework
 - [x] increase cache storage capacity
       - [x] implement lz-string for immediate gains
       - [x] switch cache storage to IndexDB

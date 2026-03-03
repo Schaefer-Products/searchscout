@@ -1,0 +1,418 @@
+{
+  "version": "0.1.20230725",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "0.5 sec.",
+  "cost": 0.01,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "task_many",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "0.4 sec.",
+      "cost": 0.01,
+      "result_count": 55,
+      "path": [],
+      "data": {},
+      "result": [
+        {
+          "se_type": "google",
+          "target": "competitor.com",
+          "location_code": 2840,
+          "language_code": "en",
+          "total_count": 55,
+          "items_count": 55,
+          "items": [
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 01",
+                "keyword_info": { "search_volume": 3200, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 02",
+                "keyword_info": { "search_volume": 3100, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 03",
+                "keyword_info": { "search_volume": 3000, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 04",
+                "keyword_info": { "search_volume": 2900, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 05",
+                "keyword_info": { "search_volume": 2800, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 06",
+                "keyword_info": { "search_volume": 2750, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 07",
+                "keyword_info": { "search_volume": 2700, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 08",
+                "keyword_info": { "search_volume": 2650, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 09",
+                "keyword_info": { "search_volume": 2600, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 10",
+                "keyword_info": { "search_volume": 2550, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 11",
+                "keyword_info": { "search_volume": 2500, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 12",
+                "keyword_info": { "search_volume": 2450, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 13",
+                "keyword_info": { "search_volume": 2400, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 14",
+                "keyword_info": { "search_volume": 2350, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 15",
+                "keyword_info": { "search_volume": 2300, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 16",
+                "keyword_info": { "search_volume": 2250, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 17",
+                "keyword_info": { "search_volume": 2200, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 18",
+                "keyword_info": { "search_volume": 2150, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 19",
+                "keyword_info": { "search_volume": 2100, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 20",
+                "keyword_info": { "search_volume": 2050, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 21",
+                "keyword_info": { "search_volume": 2000, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 22",
+                "keyword_info": { "search_volume": 1950, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 23",
+                "keyword_info": { "search_volume": 1900, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 24",
+                "keyword_info": { "search_volume": 1850, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 25",
+                "keyword_info": { "search_volume": 1800, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 26",
+                "keyword_info": { "search_volume": 1780, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 27",
+                "keyword_info": { "search_volume": 1760, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 28",
+                "keyword_info": { "search_volume": 1740, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 29",
+                "keyword_info": { "search_volume": 1720, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 30",
+                "keyword_info": { "search_volume": 1700, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 31",
+                "keyword_info": { "search_volume": 1680, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 32",
+                "keyword_info": { "search_volume": 1660, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 33",
+                "keyword_info": { "search_volume": 1640, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 34",
+                "keyword_info": { "search_volume": 1620, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 35",
+                "keyword_info": { "search_volume": 1600, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 36",
+                "keyword_info": { "search_volume": 1580, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 37",
+                "keyword_info": { "search_volume": 1560, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 38",
+                "keyword_info": { "search_volume": 1540, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 39",
+                "keyword_info": { "search_volume": 1520, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 40",
+                "keyword_info": { "search_volume": 1500, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 41",
+                "keyword_info": { "search_volume": 1480, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 42",
+                "keyword_info": { "search_volume": 1460, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 43",
+                "keyword_info": { "search_volume": 1440, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 44",
+                "keyword_info": { "search_volume": 1420, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 45",
+                "keyword_info": { "search_volume": 1400, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 46",
+                "keyword_info": { "search_volume": 1380, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 47",
+                "keyword_info": { "search_volume": 1360, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 48",
+                "keyword_info": { "search_volume": 1340, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 49",
+                "keyword_info": { "search_volume": 1320, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 50",
+                "keyword_info": { "search_volume": 1300, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 51",
+                "keyword_info": { "search_volume": 1250, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 52",
+                "keyword_info": { "search_volume": 1200, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 53",
+                "keyword_info": { "search_volume": 1150, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 54",
+                "keyword_info": { "search_volume": 1100, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            },
+            {
+              "keyword_data": {
+                "keyword": "competitor keyword 55",
+                "keyword_info": { "search_volume": 1000, "competition": 0.30, "cpc": 1.00 }
+              },
+              "ranked_serp_element": { "serp_item": { "rank_absolute": 5, "etv": 100 } }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

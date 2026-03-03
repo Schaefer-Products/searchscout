@@ -1,0 +1,81 @@
+{
+  "version": "0.1.20230725",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "0.5 sec.",
+  "cost": 0.01,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "task_competitor",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "0.4 sec.",
+      "cost": 0.01,
+      "result_count": 3,
+      "path": [],
+      "data": {},
+      "result": [
+        {
+          "se_type": "google",
+          "target": "competitor.com",
+          "location_code": 2840,
+          "language_code": "en",
+          "total_count": 3,
+          "items_count": 3,
+          "items": [
+            {
+              "keyword_data": {
+                "keyword": "link building",
+                "keyword_info": {
+                  "search_volume": 9000,
+                  "competition": 0.55,
+                  "cpc": 3.20
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 3,
+                  "etv": 900
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "seo tools",
+                "keyword_info": {
+                  "search_volume": 12000,
+                  "competition": 0.45,
+                  "cpc": 2.50
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 2,
+                  "etv": 1200
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "backlink checker",
+                "keyword_info": {
+                  "search_volume": 6500,
+                  "competition": 0.60,
+                  "cpc": 4.10
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 5,
+                  "etv": 400
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

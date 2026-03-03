@@ -114,6 +114,43 @@ export async function seedDomainCache(
 }
 
 /**
+ * Seeds a competitor analysis result into the cache store before the page loads.
+ * The cache key is: competitor_analysis_<userDomain>_<competitorDomains sorted and joined by comma>
+ * Must be called before page.goto().
+ */
+export async function seedCompetitorAnalysisCache(
+  page: Page,
+  userDomain: string,
+  competitorDomains: string[],
+  results: Record<string, unknown>,
+  ageInDays: number = 2
+): Promise<void> {
+  const sorted = [...competitorDomains].sort().join(',');
+  const cacheKey = `competitor_analysis_${userDomain}_${sorted}`;
+  const msAgo = ageInDays * 24 * 60 * 60 * 1000;
+  await page.addInitScript((args: any) => {
+    const req = indexedDB.open('searchscout', 1);
+    req.onupgradeneeded = (e: any) => {
+      const db: IDBDatabase = e.target.result;
+      if (!db.objectStoreNames.contains('keyvalue')) db.createObjectStore('keyvalue');
+      if (!db.objectStoreNames.contains('cache')) db.createObjectStore('cache');
+    };
+    req.onsuccess = (e: any) => {
+      const db: IDBDatabase = e.target.result;
+      const now = Date.now();
+      const entry = {
+        key: args.cacheKey,
+        data: args.results,
+        timestamp: now - args.msAgo,
+        expiresAt: now + (7 * 24 * 60 * 60 * 1000),
+      };
+      const tx = db.transaction('cache', 'readwrite');
+      tx.objectStore('cache').put(entry, args.cacheKey);
+    };
+  }, { cacheKey, results, msAgo });
+}
+
+/**
  * Reads credentials from the keyvalue store after the page has loaded.
  * Must be called after page.goto().
  */
