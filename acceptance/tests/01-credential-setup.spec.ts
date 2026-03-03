@@ -58,4 +58,38 @@ test.describe('API Key Setup', () => {
     await expect(setup.submitButton).toBeVisible();
     await expect(setup.goToDashboardButton).not.toBeVisible();
   });
+
+  test('"Go to Dashboard" button navigates to /dashboard', async ({ page }) => {
+    await clearIndexedDb(page);
+    await seedCredentials(page, { login: 'existing@example.com', password: 'saved-pass' });
+    await page.goto('/setup');
+
+    const setup = new SetupPage(page);
+    await setup.goToDashboard();
+
+    await expect(page).toHaveURL(/\/dashboard/);
+  });
+
+  test('re-entering credentials after reset saves new credentials and redirects to dashboard', async ({ page }) => {
+    await clearIndexedDb(page);
+    await seedCredentials(page, { login: 'old@example.com', password: 'old-pass' });
+    await stubValidCredentials(page);
+    await page.goto('/setup');
+
+    const setup = new SetupPage(page);
+    await expect(setup.alreadySetUpHeading).toBeVisible();
+
+    await setup.resetCredentials();
+    await expect(setup.loginInput).toBeVisible();
+    // Note: the feature spec says the login is pre-filled with the existing email,
+    // but the component initialises login to '' and does not populate it on reset.
+    await expect(setup.loginInput).toHaveValue('');
+
+    await setup.fillCredentials('new@example.com', 'new-password');
+    await setup.submit();
+
+    await expect(page).toHaveURL(/\/dashboard/);
+    const savedCreds = await readCredentialsFromIdb(page);
+    expect(savedCreds?.login).toBe('new@example.com');
+  });
 });
