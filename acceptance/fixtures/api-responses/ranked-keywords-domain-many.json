@@ -1,0 +1,1793 @@
+{
+  "version": "0.1.20230725",
+  "status_code": 20000,
+  "status_message": "Ok.",
+  "time": "0.5 sec.",
+  "cost": 0.01,
+  "tasks_count": 1,
+  "tasks_error": 0,
+  "tasks": [
+    {
+      "id": "task_domain_many",
+      "status_code": 20000,
+      "status_message": "Ok.",
+      "time": "0.4 sec.",
+      "cost": 0.01,
+      "result_count": 110,
+      "path": [],
+      "data": {},
+      "result": [
+        {
+          "se_type": "google",
+          "target": "example.com",
+          "location_code": 2840,
+          "language_code": "en",
+          "total_count": 110,
+          "items_count": 110,
+          "items": [
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 001",
+                "keyword_info": {
+                  "search_volume": 1010,
+                  "competition": 0.4,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 2,
+                  "etv": 55
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 002",
+                "keyword_info": {
+                  "search_volume": 1020,
+                  "competition": 0.5,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 3,
+                  "etv": 60
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 003",
+                "keyword_info": {
+                  "search_volume": 1030,
+                  "competition": 0.6,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 4,
+                  "etv": 65
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 004",
+                "keyword_info": {
+                  "search_volume": 1040,
+                  "competition": 0.7,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 5,
+                  "etv": 70
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 005",
+                "keyword_info": {
+                  "search_volume": 1050,
+                  "competition": 0.8,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 6,
+                  "etv": 75
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 006",
+                "keyword_info": {
+                  "search_volume": 1060,
+                  "competition": 0.9,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 7,
+                  "etv": 80
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 007",
+                "keyword_info": {
+                  "search_volume": 1070,
+                  "competition": 0.3,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 8,
+                  "etv": 85
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 008",
+                "keyword_info": {
+                  "search_volume": 1080,
+                  "competition": 0.4,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 9,
+                  "etv": 90
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 009",
+                "keyword_info": {
+                  "search_volume": 1090,
+                  "competition": 0.5,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 10,
+                  "etv": 95
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 010",
+                "keyword_info": {
+                  "search_volume": 1100,
+                  "competition": 0.6,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 11,
+                  "etv": 100
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 011",
+                "keyword_info": {
+                  "search_volume": 1110,
+                  "competition": 0.7,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 12,
+                  "etv": 105
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 012",
+                "keyword_info": {
+                  "search_volume": 1120,
+                  "competition": 0.8,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 13,
+                  "etv": 110
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 013",
+                "keyword_info": {
+                  "search_volume": 1130,
+                  "competition": 0.9,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 14,
+                  "etv": 115
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 014",
+                "keyword_info": {
+                  "search_volume": 1140,
+                  "competition": 0.3,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 15,
+                  "etv": 120
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 015",
+                "keyword_info": {
+                  "search_volume": 1150,
+                  "competition": 0.4,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 16,
+                  "etv": 125
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 016",
+                "keyword_info": {
+                  "search_volume": 1160,
+                  "competition": 0.5,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 17,
+                  "etv": 130
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 017",
+                "keyword_info": {
+                  "search_volume": 1170,
+                  "competition": 0.6,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 18,
+                  "etv": 135
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 018",
+                "keyword_info": {
+                  "search_volume": 1180,
+                  "competition": 0.7,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 19,
+                  "etv": 140
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 019",
+                "keyword_info": {
+                  "search_volume": 1190,
+                  "competition": 0.8,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 20,
+                  "etv": 145
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 020",
+                "keyword_info": {
+                  "search_volume": 1200,
+                  "competition": 0.9,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 1,
+                  "etv": 150
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 021",
+                "keyword_info": {
+                  "search_volume": 1210,
+                  "competition": 0.3,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 2,
+                  "etv": 155
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 022",
+                "keyword_info": {
+                  "search_volume": 1220,
+                  "competition": 0.4,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 3,
+                  "etv": 160
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 023",
+                "keyword_info": {
+                  "search_volume": 1230,
+                  "competition": 0.5,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 4,
+                  "etv": 165
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 024",
+                "keyword_info": {
+                  "search_volume": 1240,
+                  "competition": 0.6,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 5,
+                  "etv": 170
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 025",
+                "keyword_info": {
+                  "search_volume": 1250,
+                  "competition": 0.7,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 6,
+                  "etv": 175
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 026",
+                "keyword_info": {
+                  "search_volume": 1260,
+                  "competition": 0.8,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 7,
+                  "etv": 180
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 027",
+                "keyword_info": {
+                  "search_volume": 1270,
+                  "competition": 0.9,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 8,
+                  "etv": 185
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 028",
+                "keyword_info": {
+                  "search_volume": 1280,
+                  "competition": 0.3,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 9,
+                  "etv": 190
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 029",
+                "keyword_info": {
+                  "search_volume": 1290,
+                  "competition": 0.4,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 10,
+                  "etv": 195
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 030",
+                "keyword_info": {
+                  "search_volume": 1300,
+                  "competition": 0.5,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 11,
+                  "etv": 200
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 031",
+                "keyword_info": {
+                  "search_volume": 1310,
+                  "competition": 0.6,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 12,
+                  "etv": 205
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 032",
+                "keyword_info": {
+                  "search_volume": 1320,
+                  "competition": 0.7,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 13,
+                  "etv": 210
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 033",
+                "keyword_info": {
+                  "search_volume": 1330,
+                  "competition": 0.8,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 14,
+                  "etv": 215
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 034",
+                "keyword_info": {
+                  "search_volume": 1340,
+                  "competition": 0.9,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 15,
+                  "etv": 220
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 035",
+                "keyword_info": {
+                  "search_volume": 1350,
+                  "competition": 0.3,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 16,
+                  "etv": 225
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 036",
+                "keyword_info": {
+                  "search_volume": 1360,
+                  "competition": 0.4,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 17,
+                  "etv": 230
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 037",
+                "keyword_info": {
+                  "search_volume": 1370,
+                  "competition": 0.5,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 18,
+                  "etv": 235
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 038",
+                "keyword_info": {
+                  "search_volume": 1380,
+                  "competition": 0.6,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 19,
+                  "etv": 240
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 039",
+                "keyword_info": {
+                  "search_volume": 1390,
+                  "competition": 0.7,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 20,
+                  "etv": 245
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 040",
+                "keyword_info": {
+                  "search_volume": 1400,
+                  "competition": 0.8,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 1,
+                  "etv": 250
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 041",
+                "keyword_info": {
+                  "search_volume": 1410,
+                  "competition": 0.9,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 2,
+                  "etv": 255
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 042",
+                "keyword_info": {
+                  "search_volume": 1420,
+                  "competition": 0.3,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 3,
+                  "etv": 260
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 043",
+                "keyword_info": {
+                  "search_volume": 1430,
+                  "competition": 0.4,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 4,
+                  "etv": 265
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 044",
+                "keyword_info": {
+                  "search_volume": 1440,
+                  "competition": 0.5,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 5,
+                  "etv": 270
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 045",
+                "keyword_info": {
+                  "search_volume": 1450,
+                  "competition": 0.6,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 6,
+                  "etv": 275
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 046",
+                "keyword_info": {
+                  "search_volume": 1460,
+                  "competition": 0.7,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 7,
+                  "etv": 280
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 047",
+                "keyword_info": {
+                  "search_volume": 1470,
+                  "competition": 0.8,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 8,
+                  "etv": 285
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 048",
+                "keyword_info": {
+                  "search_volume": 1480,
+                  "competition": 0.9,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 9,
+                  "etv": 290
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 049",
+                "keyword_info": {
+                  "search_volume": 1490,
+                  "competition": 0.3,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 10,
+                  "etv": 295
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 050",
+                "keyword_info": {
+                  "search_volume": 1500,
+                  "competition": 0.4,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 11,
+                  "etv": 300
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 051",
+                "keyword_info": {
+                  "search_volume": 1510,
+                  "competition": 0.5,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 12,
+                  "etv": 305
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 052",
+                "keyword_info": {
+                  "search_volume": 1520,
+                  "competition": 0.6,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 13,
+                  "etv": 310
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 053",
+                "keyword_info": {
+                  "search_volume": 1530,
+                  "competition": 0.7,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 14,
+                  "etv": 315
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 054",
+                "keyword_info": {
+                  "search_volume": 1540,
+                  "competition": 0.8,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 15,
+                  "etv": 320
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 055",
+                "keyword_info": {
+                  "search_volume": 1550,
+                  "competition": 0.9,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 16,
+                  "etv": 325
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 056",
+                "keyword_info": {
+                  "search_volume": 1560,
+                  "competition": 0.3,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 17,
+                  "etv": 330
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 057",
+                "keyword_info": {
+                  "search_volume": 1570,
+                  "competition": 0.4,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 18,
+                  "etv": 335
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 058",
+                "keyword_info": {
+                  "search_volume": 1580,
+                  "competition": 0.5,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 19,
+                  "etv": 340
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 059",
+                "keyword_info": {
+                  "search_volume": 1590,
+                  "competition": 0.6,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 20,
+                  "etv": 345
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 060",
+                "keyword_info": {
+                  "search_volume": 1600,
+                  "competition": 0.7,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 1,
+                  "etv": 350
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 061",
+                "keyword_info": {
+                  "search_volume": 1610,
+                  "competition": 0.8,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 2,
+                  "etv": 355
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 062",
+                "keyword_info": {
+                  "search_volume": 1620,
+                  "competition": 0.9,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 3,
+                  "etv": 360
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 063",
+                "keyword_info": {
+                  "search_volume": 1630,
+                  "competition": 0.3,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 4,
+                  "etv": 365
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 064",
+                "keyword_info": {
+                  "search_volume": 1640,
+                  "competition": 0.4,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 5,
+                  "etv": 370
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 065",
+                "keyword_info": {
+                  "search_volume": 1650,
+                  "competition": 0.5,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 6,
+                  "etv": 375
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 066",
+                "keyword_info": {
+                  "search_volume": 1660,
+                  "competition": 0.6,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 7,
+                  "etv": 380
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 067",
+                "keyword_info": {
+                  "search_volume": 1670,
+                  "competition": 0.7,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 8,
+                  "etv": 385
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 068",
+                "keyword_info": {
+                  "search_volume": 1680,
+                  "competition": 0.8,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 9,
+                  "etv": 390
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 069",
+                "keyword_info": {
+                  "search_volume": 1690,
+                  "competition": 0.9,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 10,
+                  "etv": 395
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 070",
+                "keyword_info": {
+                  "search_volume": 1700,
+                  "competition": 0.3,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 11,
+                  "etv": 400
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 071",
+                "keyword_info": {
+                  "search_volume": 1710,
+                  "competition": 0.4,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 12,
+                  "etv": 405
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 072",
+                "keyword_info": {
+                  "search_volume": 1720,
+                  "competition": 0.5,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 13,
+                  "etv": 410
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 073",
+                "keyword_info": {
+                  "search_volume": 1730,
+                  "competition": 0.6,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 14,
+                  "etv": 415
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 074",
+                "keyword_info": {
+                  "search_volume": 1740,
+                  "competition": 0.7,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 15,
+                  "etv": 420
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 075",
+                "keyword_info": {
+                  "search_volume": 1750,
+                  "competition": 0.8,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 16,
+                  "etv": 425
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 076",
+                "keyword_info": {
+                  "search_volume": 1760,
+                  "competition": 0.9,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 17,
+                  "etv": 430
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 077",
+                "keyword_info": {
+                  "search_volume": 1770,
+                  "competition": 0.3,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 18,
+                  "etv": 435
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 078",
+                "keyword_info": {
+                  "search_volume": 1780,
+                  "competition": 0.4,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 19,
+                  "etv": 440
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 079",
+                "keyword_info": {
+                  "search_volume": 1790,
+                  "competition": 0.5,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 20,
+                  "etv": 445
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 080",
+                "keyword_info": {
+                  "search_volume": 1800,
+                  "competition": 0.6,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 1,
+                  "etv": 450
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 081",
+                "keyword_info": {
+                  "search_volume": 1810,
+                  "competition": 0.7,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 2,
+                  "etv": 455
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 082",
+                "keyword_info": {
+                  "search_volume": 1820,
+                  "competition": 0.8,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 3,
+                  "etv": 460
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 083",
+                "keyword_info": {
+                  "search_volume": 1830,
+                  "competition": 0.9,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 4,
+                  "etv": 465
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 084",
+                "keyword_info": {
+                  "search_volume": 1840,
+                  "competition": 0.3,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 5,
+                  "etv": 470
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 085",
+                "keyword_info": {
+                  "search_volume": 1850,
+                  "competition": 0.4,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 6,
+                  "etv": 475
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 086",
+                "keyword_info": {
+                  "search_volume": 1860,
+                  "competition": 0.5,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 7,
+                  "etv": 480
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 087",
+                "keyword_info": {
+                  "search_volume": 1870,
+                  "competition": 0.6,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 8,
+                  "etv": 485
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 088",
+                "keyword_info": {
+                  "search_volume": 1880,
+                  "competition": 0.7,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 9,
+                  "etv": 490
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 089",
+                "keyword_info": {
+                  "search_volume": 1890,
+                  "competition": 0.8,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 10,
+                  "etv": 495
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 090",
+                "keyword_info": {
+                  "search_volume": 1900,
+                  "competition": 0.9,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 11,
+                  "etv": 500
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 091",
+                "keyword_info": {
+                  "search_volume": 1910,
+                  "competition": 0.3,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 12,
+                  "etv": 505
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 092",
+                "keyword_info": {
+                  "search_volume": 1920,
+                  "competition": 0.4,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 13,
+                  "etv": 510
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 093",
+                "keyword_info": {
+                  "search_volume": 1930,
+                  "competition": 0.5,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 14,
+                  "etv": 515
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 094",
+                "keyword_info": {
+                  "search_volume": 1940,
+                  "competition": 0.6,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 15,
+                  "etv": 520
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 095",
+                "keyword_info": {
+                  "search_volume": 1950,
+                  "competition": 0.7,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 16,
+                  "etv": 525
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 096",
+                "keyword_info": {
+                  "search_volume": 1960,
+                  "competition": 0.8,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 17,
+                  "etv": 530
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 097",
+                "keyword_info": {
+                  "search_volume": 1970,
+                  "competition": 0.9,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 18,
+                  "etv": 535
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 098",
+                "keyword_info": {
+                  "search_volume": 1980,
+                  "competition": 0.3,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 19,
+                  "etv": 540
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 099",
+                "keyword_info": {
+                  "search_volume": 1990,
+                  "competition": 0.4,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 20,
+                  "etv": 545
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 100",
+                "keyword_info": {
+                  "search_volume": 2000,
+                  "competition": 0.5,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 1,
+                  "etv": 550
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 101",
+                "keyword_info": {
+                  "search_volume": 2010,
+                  "competition": 0.6,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 2,
+                  "etv": 555
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 102",
+                "keyword_info": {
+                  "search_volume": 2020,
+                  "competition": 0.7,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 3,
+                  "etv": 560
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 103",
+                "keyword_info": {
+                  "search_volume": 2030,
+                  "competition": 0.8,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 4,
+                  "etv": 565
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 104",
+                "keyword_info": {
+                  "search_volume": 2040,
+                  "competition": 0.9,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 5,
+                  "etv": 570
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 105",
+                "keyword_info": {
+                  "search_volume": 2050,
+                  "competition": 0.3,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 6,
+                  "etv": 575
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 106",
+                "keyword_info": {
+                  "search_volume": 2060,
+                  "competition": 0.4,
+                  "cpc": 0.8
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 7,
+                  "etv": 580
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 107",
+                "keyword_info": {
+                  "search_volume": 2070,
+                  "competition": 0.5,
+                  "cpc": 1.1
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 8,
+                  "etv": 585
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 108",
+                "keyword_info": {
+                  "search_volume": 2080,
+                  "competition": 0.6,
+                  "cpc": 1.4
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 9,
+                  "etv": 590
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 109",
+                "keyword_info": {
+                  "search_volume": 2090,
+                  "competition": 0.7,
+                  "cpc": 1.7
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 10,
+                  "etv": 595
+                }
+              }
+            },
+            {
+              "keyword_data": {
+                "keyword": "domain keyword 110",
+                "keyword_info": {
+                  "search_volume": 2100,
+                  "competition": 0.8,
+                  "cpc": 0.5
+                }
+              },
+              "ranked_serp_element": {
+                "serp_item": {
+                  "rank_absolute": 11,
+                  "etv": 600
+                }
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

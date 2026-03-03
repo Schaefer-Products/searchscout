@@ -88,9 +88,11 @@ export async function seedSelectedCompetitors(
 export async function seedDomainCache(
   page: Page,
   domain: string,
-  keywords: Array<Record<string, unknown>>
+  keywords: Array<Record<string, unknown>>,
+  ageInDays: number = 0
 ): Promise<void> {
   const cacheKey = `domain_keywords_${domain}`;
+  const msAgo = ageInDays * 24 * 60 * 60 * 1000;
   await page.addInitScript((args: any) => {
     const req = indexedDB.open('searchscout', 1);
     req.onupgradeneeded = (e: any) => {
@@ -104,13 +106,13 @@ export async function seedDomainCache(
       const entry = {
         key: args.cacheKey,
         data: args.keywords,
-        timestamp: now,
+        timestamp: now - args.msAgo,
         expiresAt: now + (7 * 24 * 60 * 60 * 1000),
       };
       const tx = db.transaction('cache', 'readwrite');
       tx.objectStore('cache').put(entry, args.cacheKey);
     };
-  }, { cacheKey, keywords });
+  }, { cacheKey, keywords, msAgo });
 }
 
 /**

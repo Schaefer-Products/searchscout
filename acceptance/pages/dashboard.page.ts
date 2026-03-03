@@ -15,10 +15,17 @@ export class DashboardPage {
   get cacheDataBadge() { return this.page.locator('.results-section .cache-info', { hasText: 'Data from cache' }); }
   get emptyState() { return this.page.locator('.empty-state'); }
 
-  // Sorting
-  get searchVolumeHeader() {
-    return this.page.locator('.keywords-table thead th', { hasText: 'Search Volume' });
-  }
+  // Column headers
+  get keywordColumnHeader() { return this.page.locator('.results-section .keywords-table thead th', { hasText: 'Keyword' }); }
+  get searchVolumeHeader() { return this.page.locator('.results-section .keywords-table thead th', { hasText: 'Search Volume' }); }
+  get difficultyColumnHeader() { return this.page.locator('.results-section .keywords-table thead th', { hasText: 'Difficulty' }); }
+  get positionColumnHeader() { return this.page.locator('.results-section .keywords-table thead th', { hasText: 'Position' }); }
+
+  // Stat card labels
+  get statLabelTotalKeywords() { return this.page.locator('.results-section .stat-label', { hasText: 'Total Keywords' }); }
+  get statLabelTotalSearchVolume() { return this.page.locator('.results-section .stat-label', { hasText: 'Total Search Volume' }); }
+  get statLabelAveragePosition() { return this.page.locator('.results-section .stat-label', { hasText: 'Average Position' }); }
+  get statLabelTopThree() { return this.page.locator('.results-section .stat-label', { hasText: 'Top 3 Rankings' }); }
   get firstKeywordText() {
     return this.page.locator('.keywords-table tbody tr:first-child .keyword-text');
   }

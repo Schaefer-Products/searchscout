@@ -51,8 +51,10 @@ test.describe('Persistence and Guards', () => {
 
     const dashboard = new DashboardPage(page);
 
-    // Domain pre-filled and competitors loaded from IDB — analyze to set hasAnalyzed = true
+    // Domain pre-filled and competitors loaded from IDB — but section not visible yet (hasAnalyzed is false)
     await expect(dashboard.domainInput).toHaveValue('example.com');
+    await expect(dashboard.selectedCompetitorsSection).not.toBeVisible();
+
     await dashboard.analyzeButton.click();
     await dashboard.waitForResults();
 

@@ -14,6 +14,9 @@ export class CompetitorAnalysisPage {
   get freshDataBadge() { return this.container.locator('.cache-header .cache-info.fresh'); }
   get refreshButton() { return this.container.locator('.cache-header .btn-refresh'); }
 
+  // Export
+  get exportButton() { return this.container.locator('.export-row .btn-export'); }
+
   // Stats (in .stats-grid) — scoped to avoid matching the dashboard stats
   get opportunitiesCount() { return this.container.locator('.stat-card.highlight .stat-value'); }
   get blogTopicsCount() { return this.container.locator('.stat-card.blog-topics .stat-value'); }

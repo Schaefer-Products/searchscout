@@ -36,16 +36,16 @@ export async function stubInvalidCredentials(page: Page): Promise<void> {
 
 /**
  * Stubs POST /ranked_keywords/live to return keyword data.
- * @param variant 'example' — 2 keywords; 'empty' — 0 keywords (new domain)
+ * @param variant 'example' — 2 keywords; 'empty' — 0 keywords (new domain); 'many' — 110 keywords (pagination)
  */
 export async function stubDomainKeywords(
   page: Page,
-  variant: 'example' | 'empty'
+  variant: 'example' | 'empty' | 'many'
 ): Promise<void> {
   const fixture =
-    variant === 'example'
-      ? 'ranked-keywords-example.json'
-      : 'ranked-keywords-empty.json';
+    variant === 'example' ? 'ranked-keywords-example.json'
+    : variant === 'empty' ? 'ranked-keywords-empty.json'
+    : 'ranked-keywords-domain-many.json';
   await page.route('**/ranked_keywords/live', async (route) => {
     await route.fulfill({
       status: 200,
