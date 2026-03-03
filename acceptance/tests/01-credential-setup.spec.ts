@@ -70,6 +70,18 @@ test.describe('API Key Setup', () => {
     await expect(page).toHaveURL(/\/dashboard/);
   });
 
+  test('navigating to the application root with saved credentials goes directly to the dashboard', async ({ page }) => {
+    // Scenario: Bypassing setup when credentials are already saved
+    // Root "/" redirects to "/dashboard"; the apiKeyGuard allows through when credentials exist.
+    await clearIndexedDb(page);
+    await seedCredentials(page, { login: 'existing@example.com', password: 'saved-pass' });
+
+    await page.goto('/');
+
+    // Should land on /dashboard without passing through /setup
+    await expect(page).toHaveURL(/\/dashboard/);
+  });
+
   test('re-entering credentials after reset saves new credentials and redirects to dashboard', async ({ page }) => {
     await clearIndexedDb(page);
     await seedCredentials(page, { login: 'old@example.com', password: 'old-pass' });
