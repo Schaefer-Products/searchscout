@@ -1,5 +1,9 @@
 # SearchScout — Claude Code Instructions
 
+## Agent Workflows
+
+See [`docs/AGENTS.md`](docs/AGENTS.md) for the recommended agent workflow guide — which agents are relevant to this project and how to compose them for common tasks (feature development, bug investigation, performance, security, SEO logic, refactoring, and documentation).
+
 ## Project Overview
 
 SearchScout is an Angular 21 SEO keyword opportunity finder. It helps small business owners discover blog topics by analyzing competitor keywords via the DataForSEO API.

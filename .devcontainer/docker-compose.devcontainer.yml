@@ -7,3 +7,4 @@ services:
       - ./:/app
       - /app/node_modules
       - ~/.claude:/root/.claude
+      - ~/.claude.json:/root/.claude.json
