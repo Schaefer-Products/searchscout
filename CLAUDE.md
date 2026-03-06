@@ -44,7 +44,8 @@ src/app/
 | `dataforseo.service` | DataForSEO API integration; credential validation; keyword fetching |
 | `competitor-analysis.service` | Aggregates keywords; identifies opportunities; calculates scores |
 | `blog-topic-generator.service` | Generates blog titles from keyword opportunities (30+ templates) |
-| `export.service` | Exports analysis results to CSV |
+| `keyword-rating.service` | Persists per-domain keyword ratings (0–4) to IndexedDB; exposes reactive streams for ratings, stale-topics signal, undo state, and hint visibility |
+| `export.service` | Exports analysis results to CSV (includes Rating column) |
 
 ## Code Conventions
 
@@ -72,6 +73,9 @@ src/app/
 | `AggregatedKeyword` | Keyword merged across user + competitors (userRanking, competitorRankings, isOpportunity, opportunityScore) |
 | `CompetitorAnalysisResults` | Full analysis output (allKeywords, opportunities, shared, uniqueToUser, analyzedCompetitors) |
 | `BlogTopic` | Generated blog recommendation (title, keyword, templateCategory, recommendationScore) |
+| `RatingValue` | `0 \| 1 \| 2 \| 3 \| 4` — rating 0 hides a keyword; 1–4 indicate relevance (in `keyword-rating.model`) |
+| `KeywordRatingMap` | `Record<string, RatingValue>` — the per-domain ratings map (in `keyword-rating.model`) |
+| `RatingScoreAlgorithm` | Optional interface for pluggable score adjustment; injected via `RATING_SCORE_ALGORITHM` token |
 
 ## Routing
 
@@ -89,6 +93,8 @@ Database: `searchscout` (v1) — two object stores:
 | `keyvalue` | `credentials` | `{ login, password }` |
 | `keyvalue` | `currentDomain` | `"example.com"` |
 | `keyvalue` | `competitors_<domain>` | `Competitor[]` |
+| `keyvalue` | `keyword_ratings_<domain>` | `KeywordRatingMap` (debounced writes, 300 ms) |
+| `keyvalue` | `ratingHintDismissed` | `true` when the first-time rating hint has been dismissed |
 | `cache` | `domain_keywords_<domain>` | `CacheEntry<DomainKeywordRanking[]>` |
 | `cache` | `competitor_analysis_<domain>_<sorted-competitors>` | `CacheEntry<CompetitorAnalysisResults>` |
 
@@ -124,12 +130,15 @@ acceptance/
 | `05-persistence.spec.ts` | State persistence and route guards |
 | `06-competitor-analysis.spec.ts` | Competitor analysis, tabs, sorting, cache |
 | `07-export.spec.ts` | CSV export for all views |
+| `08-keyword-rating.spec.ts` | Keyword rating UI, persistence, undo toast, stale banner, blog topic regeneration |
 
 **`idb-helpers.ts`** — seed IndexedDB state *before* `page.goto()` (uses `addInitScript`):
 - `clearIndexedDb`, `seedCredentials`, `seedCurrentDomain`, `seedSelectedCompetitors`
 - `seedDomainCache(page, domain, keywords, ageInDays?)` — accepts optional age
 - `seedCompetitorAnalysisCache(page, domain, competitors, results, ageInDays?)`
 - `readCredentialsFromIdb(page)` — read back after navigation (for assertions)
+- `seedKeywordRatings(page, domain, ratingsMap)` — seed `KeywordRatingMap` before navigation
+- `readKeywordRatingsFromIdb(page, domain)` — read ratings back after navigation (for assertions)
 
 **`api-stubs.ts`** — intercept `page.route()` before navigation:
 - `stubValidCredentials` / `stubInvalidCredentials`

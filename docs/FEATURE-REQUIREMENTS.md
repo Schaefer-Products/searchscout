@@ -309,6 +309,62 @@ Keyword,Search Volume,Difficulty,Opportunity Score,Competitor Count,Competitors,
 
 ---
 
+### Feature 7: Keyword Relevance Rating ✅
+
+**Purpose:** Let users mark keywords as relevant or irrelevant to personalise blog topic recommendations and hide noise from their workflow
+**Status:** Complete
+
+**Implementation:**
+- Emoji-based 0–4 rating scale applied to every keyword row across all tables
+- Rating 0 (🚫 Never relevant) hides the keyword from the default table view
+- Ratings 1–4 (😐🙂😊🤩) signal relevance level for future scoring integration
+- Hidden keywords excluded from blog topic generation; regenerating re-filters the list
+- "Show hidden keywords" toggle reveals hidden rows with greyed-out styling
+- Undo toast appears after hiding a keyword with a 5-second auto-dismiss window
+- Blog Topics stale banner prompts regeneration whenever any rating changes (including hide)
+- Ratings persisted to IndexedDB per domain with 300ms debounced writes
+- First-visit hint row with one-time dismissal (persisted to IDB)
+- Rating column included in all CSV exports
+
+**Rating Scale:**
+| Value | Emoji | Label | Behaviour |
+|---|---|---|---|
+| 0 | 🚫 | Never relevant | Hides keyword; excludes from blog topics |
+| 1 | 😐 | Unlikely | Visible; low priority for future scoring |
+| 2 | 🙂 | Possibly relevant | Visible |
+| 3 | 😊 | Relevant | Visible; higher priority |
+| 4 | 🤩 | Write about this today | Visible; top priority |
+
+**Key Files:**
+- `models/keyword-rating.model.ts` — `RatingValue`, `RATING_META`, `KeywordRatingMap`, `RATING_SCORE_ALGORITHM` token
+- `services/keyword-rating.service.ts` — ratings state, IDB persistence, undo, stale signalling
+- `components/keyword-rating/` — inline emoji button group
+- `components/undo-toast/` — fixed-position undo notification
+- `components/blog-topics-stale-banner/` — amber banner prompting regeneration
+- Updated `components/dashboard/` — rating column, hidden filter, hint row
+- Updated `components/competitor-analysis/` — rating column on all tabs, stale banner, regenerate
+- Updated `services/export.service.ts` — Rating column in all CSVs
+
+**IndexedDB keys added:**
+- `keyvalue` / `keyword_ratings_<domain>` — `Record<string, 0|1|2|3|4>`
+- `keyvalue` / `ratingHintDismissed` — `true` when hint has been dismissed
+
+**Architecture notes:**
+- `KeywordRatingService` exposes four read-only Observables (`ratings$`, `blogTopicsStale$`, `showRatingHint$`, `pendingUndo$`) backed by private BehaviorSubjects
+- Debounced IDB writes (300 ms) wired in constructor; subscription torn down via `OnDestroy`
+- Blog topic generation filters out hidden keywords at display/regeneration time, not inside `CompetitorAnalysisService`, so cached analysis results remain clean
+- `RATING_SCORE_ALGORITHM` InjectionToken (optional) is the extension point for Track B — weighted scoring based on rating — not yet implemented
+
+**User Flow:**
+1. User analyses domain keywords — Rating column appears as leftmost column
+2. User clicks an emoji to rate a keyword; rating saved to IDB after 300 ms
+3. Rating 0: keyword disappears; undo toast appears for 5 s
+4. Rating 1–4: Blog Topics stale banner appears if topics have been generated
+5. User navigates to Blog Topics tab; clicks "Regenerate topics"
+6. Hidden keywords are excluded; stale banner dismisses
+
+---
+
 ## Data Models
 
 ### Keyword Models
@@ -323,8 +379,9 @@ interface KeywordMetrics {
 
 // User's or competitor's ranking for a keyword
 interface DomainKeywordRanking extends KeywordMetrics {
-  position: number;  // Google ranking position (1 = top)
-  etv?: number;      // Estimated traffic value
+  position: number;      // Google ranking position (1 = top)
+  etv?: number;          // Estimated traffic value
+  relevanceRating?: RatingValue;  // 0–4, set by user
 }
 
 // Aggregated across user + competitors
@@ -334,7 +391,24 @@ interface AggregatedKeyword extends KeywordMetrics {
   competitorCount: number;
   isOpportunity: boolean;  // True if user doesn't rank but competitors do
   opportunityScore?: number;  // 0-100
+  relevanceRating?: RatingValue;  // 0–4, set by user
 }
+```
+
+### Rating Model
+```typescript
+type RatingValue = 0 | 1 | 2 | 3 | 4;
+
+type KeywordRatingMap = Record<string, RatingValue>;  // keyed by keyword string
+
+interface RatingScoreAlgorithm {
+  multiplierForRating(rating: RatingValue): number;
+  applyToScore(rawScore: number, rating: RatingValue): number;
+}
+
+// InjectionToken — provide a RatingScoreAlgorithm to weight opportunity
+// scores by rating. Optional; passthrough (no adjustment) when absent.
+const RATING_SCORE_ALGORITHM = new InjectionToken<RatingScoreAlgorithm>('RatingScoreAlgorithm');
 ```
 
 ### Competitor Model
@@ -360,6 +434,7 @@ interface BlogTopic {
   opportunityScore: number;
   competitorCount: number;
   recommendationScore: number;      // Enhanced score for ranking topics
+  relevanceRating?: RatingValue;    // Inherited from source keyword rating
 }
 ```
 
