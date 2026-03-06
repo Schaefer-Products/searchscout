@@ -2,12 +2,14 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Subject, of, throwError } from 'rxjs';
+import { BehaviorSubject, Subject, of, throwError } from 'rxjs';
 import { DashboardComponent } from './dashboard.component';
 import { DataforseoService } from '../../services/dataforseo.service';
 import { StorageService } from '../../services/storage.service';
+import { KeywordRatingService } from '../../services/keyword-rating.service';
 import { Competitor } from '../../models/competitor.model';
 import { DomainKeywordRanking } from '../../models/keyword.model';
+import { RatingValue } from '../../models/keyword-rating.model';
 
 // ─── Stub child components ────────────────────────────────────────────────────
 // Prevents real child component services from being injected and calling APIs
@@ -24,6 +26,18 @@ class MockCompetitorAnalysisComponent {
   @Input() userDomain = '';
   @Input() userKeywords: DomainKeywordRanking[] = [];
   @Input() competitors: Competitor[] = [];
+}
+
+@Component({ selector: 'app-keyword-rating', standalone: true, template: '' })
+class MockKeywordRatingComponent {
+  @Input() keyword = '';
+  @Input() currentRating: RatingValue | undefined = undefined;
+  @Output() ratingChanged = new EventEmitter<RatingValue | undefined>();
+}
+
+@Component({ selector: 'app-blog-topics-stale-banner', standalone: true, template: '' })
+class MockBlogTopicsStaleBannerComponent {
+  @Output() regenerateClicked = new EventEmitter<void>();
 }
 
 // ─── Fixture helpers ─────────────────────────────────────────────────────────
@@ -44,6 +58,8 @@ describe('DashboardComponent', () => {
   let dataforseoSpy: jasmine.SpyObj<DataforseoService>;
   let storageSpy: jasmine.SpyObj<StorageService>;
 
+  let keywordRatingSpy: jasmine.SpyObj<KeywordRatingService>;
+
   beforeEach(async () => {
     dataforseoSpy = jasmine.createSpyObj('DataforseoService', [
       'fetchDomainKeywords', 'getDomainCacheMetadata', 'clearDomainCache',
@@ -51,23 +67,43 @@ describe('DashboardComponent', () => {
     storageSpy = jasmine.createSpyObj('StorageService', [
       'getCurrentDomain', 'getSelectedCompetitors', 'saveCurrentDomain', 'saveSelectedCompetitors',
     ]);
+    keywordRatingSpy = jasmine.createSpyObj('KeywordRatingService', [
+      'initialize', 'getRating', 'setRating', 'clearRating', 'isHidden',
+      'getAllRatings', 'adjustScore', 'markBlogTopicsGenerated', 'dismissRatingHint', 'undoLastHide',
+    ], {
+      ratings$: new BehaviorSubject({}),
+      showRatingHint$: new BehaviorSubject(false),
+      blogTopicsStale$: new BehaviorSubject(false),
+      pendingUndo$: new BehaviorSubject(null),
+    });
 
     // Safe defaults — no real network calls
     dataforseoSpy.fetchDomainKeywords.and.returnValue(of([]));
     dataforseoSpy.getDomainCacheMetadata.and.returnValue(null);
     storageSpy.getCurrentDomain.and.returnValue(null);
     storageSpy.getSelectedCompetitors.and.returnValue(null);
+    keywordRatingSpy.initialize.and.returnValue(Promise.resolve());
+    keywordRatingSpy.getRating.and.returnValue(undefined);
+    keywordRatingSpy.isHidden.and.returnValue(false);
 
     await TestBed.configureTestingModule({
       imports: [DashboardComponent],
       providers: [
         { provide: DataforseoService, useValue: dataforseoSpy },
         { provide: StorageService, useValue: storageSpy },
+        { provide: KeywordRatingService, useValue: keywordRatingSpy },
       ],
     })
     .overrideComponent(DashboardComponent, {
       set: {
-        imports: [CommonModule, FormsModule, MockCompetitorSelectionComponent, MockCompetitorAnalysisComponent],
+        imports: [
+          CommonModule,
+          FormsModule,
+          MockCompetitorSelectionComponent,
+          MockCompetitorAnalysisComponent,
+          MockKeywordRatingComponent,
+          MockBlogTopicsStaleBannerComponent,
+        ],
       },
     })
     .compileComponents();
@@ -481,14 +517,16 @@ describe('DashboardComponent', () => {
   describe('loadMore()', () => {
     it('should extend displayedKeywords by 100', () => {
       component.keywords = Array.from({ length: 250 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
-      component.pagination.reset(component.keywords);
+      component.filteredKeywords = component.keywords;
+      component.pagination.reset(component.filteredKeywords);
       component.loadMore();
       expect(component.displayedKeywords.length).toBe(200);
     });
 
     it('should not exceed total keywords', () => {
       component.keywords = Array.from({ length: 120 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
-      component.pagination.reset(component.keywords);
+      component.filteredKeywords = component.keywords;
+      component.pagination.reset(component.filteredKeywords);
       component.loadMore();
       expect(component.displayedKeywords.length).toBe(120);
     });
@@ -501,12 +539,14 @@ describe('DashboardComponent', () => {
   describe('hasMoreKeywords', () => {
     it('should return true when more keywords exist beyond displayedKeywords', () => {
       component.keywords = Array.from({ length: 150 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
+      component.filteredKeywords = component.keywords;
       component.displayedKeywords = component.keywords.slice(0, 100);
       expect(component.hasMoreKeywords).toBeTrue();
     });
 
     it('should return false when all keywords are already displayed', () => {
       component.keywords = [makeKeyword()];
+      component.filteredKeywords = component.keywords;
       component.displayedKeywords = [...component.keywords];
       expect(component.hasMoreKeywords).toBeFalse();
     });
@@ -783,6 +823,7 @@ describe('DashboardComponent', () => {
     it('should show the load-more button when hasMoreKeywords is true', () => {
       component.hasAnalyzed = true;
       component.keywords = Array.from({ length: 150 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
+      component.filteredKeywords = component.keywords;
       component.displayedKeywords = component.keywords.slice(0, 100);
       fixture.detectChanges();
       expect(fixture.nativeElement.querySelector('.btn-load-more')).not.toBeNull();
@@ -792,6 +833,7 @@ describe('DashboardComponent', () => {
       spyOn(component, 'loadMore');
       component.hasAnalyzed = true;
       component.keywords = Array.from({ length: 150 }, (_, i) => makeKeyword({ keyword: `kw ${i}` }));
+      component.filteredKeywords = component.keywords;
       component.displayedKeywords = component.keywords.slice(0, 100);
       fixture.detectChanges();
       (fixture.nativeElement.querySelector('.btn-load-more') as HTMLButtonElement).click();

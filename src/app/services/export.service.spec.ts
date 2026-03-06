@@ -1,10 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 import { ExportService } from './export.service';
+import { KeywordRatingService } from './keyword-rating.service';
 import { AggregatedKeyword, CompetitorAnalysisResults } from '../models/aggregated-keyword.model';
 import { BlogTopic } from '../models/blog-topic.model';
+import { RatingValue } from '../models/keyword-rating.model';
 
 describe('ExportService', () => {
   let service: ExportService;
+  let keywordRatingSpy: jasmine.SpyObj<KeywordRatingService>;
 
   /** Spy on the private downloadCSV method and return the captured [content, filename] args. */
   function captureDownload(fn: () => void): { content: string; filename: string } {
@@ -19,7 +22,16 @@ describe('ExportService', () => {
   }
 
   beforeEach(() => {
-    TestBed.configureTestingModule({});
+    keywordRatingSpy = jasmine.createSpyObj('KeywordRatingService', ['getRating'], {
+      ratings$: { subscribe: () => {} },
+    });
+    keywordRatingSpy.getRating.and.returnValue(undefined as RatingValue | undefined);
+
+    TestBed.configureTestingModule({
+      providers: [
+        { provide: KeywordRatingService, useValue: keywordRatingSpy },
+      ],
+    });
     service = TestBed.inject(ExportService);
   });
 
@@ -149,7 +161,7 @@ describe('ExportService', () => {
       const { content } = captureDownload(() =>
         service.exportOpportunities([makeKeyword()], 'example.com', [])
       );
-      expect(content).toContain('Keyword,Search Volume,Difficulty,Opportunity Score,Competitor Count,Competitors,CPC (USD)');
+      expect(content).toContain('Keyword,Search Volume,Difficulty,Opportunity Score,Competitor Count,Competitors,CPC (USD),Rating');
     });
 
     it('should include a data row with all keyword fields', () => {
@@ -168,7 +180,7 @@ describe('ExportService', () => {
       const { content } = captureDownload(() =>
         service.exportOpportunities([kw], 'example.com', [])
       );
-      expect(content).toContain('seo tool,2000,60,90,2,a.com (#1); b.com (#4),3.50');
+      expect(content).toContain('seo tool,2000,60,90,2,a.com (#1); b.com (#4),3.50,Unrated');
     });
 
     it('should format CPC to 2 decimal places', () => {
@@ -182,10 +194,8 @@ describe('ExportService', () => {
       const { content } = captureDownload(() =>
         service.exportOpportunities([makeKeyword({ cpc: undefined })], 'example.com', [])
       );
-      const lines = content.split('\n');
-      const dataLine = lines[lines.length - 1];
-      // last column (CPC) should be empty
-      expect(dataLine.endsWith(',')).toBeTrue();
+      // CPC column should be empty (two adjacent commas before the rating column)
+      expect(content).toContain(',,Unrated');
     });
 
     it('should output an empty string for a missing opportunityScore', () => {
@@ -310,7 +320,7 @@ describe('ExportService', () => {
         service.exportAllKeywords(makeResults(), 'example.com', [])
       );
       expect(content).toContain(
-        'Keyword,Type,Search Volume,Difficulty,Opportunity Score,Your Position,Competitor Count,Competitors,CPC (USD)'
+        'Keyword,Type,Search Volume,Difficulty,Opportunity Score,Your Position,Competitor Count,Competitors,CPC (USD),Rating'
       );
     });
 

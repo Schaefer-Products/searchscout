@@ -1,4 +1,5 @@
 import { DomainKeywordRanking } from './keyword.model';
+import { RatingValue } from './keyword-rating.model';
 
 /**
  * Keyword data aggregated across user domain and competitors
@@ -38,6 +39,9 @@ export interface AggregatedKeyword {
 
     /** Calculated opportunity score (0-100) */
     opportunityScore?: number;
+
+    /** User-assigned relevance rating for this keyword (optional, non-breaking) */
+    relevanceRating?: RatingValue;
 }
 
 /**

@@ -1,4 +1,5 @@
 import { AggregatedKeyword } from './aggregated-keyword.model';
+import { RatingValue } from './keyword-rating.model';
 
 /**
  * Generated blog topic recommendation
@@ -27,6 +28,9 @@ export interface BlogTopic {
 
     /** Combined recommendation score (0-100) */
     recommendationScore: number;
+
+    /** User-assigned relevance rating for this keyword (optional, non-breaking) */
+    relevanceRating?: RatingValue;
 }
 
 /**

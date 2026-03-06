@@ -1,0 +1,76 @@
+.undo-toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #111827;
+  color: #F9FAFB;
+  border-radius: 8px;
+  padding: 12px 16px;
+  min-width: 320px;
+  max-width: 560px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+
+  .toast-message {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.4;
+
+    strong {
+      font-weight: 600;
+    }
+  }
+
+  .undo-btn {
+    flex-shrink: 0;
+    padding: 4px 12px;
+    background: #F9FAFB;
+    color: #111827;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 120ms ease;
+
+    &:hover {
+      background: #E5E7EB;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #2563EB;
+      outline-offset: 2px;
+    }
+  }
+
+  .dismiss-btn {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    background: transparent;
+    color: #9CA3AF;
+    border: none;
+    border-radius: 4px;
+    font-size: 14px;
+    line-height: 1;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 120ms ease;
+
+    &:hover {
+      color: #F9FAFB;
+    }
+
+    &:focus-visible {
+      outline: 2px solid #2563EB;
+      outline-offset: 2px;
+    }
+  }
+}

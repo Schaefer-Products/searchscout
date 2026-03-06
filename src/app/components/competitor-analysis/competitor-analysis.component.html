@@ -13,8 +13,8 @@
   </div>
 
   <!-- Error State -->
-  <div class="error-message" *ngIf="errorMessage && !isAnalyzing">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <div class="error-message" role="alert" *ngIf="errorMessage && !isAnalyzing">
+    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -30,7 +30,7 @@
     <!-- Cache Info & Refresh -->
     <div class="cache-header">
       <div class="cache-info" *ngIf="cacheMetadata">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -41,13 +41,13 @@
         <span>Data from cache ({{ cacheMetadata.ageInDays }} days old)</span>
       </div>
       <div class="cache-info fresh" *ngIf="!cacheMetadata">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
         </svg>
         <span>Fresh data</span>
       </div>
       <button class="btn-refresh" (click)="refreshAnalysis()" [disabled]="isAnalyzing">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -61,9 +61,9 @@
 
     <!-- Stats Cards -->
     <div class="stats-grid">
-      <div class="stat-card highlight" (click)="setViewMode('opportunities')">
+      <button type="button" class="stat-card highlight" (click)="setViewMode('opportunities')">
         <div class="stat-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
         </div>
@@ -72,11 +72,11 @@
           <div class="stat-value">{{ results.opportunities.length }}</div>
           <div class="stat-hint">Keywords to target</div>
         </div>
-      </div>
+      </button>
 
-      <div class="stat-card blog-topics" (click)="setViewMode('blog-topics')" *ngIf="blogTopics.length > 0">
+      <button type="button" class="stat-card blog-topics" (click)="setViewMode('blog-topics')" *ngIf="blogTopics.length > 0">
         <div class="stat-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -90,11 +90,11 @@
           <div class="stat-value">{{ blogTopics.length }}</div>
           <div class="stat-hint">Ready-to-use titles</div>
         </div>
-      </div>
+      </button>
 
-      <div class="stat-card" (click)="setViewMode('shared')">
+      <button type="button" class="stat-card" (click)="setViewMode('shared')">
         <div class="stat-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -106,13 +106,13 @@
         <div class="stat-content">
           <div class="stat-label">Shared Keywords</div>
           <div class="stat-value">{{ results.shared.length }}</div>
-          <div class="stat-hint">You & competitors rank</div>
+          <div class="stat-hint">You &amp; competitors rank</div>
         </div>
-      </div>
+      </button>
 
-      <div class="stat-card" (click)="setViewMode('unique')">
+      <button type="button" class="stat-card" (click)="setViewMode('unique')">
         <div class="stat-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -126,11 +126,11 @@
           <div class="stat-value">{{ results.uniqueToUser.length }}</div>
           <div class="stat-hint">Only you rank for</div>
         </div>
-      </div>
+      </button>
 
-      <div class="stat-card" (click)="setViewMode('all')">
+      <button type="button" class="stat-card" (click)="setViewMode('all')">
         <div class="stat-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -144,24 +144,34 @@
           <div class="stat-value">{{ results.totalKeywords }}</div>
           <div class="stat-hint">All analyzed keywords</div>
         </div>
-      </div>
+      </button>
     </div>
 
     <!-- View Mode Tabs -->
-    <div class="view-tabs">
-      <button class="tab" [class.active]="viewMode === 'opportunities'" (click)="setViewMode('opportunities')">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div class="view-tabs" role="tablist">
+      <button
+        id="tab-opportunities"
+        class="tab"
+        role="tab"
+        [class.active]="viewMode === 'opportunities'"
+        [attr.aria-selected]="viewMode === 'opportunities' ? 'true' : 'false'"
+        (click)="setViewMode('opportunities')"
+      >
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
         </svg>
         Opportunities ({{ results.opportunities.length }})
       </button>
       <button
+        id="tab-blog-topics"
         class="tab blog-tab"
+        role="tab"
         [class.active]="viewMode === 'blog-topics'"
+        [attr.aria-selected]="viewMode === 'blog-topics' ? 'true' : 'false'"
         (click)="setViewMode('blog-topics')"
         *ngIf="blogTopics.length > 0"
       >
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -171,13 +181,34 @@
         </svg>
         Blog Topics ({{ blogTopics.length }})
       </button>
-      <button class="tab" [class.active]="viewMode === 'all'" (click)="setViewMode('all')">
+      <button
+        id="tab-all"
+        class="tab"
+        role="tab"
+        [class.active]="viewMode === 'all'"
+        [attr.aria-selected]="viewMode === 'all' ? 'true' : 'false'"
+        (click)="setViewMode('all')"
+      >
         All Keywords ({{ results.totalKeywords }})
       </button>
-      <button class="tab" [class.active]="viewMode === 'shared'" (click)="setViewMode('shared')">
+      <button
+        id="tab-shared"
+        class="tab"
+        role="tab"
+        [class.active]="viewMode === 'shared'"
+        [attr.aria-selected]="viewMode === 'shared' ? 'true' : 'false'"
+        (click)="setViewMode('shared')"
+      >
         Shared ({{ results.shared.length }})
       </button>
-      <button class="tab" [class.active]="viewMode === 'unique'" (click)="setViewMode('unique')">
+      <button
+        id="tab-unique"
+        class="tab"
+        role="tab"
+        [class.active]="viewMode === 'unique'"
+        [attr.aria-selected]="viewMode === 'unique' ? 'true' : 'false'"
+        (click)="setViewMode('unique')"
+      >
         Your Unique ({{ results.uniqueToUser.length }})
       </button>
     </div>
@@ -185,7 +216,7 @@
     <!-- Export Row -->
     <div class="export-row">
       <button class="btn-export" (click)="exportCurrentView()">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
         </svg>
@@ -193,8 +224,19 @@
       </button>
     </div>
 
+    <!-- Blog Topics Stale Banner -->
+    <app-blog-topics-stale-banner
+      *ngIf="viewMode === 'blog-topics'"
+      (regenerateClicked)="onRegenerateBlogTopics()"
+    ></app-blog-topics-stale-banner>
+
     <!-- Blog Topics Table -->
-    <div class="blog-topics-container" *ngIf="viewMode === 'blog-topics' && displayedTopics.length > 0">
+    <div
+      class="blog-topics-container"
+      role="tabpanel"
+      [attr.aria-labelledby]="'tab-blog-topics'"
+      *ngIf="viewMode === 'blog-topics' && displayedTopics.length > 0"
+    >
       <div class="topics-intro">
         <h4>Ready-to-Use Blog Post Titles</h4>
         <p>
@@ -203,7 +245,7 @@
         </p>
         <div class="score-legend">
           <div class="legend-title">
-            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
@@ -250,7 +292,7 @@
 
           <div class="topic-meta">
             <span class="meta-item keyword">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path
                   stroke-linecap="round"
                   stroke-linejoin="round"
@@ -300,7 +342,7 @@
 
       <div class="load-more-topics" *ngIf="hasMoreTopics">
         <button class="btn-load-more" (click)="loadMoreTopics()">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
           </svg>
           Load More Blog Topics ({{ remainingTopicsCount }} remaining)
@@ -309,9 +351,14 @@
     </div>
 
     <!-- Keywords Table -->
-    <div class="table-container" *ngIf="viewMode !== 'blog-topics' && displayedKeywords.length > 0">
+    <div
+      class="table-container"
+      role="tabpanel"
+      [attr.aria-labelledby]="'tab-' + viewMode"
+      *ngIf="viewMode !== 'blog-topics' && displayedKeywords.length > 0"
+    >
       <div class="scroll-hint">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
         </svg>
         <span>Scroll to see more →</span>
@@ -321,20 +368,60 @@
         <table class="keywords-table">
           <thead>
             <tr>
-              <th (click)="sortBy('keyword')" class="sortable">Keyword {{ getSortIcon("keyword") }}</th>
-              <th (click)="sortBy('searchVolume')" class="sortable">Volume {{ getSortIcon("searchVolume") }}</th>
-              <th (click)="sortBy('difficulty')" class="sortable">Difficulty {{ getSortIcon("difficulty") }}</th>
-              <th (click)="sortBy('competitorCount')" class="sortable">
-                Competitors {{ getSortIcon("competitorCount") }}
+              <th scope="col">Rating</th>
+              <th
+                scope="col"
+                [attr.aria-sort]="sortColumn === 'keyword' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
+              >
+                <button type="button" (click)="sortBy('keyword')">
+                  Keyword <span aria-hidden="true">{{ getSortIcon("keyword") }}</span>
+                </button>
               </th>
-              <th *ngIf="viewMode !== 'opportunities'">Your Position</th>
-              <th *ngIf="viewMode === 'opportunities'" (click)="sortBy('opportunityScore')" class="sortable">
-                Opportunity Score {{ getSortIcon("opportunityScore") }}
+              <th
+                scope="col"
+                [attr.aria-sort]="sortColumn === 'searchVolume' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
+              >
+                <button type="button" (click)="sortBy('searchVolume')">
+                  Volume <span aria-hidden="true">{{ getSortIcon("searchVolume") }}</span>
+                </button>
+              </th>
+              <th
+                scope="col"
+                [attr.aria-sort]="sortColumn === 'difficulty' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
+              >
+                <button type="button" (click)="sortBy('difficulty')">
+                  Difficulty <span aria-hidden="true">{{ getSortIcon("difficulty") }}</span>
+                </button>
+              </th>
+              <th
+                scope="col"
+                [attr.aria-sort]="sortColumn === 'competitorCount' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
+              >
+                <button type="button" (click)="sortBy('competitorCount')">
+                  Competitors <span aria-hidden="true">{{ getSortIcon("competitorCount") }}</span>
+                </button>
+              </th>
+              <th scope="col" *ngIf="viewMode !== 'opportunities'">Your Position</th>
+              <th
+                scope="col"
+                [attr.aria-sort]="sortColumn === 'opportunityScore' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
+                *ngIf="viewMode === 'opportunities'"
+              >
+                <button type="button" (click)="sortBy('opportunityScore')">
+                  Opportunity Score <span aria-hidden="true">{{ getSortIcon("opportunityScore") }}</span>
+                </button>
               </th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let keyword of displayedKeywords" [class.opportunity]="keyword.isOpportunity">
+              <td class="rating-cell">
+                <app-keyword-rating
+                  [keyword]="keyword.keyword"
+                  [currentRating]="keywordRatingService.getRating(keyword.keyword)"
+                  (ratingChanged)="onKeywordRatingChanged(keyword.keyword, $event)"
+                ></app-keyword-rating>
+              </td>
               <td class="keyword-cell">
                 <span class="keyword-text">{{ keyword.keyword }}</span>
                 <span class="badge opportunity" *ngIf="keyword.isOpportunity">Opportunity</span>
@@ -375,11 +462,11 @@
               <td class="score-cell" *ngIf="viewMode === 'opportunities'">
                 <div
                   class="score-badge"
-                  [class.high]="(keyword.opportunityScore || 0) >= 70"
-                  [class.medium]="(keyword.opportunityScore || 0) >= 40 && (keyword.opportunityScore || 0) < 70"
-                  [class.low]="(keyword.opportunityScore || 0) < 40"
+                  [class.high]="adjustedScores[keyword.keyword] >= 70"
+                  [class.medium]="adjustedScores[keyword.keyword] >= 40 && adjustedScores[keyword.keyword] < 70"
+                  [class.low]="adjustedScores[keyword.keyword] < 40"
                 >
-                  {{ keyword.opportunityScore }}
+                  {{ adjustedScores[keyword.keyword] }}
                 </div>
               </td>
             </tr>
@@ -390,7 +477,7 @@
       <!-- Load More -->
       <div class="load-more-container" *ngIf="hasMoreKeywords">
         <button class="btn-load-more" (click)="loadMore()">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
           </svg>
           Load More Keywords ({{ remainingCount }} remaining)
@@ -399,8 +486,13 @@
     </div>
 
     <!-- Empty State -->
-    <div class="empty-state" *ngIf="viewMode !== 'blog-topics' && displayedKeywords.length === 0">
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <div
+      class="empty-state"
+      role="tabpanel"
+      [attr.aria-labelledby]="'tab-' + viewMode"
+      *ngIf="viewMode !== 'blog-topics' && displayedKeywords.length === 0"
+    >
+      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
         <path
           stroke-linecap="round"
           stroke-linejoin="round"

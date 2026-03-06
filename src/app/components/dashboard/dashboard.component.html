@@ -22,6 +22,7 @@
             placeholder="example.com"
             [disabled]="isAnalyzing"
             class="domain-input"
+            aria-label="Your website domain"
             required
           />
           <button type="submit" class="btn-primary" [disabled]="isAnalyzing || !domain.trim()">
@@ -35,8 +36,8 @@
       </form>
 
       <!-- Error Message -->
-      <div class="error-message" *ngIf="errorMessage && !isAnalyzing">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <div class="error-message" role="alert" *ngIf="errorMessage && !isAnalyzing">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -49,12 +50,17 @@
     </div>
   </section>
 
+  <!-- Blog Topics Stale Banner -->
+  <app-blog-topics-stale-banner
+    *ngIf="hasAnalyzed && keywords.length > 0"
+  ></app-blog-topics-stale-banner>
+
   <!-- Results Section -->
   <section class="results-section" *ngIf="hasAnalyzed && keywords.length > 0">
     <!-- Cache Info & Actions -->
     <div class="results-header">
       <div class="cache-info" *ngIf="cacheMetadata">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -65,13 +71,13 @@
         <span>Data from cache ({{ cacheMetadata.ageInDays }} days old)</span>
       </div>
       <div class="cache-info fresh" *ngIf="!cacheMetadata">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
         </svg>
         <span>Fresh data</span>
       </div>
       <button class="btn-refresh" (click)="refreshData()" [disabled]="isAnalyzing">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -87,7 +93,7 @@
     <div class="stats-grid">
       <div class="stat-card">
         <div class="stat-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -104,7 +110,7 @@
 
       <div class="stat-card">
         <div class="stat-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -121,7 +127,7 @@
 
       <div class="stat-card">
         <div class="stat-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -138,7 +144,7 @@
 
       <div class="stat-card highlight">
         <div class="stat-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -156,9 +162,30 @@
 
     <!-- Keywords Table -->
     <div class="table-container">
+      <!-- Rating hint row -->
+      <div class="rating-hint" *ngIf="(keywordRatingService.showRatingHint$ | async)">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>Rate keywords to improve recommendations</span>
+        <button type="button" class="btn-dismiss-hint" (click)="keywordRatingService.dismissRatingHint()">Dismiss</button>
+      </div>
+
+      <!-- Show-hidden toggle -->
+      <div class="hidden-keywords-toggle" *ngIf="hiddenCount > 0">
+        <button
+          type="button"
+          class="btn-toggle-hidden"
+          [attr.aria-label]="showHidden ? 'Hide hidden keywords' : 'Show ' + hiddenCount + ' hidden keywords'"
+          (click)="toggleShowHidden()"
+        >
+          {{ showHidden ? 'Hide hidden keywords' : 'Show hidden keywords (' + hiddenCount + ')' }}
+        </button>
+      </div>
+
       <!-- Add this scroll hint for mobile -->
       <div class="scroll-hint" *ngIf="keywords.length > 0">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
         </svg>
         <span>Scroll to see more →</span>
@@ -166,12 +193,47 @@
       <table class="keywords-table">
         <thead>
           <tr>
-            <th (click)="sortBy('keyword')" class="sortable">Keyword {{ getSortIcon("keyword") }}</th>
-            <th (click)="sortBy('searchVolume')" class="sortable">Search Volume {{ getSortIcon("searchVolume") }}</th>
-            <th (click)="sortBy('difficulty')" class="sortable">Difficulty {{ getSortIcon("difficulty") }}</th>
-            <th (click)="sortBy('position')" class="sortable">Position {{ getSortIcon("position") }}</th>
-            <th (click)="sortBy('etv')" class="sortable" *ngIf="keywords[0]?.etv">
-              Est. Traffic Value {{ getSortIcon("etv") }}
+            <th scope="col">Rating</th>
+            <th
+              scope="col"
+              [attr.aria-sort]="sortColumn === 'keyword' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
+            >
+              <button type="button" (click)="sortBy('keyword')">
+                Keyword <span aria-hidden="true">{{ getSortIcon("keyword") }}</span>
+              </button>
+            </th>
+            <th
+              scope="col"
+              [attr.aria-sort]="sortColumn === 'searchVolume' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
+            >
+              <button type="button" (click)="sortBy('searchVolume')">
+                Search Volume <span aria-hidden="true">{{ getSortIcon("searchVolume") }}</span>
+              </button>
+            </th>
+            <th
+              scope="col"
+              [attr.aria-sort]="sortColumn === 'difficulty' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
+            >
+              <button type="button" (click)="sortBy('difficulty')">
+                Difficulty <span aria-hidden="true">{{ getSortIcon("difficulty") }}</span>
+              </button>
+            </th>
+            <th
+              scope="col"
+              [attr.aria-sort]="sortColumn === 'position' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
+            >
+              <button type="button" (click)="sortBy('position')">
+                Position <span aria-hidden="true">{{ getSortIcon("position") }}</span>
+              </button>
+            </th>
+            <th
+              scope="col"
+              [attr.aria-sort]="sortColumn === 'etv' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
+              *ngIf="keywords[0]?.etv"
+            >
+              <button type="button" (click)="sortBy('etv')">
+                Est. Traffic Value <span aria-hidden="true">{{ getSortIcon("etv") }}</span>
+              </button>
             </th>
           </tr>
         </thead>
@@ -181,6 +243,13 @@
             [class.top-position]="keyword.position <= 3"
             [class.first-page]="keyword.position > 3 && keyword.position <= 10"
           >
+            <td class="rating-cell">
+              <app-keyword-rating
+                [keyword]="keyword.keyword"
+                [currentRating]="keywordRatingService.getRating(keyword.keyword)"
+                (ratingChanged)="onKeywordRatingChanged(keyword.keyword, $event)"
+              ></app-keyword-rating>
+            </td>
             <td class="keyword-cell">
               <span class="keyword-text">{{ keyword.keyword }}</span>
               <span class="badge top-3" *ngIf="keyword.position <= 3">Top 3</span>
@@ -216,7 +285,7 @@
     </div>
     <div class="load-more-container" *ngIf="hasMoreKeywords">
       <button class="btn-load-more" (click)="loadMore()">
-        Load More Keywords ({{ keywords.length - displayedKeywords.length }}
+        Load More Keywords ({{ filteredKeywords.length - displayedKeywords.length }}
         remaining)
       </button>
     </div>
@@ -224,7 +293,7 @@
 
   <!-- Empty State -->
   <section class="empty-state" *ngIf="hasAnalyzed && keywords.length === 0 && !errorMessage">
-    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path
         stroke-linecap="round"
         stroke-linejoin="round"
@@ -252,7 +321,7 @@
       <h3>Ready for the next step?</h3>
       <p>Discover and analyze your competitors to find keyword opportunities</p>
       <button class="btn-discover-competitors" (click)="showCompetitorSelection = true">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -288,7 +357,7 @@
     <!-- Start Analysis Button (only shown before analysis) -->
     <div *ngIf="!showCompetitorAnalysis" class="analyze-action">
       <button class="btn-analyze" (click)="showCompetitorAnalysis = true">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"

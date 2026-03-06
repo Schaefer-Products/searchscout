@@ -1,0 +1,31 @@
+<div
+  *ngIf="pendingUndo"
+  class="undo-toast"
+  data-testid="undo-toast"
+  role="status"
+  aria-label="Rating change notification"
+>
+  <span aria-live="polite" aria-atomic="true" class="toast-message">
+    <strong>{{ pendingUndo.keyword }}</strong> hidden.
+  </span>
+
+  <button
+    #undoBtn
+    type="button"
+    class="undo-btn"
+    data-action="undo"
+    (click)="onUndo()"
+  >
+    Undo
+  </button>
+
+  <button
+    type="button"
+    class="dismiss-btn"
+    data-action="dismiss"
+    aria-label="Dismiss rating change notification"
+    (click)="onDismiss()"
+  >
+    ✕
+  </button>
+</div>

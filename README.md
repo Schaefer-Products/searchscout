@@ -44,10 +44,15 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 - [x] Persist competitor selection
 - [ ] Estimated cost tracking
 - [x] Click "Change Selection" should pre-populate the competitors list
-- [ ] Allow user to explicitly select relevant keywords and exclude irrelevant keywords
-      - Persist the selection
-      - Prioritize relevant keywords in the "Blog Topics" generator
+- [x] Allow user to explicitly select relevant keywords and exclude irrelevant keywords for their domain
+      - Choose 0-4 for relevancy
+        - 0 - is not and never will be relevant
+        - 4 - is a relevant keyword and I could write about it today
+      - Persist the selection to the long-term database
+      - Prioritize higher relevant keywords in the "Blog Topics" generator
       - Star the relevant keywords
+- [ ] Explore different color schemes
+- [ ] Import data
 
 ## Tech Debt
 - [x] unit tests

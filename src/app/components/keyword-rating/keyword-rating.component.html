@@ -1,0 +1,37 @@
+<div
+  class="rating-group"
+  role="group"
+  [attr.aria-label]="'Rate keyword: ' + keyword"
+>
+  <!-- Rating 0 — Hide button (rendered separately for the separator) -->
+  <button
+    type="button"
+    class="rating-btn rating-btn--hide"
+    [class.is-selected]="currentRating === ratingValues[0]"
+    [class.is-not-selected]="currentRating !== undefined && currentRating !== ratingValues[0]"
+    [attr.data-rating]="ratingValues[0]"
+    [attr.aria-pressed]="currentRating === ratingValues[0] ? 'true' : 'false'"
+    [attr.aria-label]="getAriaLabel(ratingValues[0])"
+    [title]="getTooltip(ratingValues[0])"
+    [style]="getRingStyle(ratingValues[0])"
+    (click)="onButtonClick(ratingValues[0])"
+  >{{ getEmoji(ratingValues[0]) }}</button>
+
+  <!-- Visual separator between hide (0) and rated (1–4) buttons -->
+  <span class="rating-separator" aria-hidden="true"></span>
+
+  <!-- Ratings 1–4 -->
+  <button
+    *ngFor="let value of ratingValuesPositive"
+    type="button"
+    class="rating-btn"
+    [class.is-selected]="currentRating === value"
+    [class.is-not-selected]="currentRating !== undefined && currentRating !== value"
+    [attr.data-rating]="value"
+    [attr.aria-pressed]="currentRating === value ? 'true' : 'false'"
+    [attr.aria-label]="getAriaLabel(value)"
+    [title]="getTooltip(value)"
+    [style]="getRingStyle(value)"
+    (click)="onButtonClick(value)"
+  >{{ getEmoji(value) }}</button>
+</div>

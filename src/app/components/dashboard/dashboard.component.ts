@@ -1,12 +1,17 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { DataforseoService } from '../../services/dataforseo.service';
 import { StorageService } from '../../services/storage.service';
+import { KeywordRatingService } from '../../services/keyword-rating.service';
 import { DomainKeywordRanking } from '../../models/keyword.model';
 import { Competitor } from '../../models/competitor.model';
+import { RatingValue } from '../../models/keyword-rating.model';
 import { CompetitorSelectionComponent } from '../competitor-selection/competitor-selection.component';
 import { CompetitorAnalysisComponent } from '../competitor-analysis/competitor-analysis.component';
+import { KeywordRatingComponent } from '../keyword-rating/keyword-rating.component';
+import { BlogTopicsStaleBannerComponent } from '../blog-topics-stale-banner/blog-topics-stale-banner.component';
 import { Logger } from '../../utils/logger';
 import { cleanDomain, isValidDomain } from '../../utils/domain.utils';
 import { PaginatedList } from '../../utils/paginated-list';
@@ -14,24 +19,37 @@ import { PaginatedList } from '../../utils/paginated-list';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, CompetitorSelectionComponent, CompetitorAnalysisComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    CompetitorSelectionComponent,
+    CompetitorAnalysisComponent,
+    KeywordRatingComponent,
+    BlogTopicsStaleBannerComponent,
+  ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, OnDestroy {
   private dataforseoService = inject(DataforseoService);
   private storageService = inject(StorageService);
+  keywordRatingService = inject(KeywordRatingService);
   private cdr = inject(ChangeDetectorRef);
+
+  private ratingsSub: Subscription | null = null;
 
   // Form state
   domain: string = '';
   isAnalyzing: boolean = false;
   errorMessage: string = '';
 
-  // Results state
+  // Results state — full sorted list, before hiding
   keywords: DomainKeywordRanking[] = [];
+  /** Visible list after applying the hidden filter. Used for pagination. */
+  filteredKeywords: DomainKeywordRanking[] = [];
   pagination = new PaginatedList<DomainKeywordRanking>(100);
   hasAnalyzed: boolean = false;
+  showHidden: boolean = false;
 
   get displayedKeywords(): DomainKeywordRanking[] { return this.pagination.displayed; }
   set displayedKeywords(v: DomainKeywordRanking[]) { this.pagination.displayed = v; }
@@ -49,6 +67,12 @@ export class DashboardComponent implements OnInit {
   showCompetitorAnalysis: boolean = false;
 
   ngOnInit(): void {
+    // Subscribe to rating changes to keep the filtered list in sync
+    this.ratingsSub = this.keywordRatingService.ratings$.subscribe(() => {
+      this.applyHiddenFilter();
+      this.cdr.detectChanges();
+    });
+
     // Load saved domain and competitors on init
     const savedDomain = this.storageService.getCurrentDomain();
     if (savedDomain) {
@@ -68,6 +92,39 @@ export class DashboardComponent implements OnInit {
         Logger.debug('Found cached keywords, auto-analyzing...');
         this.analyzeDomain();
       }
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.ratingsSub?.unsubscribe();
+  }
+
+  private applyHiddenFilter(): void {
+    if (this.showHidden) {
+      this.filteredKeywords = this.keywords;
+    } else {
+      this.filteredKeywords = this.keywords.filter(
+        kw => !this.keywordRatingService.isHidden(kw.keyword)
+      );
+    }
+    this.pagination.reset(this.filteredKeywords);
+  }
+
+  toggleShowHidden(): void {
+    this.showHidden = !this.showHidden;
+    this.applyHiddenFilter();
+    this.cdr.detectChanges();
+  }
+
+  get hiddenCount(): number {
+    return this.keywords.filter(kw => this.keywordRatingService.isHidden(kw.keyword)).length;
+  }
+
+  onKeywordRatingChanged(keyword: string, rating: RatingValue | undefined): void {
+    if (rating === undefined) {
+      this.keywordRatingService.clearRating(keyword);
+    } else {
+      this.keywordRatingService.setRating(keyword, rating);
     }
   }
 
@@ -93,6 +150,9 @@ export class DashboardComponent implements OnInit {
 
     // Save current domain to storage (update to new domain)
     this.storageService.saveCurrentDomain(cleaned);
+
+    // Initialize keyword rating service for this domain
+    void this.keywordRatingService.initialize(cleaned);
 
     // Load competitors for this domain (even if it's the same domain)
     const savedCompetitors = this.storageService.getSelectedCompetitors(cleaned);
@@ -120,7 +180,7 @@ export class DashboardComponent implements OnInit {
         Logger.debug('First keyword:', keywords[0]);
 
         this.keywords = keywords;
-        this.pagination.reset(keywords);
+        this.applyHiddenFilter();
         this.hasAnalyzed = true;
         this.isAnalyzing = false;
 
@@ -191,7 +251,7 @@ export class DashboardComponent implements OnInit {
       return 0;
     });
 
-    this.pagination.reset(this.keywords);
+    this.applyHiddenFilter();
     this.cdr.detectChanges();
   }
 
@@ -201,7 +261,7 @@ export class DashboardComponent implements OnInit {
   }
 
   get hasMoreKeywords(): boolean {
-    return this.pagination.displayed.length < this.keywords.length;
+    return this.pagination.displayed.length < this.filteredKeywords.length;
   }
 
   getSortIcon(column: keyof DomainKeywordRanking): string {

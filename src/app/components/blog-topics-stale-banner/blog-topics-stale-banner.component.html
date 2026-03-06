@@ -1,0 +1,21 @@
+<div aria-live="polite" aria-atomic="true">
+  <div
+    *ngIf="isStale$ | async"
+    class="stale-banner blog-topics-stale-banner"
+    data-testid="topics-stale-banner"
+  >
+    <span class="banner-icon" aria-hidden="true">⚠️</span>
+
+    <p class="banner-message">
+      Your keyword ratings have changed. Blog topics may be out of date.
+    </p>
+
+    <button
+      type="button"
+      class="btn-regenerate"
+      (click)="onRegenerate()"
+    >
+      Regenerate topics
+    </button>
+  </div>
+</div>

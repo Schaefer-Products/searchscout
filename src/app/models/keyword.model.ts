@@ -1,3 +1,5 @@
+import { RatingValue } from './keyword-rating.model';
+
 /**
  * General keyword search metrics from DataForSEO
  * Not tied to any specific domain's rankings
@@ -26,6 +28,9 @@ export interface DomainKeywordRanking extends KeywordMetrics {
 
     /** Estimated monthly traffic value in USD for this domain/keyword combo */
     etv?: number;
+
+    /** User-assigned relevance rating for this keyword (optional, non-breaking) */
+    relevanceRating?: RatingValue;
 }
 
 /**

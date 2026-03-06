@@ -1,12 +1,15 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { AggregatedKeyword, CompetitorAnalysisResults } from '../models/aggregated-keyword.model';
 import { BlogTopic } from '../models/blog-topic.model';
+import { KeywordRatingService } from './keyword-rating.service';
+import { RATING_META } from '../models/keyword-rating.model';
 import { Logger } from '../utils/logger';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ExportService {
+  private keywordRatingService = inject(KeywordRatingService);
 
   private escapeCSV(value: string | number | undefined | null): string {
     if (value === null || value === undefined) return '';
@@ -68,12 +71,14 @@ export class ExportService {
       'Total Opportunities'
     );
 
-    const columns = 'Keyword,Search Volume,Difficulty,Opportunity Score,Competitor Count,Competitors,CPC (USD)';
+    const columns = 'Keyword,Search Volume,Difficulty,Opportunity Score,Competitor Count,Competitors,CPC (USD),Rating';
 
     const rows = opportunities.map(kw => {
       const competitorStr = kw.competitorRankings
         .map(c => `${c.domain} (#${c.position})`)
         .join('; ');
+      const rating = this.keywordRatingService.getRating(kw.keyword);
+      const ratingLabel = rating !== undefined ? (RATING_META[rating]?.label ?? 'Unrated') : 'Unrated';
       return [
         this.escapeCSV(kw.keyword),
         this.escapeCSV(kw.searchVolume),
@@ -82,6 +87,7 @@ export class ExportService {
         this.escapeCSV(kw.competitorCount),
         this.escapeCSV(competitorStr),
         this.escapeCSV(kw.cpc != null ? kw.cpc.toFixed(2) : ''),
+        this.escapeCSV(ratingLabel),
       ].join(',');
     });
 
@@ -134,7 +140,7 @@ export class ExportService {
       'Total Keywords'
     );
 
-    const columns = 'Keyword,Type,Search Volume,Difficulty,Opportunity Score,Your Position,Competitor Count,Competitors,CPC (USD)';
+    const columns = 'Keyword,Type,Search Volume,Difficulty,Opportunity Score,Your Position,Competitor Count,Competitors,CPC (USD),Rating';
 
     const getType = (kw: AggregatedKeyword): string => {
       if (kw.isOpportunity) return 'Opportunity';
@@ -147,6 +153,8 @@ export class ExportService {
       const competitorStr = kw.competitorRankings
         .map(c => `${c.domain} (#${c.position})`)
         .join('; ');
+      const rating = this.keywordRatingService.getRating(kw.keyword);
+      const ratingLabel = rating !== undefined ? (RATING_META[rating]?.label ?? 'Unrated') : 'Unrated';
       return [
         this.escapeCSV(kw.keyword),
         this.escapeCSV(getType(kw)),
@@ -157,6 +165,7 @@ export class ExportService {
         this.escapeCSV(kw.competitorCount),
         this.escapeCSV(competitorStr),
         this.escapeCSV(kw.cpc != null ? kw.cpc.toFixed(2) : ''),
+        this.escapeCSV(ratingLabel),
       ].join(',');
     });
 

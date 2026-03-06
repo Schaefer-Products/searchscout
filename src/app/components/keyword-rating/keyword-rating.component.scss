@@ -1,0 +1,86 @@
+// ── CSS custom properties for rating colours ─────────────────────────────────
+
+:host {
+  --rating-0-color: #DC2626;
+  --rating-1-color: #9CA3AF;
+  --rating-2-color: #F59E0B;
+  --rating-3-color: #10B981;
+  --rating-4-color: #8B5CF6;
+}
+
+// ── Rating group wrapper ──────────────────────────────────────────────────────
+
+.rating-group {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+// ── Vertical separator between hide (0) and rated (1–4) buttons ───────────────
+
+.rating-separator {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: #D1D5DB;
+  margin: 0 6px;
+  flex-shrink: 0;
+}
+
+// ── Individual rating buttons ─────────────────────────────────────────────────
+
+.rating-btn {
+  opacity: 0.22;
+  font-size: 18px;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  border-radius: 6px;
+  padding: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  transition: opacity 150ms ease, transform 120ms ease;
+  position: relative;
+
+  &:hover {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+
+  &:active {
+    transform: scale(0.88);
+  }
+
+  &:focus-visible {
+    outline: 2px solid #2563EB;
+    outline-offset: 3px;
+  }
+
+  // ── Selected state ──────────────────────────────────────────────────────────
+
+  &.is-selected {
+    opacity: 1;
+    position: relative;
+
+    // Coloured ring rendered via ::after; colour passed through --ring-color
+    // which is set as inline style on each button element
+    &::after {
+      content: '';
+      position: absolute;
+      inset: -3px;
+      border-radius: 8px;
+      border: 2px solid var(--ring-color, #6B7280);
+      pointer-events: none;
+    }
+  }
+
+  // ── Not-selected (sibling of active selection) ──────────────────────────────
+
+  &.is-not-selected {
+    opacity: 0.3;
+  }
+}

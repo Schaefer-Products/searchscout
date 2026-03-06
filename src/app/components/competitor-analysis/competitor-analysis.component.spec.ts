@@ -1,13 +1,30 @@
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Subject, of, throwError } from 'rxjs';
+import { BehaviorSubject, Subject, of, throwError } from 'rxjs';
 import { CompetitorAnalysisComponent } from './competitor-analysis.component';
 import { CompetitorAnalysisService } from '../../services/competitor-analysis.service';
 import { BlogTopicGeneratorService } from '../../services/blog-topic-generator.service';
 import { ExportService } from '../../services/export.service';
+import { KeywordRatingService } from '../../services/keyword-rating.service';
 import { Competitor } from '../../models/competitor.model';
 import { DomainKeywordRanking } from '../../models/keyword.model';
 import { AggregatedKeyword, CompetitorAnalysisResults } from '../../models/aggregated-keyword.model';
 import { BlogTopic } from '../../models/blog-topic.model';
+import { RatingValue } from '../../models/keyword-rating.model';
+
+// ─── Stub child components ────────────────────────────────────────────────────
+
+@Component({ selector: 'app-keyword-rating', standalone: true, template: '' })
+class MockKeywordRatingComponent {
+  @Input() keyword = '';
+  @Input() currentRating: RatingValue | undefined = undefined;
+  @Output() ratingChanged = new EventEmitter<RatingValue | undefined>();
+}
+
+@Component({ selector: 'app-blog-topics-stale-banner', standalone: true, template: '' })
+class MockBlogTopicsStaleBannerComponent {
+  @Output() regenerateClicked = new EventEmitter<void>();
+}
 
 // ─── Fixture helpers ─────────────────────────────────────────────────────────
 
@@ -63,6 +80,7 @@ describe('CompetitorAnalysisComponent', () => {
   let analysisSpy: jasmine.SpyObj<CompetitorAnalysisService>;
   let blogTopicSpy: jasmine.SpyObj<BlogTopicGeneratorService>;
   let exportSpy: jasmine.SpyObj<ExportService>;
+  let keywordRatingSpy: jasmine.SpyObj<KeywordRatingService>;
 
   beforeEach(async () => {
     analysisSpy = jasmine.createSpyObj('CompetitorAnalysisService', [
@@ -72,11 +90,22 @@ describe('CompetitorAnalysisComponent', () => {
     exportSpy = jasmine.createSpyObj('ExportService', [
       'exportBlogTopics', 'exportOpportunities', 'exportAllKeywords',
     ]);
+    keywordRatingSpy = jasmine.createSpyObj('KeywordRatingService', [
+      'initialize', 'getRating', 'setRating', 'clearRating', 'isHidden',
+      'getAllRatings', 'adjustScore', 'markBlogTopicsGenerated', 'dismissRatingHint', 'undoLastHide',
+    ], {
+      ratings$: new BehaviorSubject({}),
+      showRatingHint$: new BehaviorSubject(false),
+      blogTopicsStale$: new BehaviorSubject(false),
+      pendingUndo$: new BehaviorSubject(null),
+    });
 
     // Safe defaults so ngOnInit doesn't explode
     analysisSpy.analyzeCompetitors.and.returnValue(of(makeResults()));
     analysisSpy.getCacheMetadata.and.returnValue(null);
     blogTopicSpy.generateTopics.and.returnValue([]);
+    keywordRatingSpy.getRating.and.returnValue(undefined);
+    keywordRatingSpy.adjustScore.and.callFake((_keyword: string, rawScore: number) => rawScore);
 
     await TestBed.configureTestingModule({
       imports: [CompetitorAnalysisComponent],
@@ -84,8 +113,10 @@ describe('CompetitorAnalysisComponent', () => {
         { provide: CompetitorAnalysisService, useValue: analysisSpy },
         { provide: BlogTopicGeneratorService, useValue: blogTopicSpy },
         { provide: ExportService, useValue: exportSpy },
+        { provide: KeywordRatingService, useValue: keywordRatingSpy },
       ],
-    }).compileComponents();
+    })
+    .compileComponents();
 
     fixture = TestBed.createComponent(CompetitorAnalysisComponent);
     component = fixture.componentInstance;

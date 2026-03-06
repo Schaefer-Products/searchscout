@@ -1,6 +1,7 @@
-import { Component, Input, OnInit, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { Competitor } from '../../models/competitor.model';
 import { DomainKeywordRanking } from '../../models/keyword.model';
 import { AggregatedKeyword, CompetitorAnalysisResults } from '../../models/aggregated-keyword.model';
@@ -8,6 +9,10 @@ import { BlogTopic } from '../../models/blog-topic.model';
 import { CompetitorAnalysisService } from '../../services/competitor-analysis.service';
 import { BlogTopicGeneratorService } from '../../services/blog-topic-generator.service';
 import { ExportService } from '../../services/export.service';
+import { KeywordRatingService } from '../../services/keyword-rating.service';
+import { RatingValue } from '../../models/keyword-rating.model';
+import { KeywordRatingComponent } from '../keyword-rating/keyword-rating.component';
+import { BlogTopicsStaleBannerComponent } from '../blog-topics-stale-banner/blog-topics-stale-banner.component';
 import { Logger } from '../../utils/logger';
 import { PaginatedList } from '../../utils/paginated-list';
 
@@ -16,14 +21,15 @@ type ViewMode = 'opportunities' | 'all' | 'shared' | 'unique' | 'blog-topics';
 @Component({
   selector: 'app-competitor-analysis',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, KeywordRatingComponent, BlogTopicsStaleBannerComponent],
   templateUrl: './competitor-analysis.component.html',
   styleUrls: ['./competitor-analysis.component.scss']
 })
-export class CompetitorAnalysisComponent implements OnInit {
+export class CompetitorAnalysisComponent implements OnInit, OnDestroy {
   private analysisService = inject(CompetitorAnalysisService);
   private blogTopicService = inject(BlogTopicGeneratorService);
   private exportService = inject(ExportService);
+  keywordRatingService = inject(KeywordRatingService);
   private cdr = inject(ChangeDetectorRef);
 
   @Input() userDomain: string = '';
@@ -73,9 +79,19 @@ export class CompetitorAnalysisComponent implements OnInit {
   // Cache state
   cacheMetadata: { timestamp: number; ageInDays: number } | null = null;
 
+  // Pre-computed adjusted scores to avoid calling getAdjustedScore() multiple times per row
+  adjustedScores: Record<string, number> = {};
+
+  // Subscription for the analysis Observable — unsubscribed on destroy
+  private analysisSubscription: Subscription = Subscription.EMPTY;
+
   ngOnInit(): void {
     // Auto-start analysis when component loads
     this.analyzeCompetitors();
+  }
+
+  ngOnDestroy(): void {
+    this.analysisSubscription.unsubscribe();
   }
 
   analyzeCompetitors(): void {
@@ -88,7 +104,7 @@ export class CompetitorAnalysisComponent implements OnInit {
     this.errorMessage = '';
     Logger.debug('Starting competitor keyword analysis');
 
-    this.analysisService.analyzeCompetitors(
+    this.analysisSubscription = this.analysisService.analyzeCompetitors(
       this.userDomain,
       this.userKeywords,
       this.competitors
@@ -147,12 +163,24 @@ export class CompetitorAnalysisComponent implements OnInit {
 
   updateDisplayedKeywords(): void {
     if (!this.results || this.viewMode === 'blog-topics') return;
-    this.keywordPagination.reset(this.sortKeywords(this.getKeywordsForCurrentView()));
+    const sorted = this.sortKeywords(this.getKeywordsForCurrentView());
+    this.keywordPagination.reset(sorted);
+    // Pre-compute adjusted scores for the full current view to avoid repeated calls in the template
+    this.adjustedScores = {};
+    for (const kw of this.getKeywordsForCurrentView()) {
+      this.adjustedScores[kw.keyword] = this.getAdjustedScore(kw.keyword, kw.opportunityScore);
+    }
   }
 
   loadMore(): void {
     const newLimit = this.keywordPagination.displayed.length + this.keywordPagination.chunk;
     this.keywordPagination.displayed = this.sortKeywords(this.getKeywordsForCurrentView()).slice(0, newLimit);
+    // Ensure adjustedScores covers any newly loaded keywords
+    for (const kw of this.keywordPagination.displayed) {
+      if (!(kw.keyword in this.adjustedScores)) {
+        this.adjustedScores[kw.keyword] = this.getAdjustedScore(kw.keyword, kw.opportunityScore);
+      }
+    }
     this.cdr.detectChanges();
   }
 
@@ -180,15 +208,15 @@ export class CompetitorAnalysisComponent implements OnInit {
 
   private sortKeywords(keywords: AggregatedKeyword[]): AggregatedKeyword[] {
     return [...keywords].sort((a, b) => {
-      let aVal: any;
-      let bVal: any;
+      let aVal: string | number | undefined;
+      let bVal: string | number | undefined;
 
       if (this.sortColumn === 'userRanking') {
         aVal = a.userRanking?.position ?? 999;
         bVal = b.userRanking?.position ?? 999;
       } else {
-        aVal = a[this.sortColumn];
-        bVal = b[this.sortColumn];
+        aVal = a[this.sortColumn] as string | number | undefined;
+        bVal = b[this.sortColumn] as string | number | undefined;
       }
 
       if (typeof aVal === 'number' && typeof bVal === 'number') {
@@ -249,5 +277,32 @@ export class CompetitorAnalysisComponent implements OnInit {
       case 'opportunities': return 'Export Opportunities';
       default: return 'Export All Keywords';
     }
+  }
+
+  onKeywordRatingChanged(keyword: string, rating: RatingValue | undefined): void {
+    if (rating === undefined) {
+      this.keywordRatingService.clearRating(keyword);
+    } else {
+      this.keywordRatingService.setRating(keyword, rating);
+    }
+  }
+
+  getAdjustedScore(keyword: string, rawScore: number | undefined): number {
+    if (rawScore === undefined) return 0;
+    return this.keywordRatingService.adjustScore(keyword, rawScore);
+  }
+
+  onRegenerateBlogTopics(): void {
+    if (!this.results) return;
+    Logger.debug('[CompetitorAnalysisComponent] Regenerating blog topics after rating changes');
+    this.blogTopics = this.blogTopicService.generateTopics(
+      this.results.opportunities,
+      this.results.opportunities.length
+    );
+    this.keywordRatingService.markBlogTopicsGenerated();
+    if (this.viewMode === 'blog-topics') {
+      this.topicPagination.reset(this.blogTopics);
+    }
+    this.cdr.detectChanges();
   }
 }
