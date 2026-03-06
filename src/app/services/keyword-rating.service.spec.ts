@@ -226,13 +226,13 @@ describe('KeywordRatingService', () => {
       expect(stale).toBeTrue();
     });
 
-    it('should NOT set blogTopicsStale$ to true when rating is 0 (hide)', () => {
-      // Start with a known false state (ratings are fresh)
+    it('should set blogTopicsStale$ to true when rating is 0 (hide)', () => {
+      // Hiding a keyword removes it from blog topic generation, so topics are stale.
       service.markBlogTopicsGenerated();
       let stale = false;
       service.blogTopicsStale$.subscribe(v => (stale = v));
       service.setRating('kw', 0);
-      expect(stale).toBeFalse();
+      expect(stale).toBeTrue();
     });
   });
 

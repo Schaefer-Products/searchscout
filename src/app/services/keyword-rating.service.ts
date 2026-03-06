@@ -151,8 +151,10 @@ export class KeywordRatingService implements OnDestroy {
   /**
    * Assign `rating` to `keyword` and emit the updated map.
    *
-   * Rating 0 (hide): stores previous rating in pendingUndo$ for undo support.
-   * Rating 1–4: sets blogTopicsStale$ to true.
+   * All ratings (0–4) mark blog topics as stale because the generated list
+   * depends on which keywords are visible and their relevance scores.
+   * Rating 0 (hide): additionally stores previous rating in pendingUndo$.
+   * Rating 1–4: clears any pending undo.
    */
   setRating(keyword: string, rating: RatingValue): void {
     const previousRating = this.ratingsMap[keyword];
@@ -161,6 +163,9 @@ export class KeywordRatingService implements OnDestroy {
     this.ratingsMap = { ...this.ratingsMap, [keyword]: rating };
     this._ratings$.next({ ...this.ratingsMap });
 
+    // Any rating change invalidates the current blog topic list.
+    this._blogTopicsStale$.next(true);
+
     if (rating === 0) {
       Logger.debug(
         `[KeywordRatingService] "${keyword}" hidden (rating 0); previous rating: ${previousRating}`
@@ -168,7 +173,6 @@ export class KeywordRatingService implements OnDestroy {
       this._pendingUndo$.next({ keyword, previousRating });
     } else {
       Logger.debug(`[KeywordRatingService] "${keyword}" rated ${rating}; blog topics now stale`);
-      this._blogTopicsStale$.next(true);
       // A new explicit rating supersedes any previous undo.
       if (this._pendingUndo$.value !== null) {
         this._pendingUndo$.next(null);

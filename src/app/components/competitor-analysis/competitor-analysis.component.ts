@@ -115,13 +115,14 @@ export class CompetitorAnalysisComponent implements OnInit, OnDestroy {
         this.analysisComplete = true;
         this.isAnalyzing = false;
 
-        // Generate blog topics from opportunities
+        // Generate blog topics from non-hidden opportunities
         if (results.opportunities.length > 0) {
-          // Generate topics for ALL opportunities (no limit)
-          // The service will handle scoring and sorting
+          const visibleOpportunities = results.opportunities.filter(
+            kw => !this.keywordRatingService.isHidden(kw.keyword)
+          );
           this.blogTopics = this.blogTopicService.generateTopics(
-            results.opportunities,
-            results.opportunities.length // Generate for all opportunities
+            visibleOpportunities,
+            visibleOpportunities.length
           );
           Logger.debug('Generated blog topics:', this.blogTopics.length);
         }
@@ -295,14 +296,15 @@ export class CompetitorAnalysisComponent implements OnInit, OnDestroy {
   onRegenerateBlogTopics(): void {
     if (!this.results) return;
     Logger.debug('[CompetitorAnalysisComponent] Regenerating blog topics after rating changes');
+    const visibleOpportunities = this.results.opportunities.filter(
+      kw => !this.keywordRatingService.isHidden(kw.keyword)
+    );
     this.blogTopics = this.blogTopicService.generateTopics(
-      this.results.opportunities,
-      this.results.opportunities.length
+      visibleOpportunities,
+      visibleOpportunities.length
     );
     this.keywordRatingService.markBlogTopicsGenerated();
-    if (this.viewMode === 'blog-topics') {
-      this.topicPagination.reset(this.blogTopics);
-    }
+    this.topicPagination.reset(this.blogTopics);
     this.cdr.detectChanges();
   }
 }

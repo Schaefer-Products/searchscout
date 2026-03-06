@@ -53,6 +53,7 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
       - Star the relevant keywords
 - [ ] Explore different color schemes
 - [ ] Import data
+- [ ] Filters for keywords table
 
 ## Tech Debt
 - [x] unit tests

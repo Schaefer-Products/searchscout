@@ -614,6 +614,34 @@ test.describe('Keyword Rating — Rule 4: Blog Topics stale banner', () => {
     await expect(rating.getStaleBanner()).not.toBeVisible();
   });
 
+  test('changing a rating from 1–4 to not relevant (0) shows the stale banner', async ({ page }) => {
+    await setupWithCompetitorCache(page);
+
+    const dashboard = new DashboardPage(page);
+    const analysis = new CompetitorAnalysisPage(page);
+    const rating = new KeywordRatingPage(page);
+
+    await navigateAndStartAnalysis(page, dashboard, analysis);
+
+    // Visit blog topics tab to generate initial list, then return
+    await analysis.clickTab('Blog Topics');
+    await expect(analysis.blogTopicsContainer).toBeVisible();
+    await analysis.clickTab('Opportunities');
+
+    // First rate the keyword as relevant (1–4) and then regenerate to clear stale
+    await rating.clickRating('link building', 3);
+    await analysis.clickTab('Blog Topics');
+    await rating.clickRegenerate();
+    await expect(rating.getStaleBanner()).not.toBeVisible();
+
+    // Now change the same keyword to not relevant (0) — banner must reappear
+    await analysis.clickTab('Opportunities');
+    await rating.clickRating('link building', 0);
+    await analysis.clickTab('Blog Topics');
+
+    await expect(rating.getStaleBanner()).toBeVisible();
+  });
+
   test('blog topics stale banner does not appear before any rating changes', async ({ page }) => {
     await setupWithCompetitorCache(page);
 
@@ -793,5 +821,97 @@ test.describe('Keyword Rating — Rule 6: Show hidden keywords', () => {
     // Visible but with hidden styling
     expect(await rating.isKeywordVisible('seo tools')).toBe(true);
     expect(await rating.isKeywordHiddenStyle('seo tools')).toBe(true);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// Rule 7: Regenerate blog topics excludes hidden keywords
+// ---------------------------------------------------------------------------
+
+test.describe('Keyword Rating — Rule 7: Regenerate excludes hidden keywords', () => {
+  test('blog topics for a keyword seeded as hidden (rating 0) are absent on initial load', async ({ page }) => {
+    await setupWithCompetitorCache(page);
+    // 'link building' is one of the two opportunities in the cached results
+    await seedKeywordRatings(page, 'example.com', { 'link building': 0 });
+
+    const dashboard = new DashboardPage(page);
+    const analysis = new CompetitorAnalysisPage(page);
+
+    await navigateAndStartAnalysis(page, dashboard, analysis);
+    await analysis.clickTab('Blog Topics');
+    await expect(analysis.blogTopicsContainer).toBeVisible();
+
+    // No topic card should reference the hidden keyword
+    const linkBuildingTopics = analysis.topicCards.filter({ hasText: /link building/i });
+    await expect(linkBuildingTopics).toHaveCount(0);
+
+    // Topics for the other opportunity keyword should still be present
+    const backLinkTopics = analysis.topicCards.filter({ hasText: /backlink checker/i });
+    await expect(backLinkTopics).not.toHaveCount(0);
+  });
+
+  test('clicking Regenerate removes blog topics for a keyword rated 0 since the last generation', async ({ page }) => {
+    await setupWithCompetitorCache(page);
+
+    const dashboard = new DashboardPage(page);
+    const analysis = new CompetitorAnalysisPage(page);
+    const rating = new KeywordRatingPage(page);
+
+    await navigateAndStartAnalysis(page, dashboard, analysis);
+
+    // Confirm both opportunity keywords produce topics on initial load
+    await analysis.clickTab('Blog Topics');
+    await expect(analysis.blogTopicsContainer).toBeVisible();
+    const initialLinkBuildingTopics = analysis.topicCards.filter({ hasText: /link building/i });
+    await expect(initialLinkBuildingTopics).not.toHaveCount(0);
+
+    // Hide 'link building' from the Opportunities tab
+    await analysis.clickTab('Opportunities');
+    await rating.clickRating('link building', 0);
+
+    // Switch to Blog Topics — stale banner should appear
+    await analysis.clickTab('Blog Topics');
+    await expect(rating.getStaleBanner()).toBeVisible();
+
+    // Regenerate
+    await rating.clickRegenerate();
+
+    // Banner dismissed
+    await expect(rating.getStaleBanner()).not.toBeVisible();
+
+    // Topics for 'link building' are gone
+    const afterLinkBuildingTopics = analysis.topicCards.filter({ hasText: /link building/i });
+    await expect(afterLinkBuildingTopics).toHaveCount(0);
+
+    // Topics for the remaining opportunity are still present
+    const backLinkTopics = analysis.topicCards.filter({ hasText: /backlink checker/i });
+    await expect(backLinkTopics).not.toHaveCount(0);
+  });
+
+  test('topic count on the stat card decreases after regenerating with a hidden keyword', async ({ page }) => {
+    await setupWithCompetitorCache(page);
+
+    const dashboard = new DashboardPage(page);
+    const analysis = new CompetitorAnalysisPage(page);
+    const rating = new KeywordRatingPage(page);
+
+    await navigateAndStartAnalysis(page, dashboard, analysis);
+
+    // Record initial topic count
+    await analysis.clickTab('Blog Topics');
+    await expect(analysis.blogTopicsContainer).toBeVisible();
+    const initialCount = await analysis.blogTopicsContainer.locator('.topic-card').count();
+    expect(initialCount).toBeGreaterThan(0);
+
+    // Hide one opportunity keyword
+    await analysis.clickTab('Opportunities');
+    await rating.clickRating('link building', 0);
+
+    await analysis.clickTab('Blog Topics');
+    await rating.clickRegenerate();
+
+    // Count should be strictly less after removing one keyword's topics
+    const afterCount = await analysis.blogTopicsContainer.locator('.topic-card').count();
+    expect(afterCount).toBeLessThan(initialCount);
   });
 });
