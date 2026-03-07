@@ -178,6 +178,20 @@
         </button>
       </div>
 
+      <!-- Unrated filter toggle -->
+      <div class="unrated-keywords-toggle" *ngIf="hasAnalyzed && keywords.length > 0">
+        <button
+          type="button"
+          class="btn-toggle-unrated"
+          [class.unrated-filter-active]="showUnratedOnly"
+          [attr.aria-pressed]="showUnratedOnly"
+          [attr.aria-label]="showUnratedOnly ? 'Showing unrated only (' + unratedCount + '). Click to show all keywords' : 'Show unrated only (' + unratedCount + ')'"
+          (click)="toggleShowUnratedOnly()"
+        >
+          {{ showUnratedOnly ? 'Showing unrated only (' + unratedCount + ')' : 'Show unrated only (' + unratedCount + ')' }}
+        </button>
+      </div>
+
       <!-- Add this scroll hint for mobile -->
       <div class="scroll-hint" *ngIf="keywords.length > 0">
         <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -275,6 +289,16 @@
               </span>
             </td>
             <td class="etv-cell" *ngIf="keyword.etv">${{ keyword.etv | number: "1.2-2" }}</td>
+          </tr>
+          <!-- Unrated filter completion state -->
+          <tr *ngIf="showUnratedOnly && unratedCount === 0" class="unrated-complete-state" role="status" aria-live="polite">
+            <td [attr.colspan]="keywords[0]?.etv ? 6 : 5" class="unrated-complete-cell">
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <strong>All keywords rated</strong>
+              <p>You have rated every keyword for this domain. Toggle off "Showing unrated only" to see the full table.</p>
+            </td>
           </tr>
         </tbody>
       </table>

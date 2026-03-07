@@ -140,3 +140,65 @@ Feature: Keyword Rating
     And I have rated keyword number 1 with rating 0
     Then the keyword table shows 100 rows on the first page
     And the load more button shows 9 remaining
+
+  # ---------------------------------------------------------------------------
+  # Feature 8: Unrated Keywords Filter
+  # ---------------------------------------------------------------------------
+
+  Scenario: Unrated filter button shows correct count of unrated keywords
+    Given I have rated "seo tools" with rating 2 seeded in IndexedDB
+    Then the unrated filter button shows a count of 1
+
+  Scenario: Unrated filter button is not visible before any domain is analyzed
+    Given I have not yet analyzed a domain
+    Then the unrated filter button is not visible
+
+  Scenario: Clicking the unrated filter button filters the table to unrated keywords only
+    Given I have rated "seo tools" with rating 2 seeded in IndexedDB
+    When I click the unrated filter button
+    Then "keyword research" is visible in the keyword table
+    And "seo tools" is not visible in the keyword table
+    And the unrated filter button shows active state
+
+  Scenario: Count decrements in real time as keywords are rated while filter is active
+    When I click the unrated filter button
+    Then the unrated filter button shows a count of 2
+    When I click the rating emoji for "seo tools" with rating 1
+    Then the unrated filter button shows a count of 1
+
+  Scenario: Clicking the active unrated filter button deactivates it and shows all keywords
+    Given I have rated "seo tools" with rating 2 seeded in IndexedDB
+    When I click the unrated filter button
+    And I click the unrated filter button again
+    Then "seo tools" is visible in the keyword table
+    And the unrated filter button shows inactive state
+
+  Scenario: When all keywords are rated while filter is active the completion state appears
+    Given I have rated "seo tools" with rating 1 seeded in IndexedDB
+    And I have rated "keyword research" with rating 2 seeded in IndexedDB
+    When I click the unrated filter button
+    Then the unrated completion state is visible
+    And the unrated filter button shows a count of 0
+
+  Scenario: Unrated filter resets when a different domain is analyzed
+    Given I have cached domain keywords for "other.com"
+    And I have rated "seo tools" with rating 2 seeded in IndexedDB
+    When I click the unrated filter button
+    And I change the current domain to "other.com"
+    Then the unrated filter button shows inactive state
+    And "seo tools" is visible in the keyword table
+
+  Scenario: Unrated filter persists through column sort
+    Given I have rated "seo tools" with rating 2 seeded in IndexedDB
+    When I click the unrated filter button
+    And I click the keyword column header to sort
+    Then "keyword research" is visible in the keyword table
+    And "seo tools" is not visible in the keyword table
+    And the unrated filter button shows active state
+
+  Scenario: Unrated filter persists through Load More pagination
+    Given I have 110 domain keywords cached for "example.com" with keyword 1 rated 2
+    When I click the unrated filter button
+    And I click the load more button
+    Then the unrated filter button shows active state
+    And keyword 1 is not visible in the keyword table

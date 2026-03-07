@@ -849,4 +849,209 @@ describe('DashboardComponent', () => {
       expect(rows.length).toBe(2);
     });
   });
+
+  // ---------------------------------------------------------------------------
+  // Unrated Keywords Filter
+  // ---------------------------------------------------------------------------
+
+  describe('Unrated Keywords Filter', () => {
+    beforeEach(() => {
+      storageSpy.getCurrentDomain.and.returnValue('mysite.com');
+    });
+
+    // ── 1. showUnratedOnly defaults to false ──────────────────────────────────
+
+    it('showUnratedOnly should default to false', () => {
+      expect(component.showUnratedOnly).toBeFalse();
+    });
+
+    // ── 2. unratedCount returns count of keywords where getRating === undefined
+
+    it('unratedCount should return the count of keywords with getRating === undefined', () => {
+      component.keywords = [
+        makeKeyword({ keyword: 'alpha' }),
+        makeKeyword({ keyword: 'beta' }),
+        makeKeyword({ keyword: 'gamma' }),
+      ];
+      keywordRatingSpy.getRating.and.returnValue(undefined);
+      expect(component.unratedCount).toBe(3);
+    });
+
+    // ── 3. unratedCount excludes keywords rated 1–4 ───────────────────────────
+
+    it('unratedCount should exclude keywords rated 1–4', () => {
+      component.keywords = [
+        makeKeyword({ keyword: 'alpha' }),
+        makeKeyword({ keyword: 'beta' }),
+        makeKeyword({ keyword: 'gamma' }),
+      ];
+      keywordRatingSpy.getRating.and.callFake((kw: string): RatingValue | undefined => {
+        if (kw === 'alpha') return 3;
+        if (kw === 'beta') return 1;
+        return undefined; // gamma is unrated
+      });
+      expect(component.unratedCount).toBe(1);
+    });
+
+    // ── 4. unratedCount excludes keywords rated 0 (hidden) ───────────────────
+
+    it('unratedCount should exclude keywords rated 0 (hidden)', () => {
+      component.keywords = [
+        makeKeyword({ keyword: 'alpha' }),
+        makeKeyword({ keyword: 'beta' }),
+      ];
+      keywordRatingSpy.getRating.and.callFake((kw: string): RatingValue | undefined => {
+        if (kw === 'alpha') return 0;
+        return undefined; // beta is unrated
+      });
+      expect(component.unratedCount).toBe(1);
+    });
+
+    // ── 5. toggleShowUnratedOnly() sets showUnratedOnly to true on first call ─
+
+    it('toggleShowUnratedOnly() should set showUnratedOnly to true on first call', () => {
+      component.keywords = [];
+      component.filteredKeywords = [];
+      component.toggleShowUnratedOnly();
+      expect(component.showUnratedOnly).toBeTrue();
+    });
+
+    // ── 6. toggleShowUnratedOnly() sets showUnratedOnly back to false on second call
+
+    it('toggleShowUnratedOnly() should set showUnratedOnly back to false on second call', () => {
+      component.keywords = [];
+      component.filteredKeywords = [];
+      component.toggleShowUnratedOnly();
+      component.toggleShowUnratedOnly();
+      expect(component.showUnratedOnly).toBeFalse();
+    });
+
+    // ── 7. When showUnratedOnly is true, filteredKeywords contains only unrated keywords
+
+    it('filteredKeywords should contain only unrated keywords when showUnratedOnly is true', () => {
+      const alpha = makeKeyword({ keyword: 'alpha' });
+      const beta  = makeKeyword({ keyword: 'beta' });
+      const gamma = makeKeyword({ keyword: 'gamma' });
+      component.keywords = [alpha, beta, gamma];
+
+      keywordRatingSpy.getRating.and.callFake((kw: string): RatingValue | undefined => {
+        if (kw === 'beta') return 2;
+        return undefined;
+      });
+      keywordRatingSpy.isHidden.and.returnValue(false);
+
+      component.showUnratedOnly = false;
+      component.toggleShowUnratedOnly();
+
+      expect(component.filteredKeywords).toContain(alpha);
+      expect(component.filteredKeywords).toContain(gamma);
+      expect(component.filteredKeywords).not.toContain(beta);
+    });
+
+    // ── 8. When showUnratedOnly is true, rated keywords (1–4) are excluded ────
+
+    it('filteredKeywords should exclude rated keywords (1–4) when showUnratedOnly is true', () => {
+      const kw1 = makeKeyword({ keyword: 'rated-one' });
+      const kw2 = makeKeyword({ keyword: 'rated-four' });
+      const kw3 = makeKeyword({ keyword: 'unrated' });
+      component.keywords = [kw1, kw2, kw3];
+
+      keywordRatingSpy.getRating.and.callFake((kw: string): RatingValue | undefined => {
+        if (kw === 'rated-one') return 1;
+        if (kw === 'rated-four') return 4;
+        return undefined;
+      });
+      keywordRatingSpy.isHidden.and.returnValue(false);
+
+      component.showUnratedOnly = false;
+      component.toggleShowUnratedOnly();
+
+      expect(component.filteredKeywords).not.toContain(kw1);
+      expect(component.filteredKeywords).not.toContain(kw2);
+      expect(component.filteredKeywords).toContain(kw3);
+    });
+
+    // ── 9. When showUnratedOnly is true, hidden keywords (rating 0) are excluded
+
+    it('filteredKeywords should exclude hidden keywords (rating 0) when showUnratedOnly is true', () => {
+      const hidden  = makeKeyword({ keyword: 'hidden-kw' });
+      const unrated = makeKeyword({ keyword: 'unrated-kw' });
+      component.keywords = [hidden, unrated];
+
+      keywordRatingSpy.getRating.and.callFake((kw: string): RatingValue | undefined => {
+        if (kw === 'hidden-kw') return 0;
+        return undefined;
+      });
+      keywordRatingSpy.isHidden.and.callFake((kw: string) => kw === 'hidden-kw');
+
+      component.showUnratedOnly = false;
+      component.toggleShowUnratedOnly();
+
+      expect(component.filteredKeywords).not.toContain(hidden);
+      expect(component.filteredKeywords).toContain(unrated);
+    });
+
+    // ── 10. showUnratedOnly true AND showHidden true → only unrated shown ─────
+
+    it('when showUnratedOnly and showHidden are both true, only unrated keywords are shown', () => {
+      const hidden  = makeKeyword({ keyword: 'hidden-kw' });
+      const rated   = makeKeyword({ keyword: 'rated-kw' });
+      const unrated = makeKeyword({ keyword: 'unrated-kw' });
+      component.keywords = [hidden, rated, unrated];
+
+      keywordRatingSpy.getRating.and.callFake((kw: string): RatingValue | undefined => {
+        if (kw === 'hidden-kw') return 0;
+        if (kw === 'rated-kw') return 2;
+        return undefined;
+      });
+      keywordRatingSpy.isHidden.and.callFake((kw: string) => kw === 'hidden-kw');
+
+      component.showHidden = true;
+      component.showUnratedOnly = false;
+      component.toggleShowUnratedOnly();
+
+      expect(component.filteredKeywords).toContain(unrated);
+      expect(component.filteredKeywords).not.toContain(hidden);
+      expect(component.filteredKeywords).not.toContain(rated);
+    });
+
+    // ── 11. showUnratedOnly resets to false after analyzeDomain() with a different domain
+
+    it('showUnratedOnly should reset to false when analyzeDomain() is called with a different domain', () => {
+      dataforseoSpy.fetchDomainKeywords.and.returnValue(of([]));
+      storageSpy.getCurrentDomain.and.returnValue('old-site.com');
+      storageSpy.getSelectedCompetitors.and.returnValue(null);
+      keywordRatingSpy.initialize.and.returnValue(Promise.resolve());
+
+      component.showUnratedOnly = true;
+      component.domain = 'new-site.com';
+      component.analyzeDomain();
+
+      expect(component.showUnratedOnly).toBeFalse();
+    });
+
+    // ── 12. unratedCount updates reactively when a keyword is rated (via ratingsSub)
+
+    it('unratedCount should update reactively when a keyword is rated via ratingsSub', () => {
+      const ratingsSubject = new BehaviorSubject<Record<string, RatingValue>>({});
+      Object.defineProperty(keywordRatingSpy, 'ratings$', { get: () => ratingsSubject.asObservable() });
+
+      component.keywords = [
+        makeKeyword({ keyword: 'alpha' }),
+        makeKeyword({ keyword: 'beta' }),
+      ];
+
+      keywordRatingSpy.getRating.and.returnValue(undefined);
+      expect(component.unratedCount).toBe(2);
+
+      keywordRatingSpy.getRating.and.callFake((kw: string): RatingValue | undefined => {
+        if (kw === 'alpha') return 1;
+        return undefined;
+      });
+
+      ratingsSubject.next({ alpha: 1 });
+
+      expect(component.unratedCount).toBe(1);
+    });
+  });
 });

@@ -220,6 +220,49 @@
       }
     }
 
+    .unrated-keywords-toggle {
+      padding: $space-2 $space-4;
+      border-bottom: 1px solid $color-border;
+      background: $color-bg-page;
+
+      .btn-toggle-unrated {
+        background: transparent;
+        border: 1px solid $color-primary;
+        border-radius: 9999px;
+        font-size: $font-size-sm;
+        color: $color-primary;
+        cursor: pointer;
+        padding: $space-1 $space-3;
+        font-weight: 500;
+        transition: background 0.2s, color 0.2s;
+
+        &:hover {
+          background: rgba($color-primary, 0.08);
+        }
+
+        &:focus-visible {
+          outline: 2px solid $color-text-dark;
+          outline-offset: 2px;
+        }
+
+        &.unrated-filter-active {
+          background: #5568d8;
+          border-color: #5568d8;
+          color: #fff;
+
+          &:hover {
+            background: #4557c7;
+            border-color: #4557c7;
+          }
+
+          &:focus-visible {
+            outline: 2px solid $color-text-dark;
+            outline-offset: 2px;
+          }
+        }
+      }
+    }
+
     .keywords-table {
       width: 100%;
       border-collapse: collapse;
@@ -292,6 +335,37 @@
 
             &:hover {
               background: rgba($color-primary, 0.06);
+            }
+          }
+
+          &.unrated-complete-state {
+            &:hover {
+              background: transparent;
+            }
+
+            .unrated-complete-cell {
+              text-align: center;
+              padding: $space-8 $space-4;
+              color: $color-text-mid;
+
+              svg {
+                width: 2.5rem;
+                height: 2.5rem;
+                color: $color-primary;
+                margin-bottom: $space-2;
+              }
+
+              strong {
+                display: block;
+                font-size: $font-size-lg;
+                color: $color-text-dark;
+                margin-bottom: $space-1;
+              }
+
+              p {
+                font-size: $font-size-sm;
+                margin: 0;
+              }
             }
           }
 

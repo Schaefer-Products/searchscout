@@ -48,6 +48,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   pagination = new PaginatedList<DomainKeywordRanking>(100);
   hasAnalyzed: boolean = false;
   showHidden: boolean = false;
+  showUnratedOnly: boolean = false;
 
   get displayedKeywords(): DomainKeywordRanking[] { return this.pagination.displayed; }
   set displayedKeywords(v: DomainKeywordRanking[]) { this.pagination.displayed = v; }
@@ -98,13 +99,14 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   private applyHiddenFilter(): void {
-    if (this.showHidden) {
-      this.filteredKeywords = this.keywords;
-    } else {
-      this.filteredKeywords = this.keywords.filter(
-        kw => !this.keywordRatingService.isHidden(kw.keyword)
-      );
+    let result = this.keywords;
+    if (!this.showHidden) {
+      result = result.filter(kw => !this.keywordRatingService.isHidden(kw.keyword));
     }
+    if (this.showUnratedOnly) {
+      result = result.filter(kw => this.keywordRatingService.getRating(kw.keyword) === undefined);
+    }
+    this.filteredKeywords = result;
     this.pagination.reset(this.filteredKeywords);
   }
 
@@ -114,8 +116,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.cdr.detectChanges();
   }
 
+  toggleShowUnratedOnly(): void {
+    this.showUnratedOnly = !this.showUnratedOnly;
+    this.applyHiddenFilter();
+    this.cdr.detectChanges();
+  }
+
   get hiddenCount(): number {
     return this.keywords.filter(kw => this.keywordRatingService.isHidden(kw.keyword)).length;
+  }
+
+  get unratedCount(): number {
+    return this.keywords.filter(kw => this.keywordRatingService.getRating(kw.keyword) === undefined).length;
   }
 
   onKeywordRatingChanged(keyword: string, rating: RatingValue | undefined): void {
@@ -165,6 +177,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       this.selectedCompetitors = savedCompetitors || [];
       this.showCompetitorSelection = false;
       this.showCompetitorAnalysis = false;
+      this.showUnratedOnly = false;
 
       Logger.debug('Loaded competitors:', this.selectedCompetitors);
     } else {

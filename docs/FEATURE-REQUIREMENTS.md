@@ -724,5 +724,55 @@ Logger.warn('Warning message');
 
 ---
 
-**Last Updated:** February 28, 2026
-**Version:** 1.0.0 (MVP Complete)
+### Feature 8: Unrated Keywords Filter (In Development)
+
+**Purpose:** Help users focus on keywords they haven't yet rated by filtering the keywords table to show only unrated keywords
+**Status:** In Development
+
+**Implementation:**
+- Add toggle button to keywords table toolbar labeled "Show Unrated Only" (or similar)
+- Display count of unrated keywords on the button (e.g., "Show Unrated (27)")
+- When active, filter displays only keywords where `getRating() === undefined`
+- Exclude all rated keywords (ratings 0–4) from the filtered view
+- Filter is independent of the existing "Show hidden keywords" toggle
+- Both filters can be combined (e.g., show unrated AND hidden keywords)
+- Filter state resets when switching to a different domain
+- Filter persists while analyzing the same domain (survives sorting, load-more, and rating changes)
+
+**Key Files:**
+- `components/dashboard/` — Add filter toggle button and unrated count calculation
+- `services/keyword-rating.service.ts` — Existing `getRating()` method returns undefined for unrated keywords
+
+**User Flow:**
+1. User analyzes domain; keywords table displays all non-hidden keywords
+2. User clicks "Show Unrated (27)" to filter to only unrated keywords
+3. Table updates to show only keywords where `getRating() === undefined`
+4. User rates keywords; if a keyword is rated, it disappears from the unrated filter view
+5. User can toggle "Show Unrated" back off to see all keywords again
+6. User can combine "Show Unrated" with "Show Hidden" toggle to see hidden + unrated keywords
+7. When user switches to a different domain, both filter toggles reset
+
+**Acceptance Criteria:**
+1. Unrated keywords filter toggle button appears in the keywords table toolbar
+2. Button displays count of unrated keywords (e.g., "Show Unrated (27)")
+3. When inactive, button appears in default/grey state; when active, button is highlighted (e.g., blue or accent color)
+4. Clicking the button toggles the filter on/off
+5. When filter is active, only keywords with `getRating() === undefined` are displayed
+6. All rated keywords (ratings 0–4) are excluded from the filtered view, including hidden keywords (rating 0)
+7. Unrated filter is independent of "Show Hidden" toggle; both can be used together
+8. Unrated count updates in real-time when user rates keywords on the same domain
+9. If all keywords are rated, button displays "Show Unrated (0)" and clicking it shows empty state
+10. Filter state resets when user switches to a different domain
+11. Filter persists across sorting, pagination, and other table operations
+12. Filter works correctly with pagination (page size 100); unrated count reflects all unrated keywords, not just displayed page
+
+**Out of Scope:**
+- Persisting filter state across browser sessions (stateless toggle within current session)
+- Adding unrated filter to CompetitorAnalysisComponent tabs (feature applies only to DashboardComponent keyword table)
+- Changing the unrated count dynamically via URL parameters or external state
+- Combining unrated filter with other future filters (e.g., difficulty range) — each filter independent
+
+---
+
+**Last Updated:** March 7, 2026
+**Version:** 1.0.0 (MVP Complete) + Feature 8 (In Development)
