@@ -840,5 +840,70 @@ Logger.warn('Warning message');
 
 ---
 
+---
+
+### Feature 10: Opportunity Score Explanation Tooltip ✅
+
+**Purpose:** Educate users on how the Opportunity Score is calculated and what factors influence it, reducing confusion and building confidence in the algorithm
+**Status:** Backlog
+
+**Implementation:**
+- Add interactive tooltip/popover on Opportunity Score column header explaining the score
+- Display score breakdown inline (percentage contribution of each factor)
+- Show real-world example: "For this keyword: 40% search volume (3k/month), 40% inverted difficulty (45/100), 20% competitor gap (3 competitors)"
+- Tooltip accessible via info icon next to "Opportunity Score" header or as hover tooltip
+- Mobile-friendly: tap/click info icon to show explanation modal instead of hover
+- Explanation includes 0-100 scale context and color-coding reference (high≥70, medium≥40, low<40)
+
+**Score Calculation Details (for tooltip copy):**
+```
+Opportunity Score = (0.4 × Normalized Volume) + (0.4 × Inverted Difficulty) + (0.2 × Competitor Gap)
+
+Where:
+- Normalized Volume = (Search Volume / 100,000) × 100, capped at 100
+- Inverted Difficulty = 100 - Keyword Difficulty (lower difficulty = higher score)
+- Competitor Gap = (Competitor Count / 5) × 100, capped at 100
+```
+
+**Key Files:**
+- `components/competitor-analysis/` — Add info icon + tooltip/modal near column header
+- `components/opportunity-score-tooltip/` (new) — Reusable tooltip component showing score breakdown
+- `services/competitor-analysis.service.ts` — Optional: expose scoring breakdown method for display
+
+**User Flow:**
+1. User views Opportunities tab with Opportunity Score column
+2. User hovers over (desktop) or taps (mobile) info icon next to "Opportunity Score" header
+3. Tooltip/modal appears explaining the score formula and factors
+4. User can also hover over individual score badges to see a mini-breakdown for that specific keyword
+5. User gains understanding of what makes a keyword a strong opportunity
+
+**Acceptance Criteria:**
+1. Info icon (help/question mark) appears next to "Opportunity Score" column header
+2. On desktop, hovering over icon shows tooltip with full explanation
+3. On mobile, tapping icon opens modal with explanation (dismiss via close button or outside click)
+4. Explanation includes the 0-100 scale, the three weighted factors, and the formula
+5. Explanation mentions real-world context: "40% search volume, 40% difficulty, 20% competitor gap"
+6. Color-coding legend included: high (70+), medium (40-69), low (<40)
+7. Optional: individual score cells show mini-explanation on hover ("40% volume + 40% difficulty + 20% competitors")
+8. Tooltip content is consistent across all keyword views (opportunities, shared, all, unique)
+9. No blocking UI elements; tooltip/modal does not prevent table interaction
+10. Accessible: tooltip content available via screen reader; keyboard navigation supported (Tab to icon, Enter/Space to open)
+
+**Out of Scope:**
+- Modifying the scoring algorithm itself (calculation logic unchanged)
+- Personalization of weightings (40/40/20 split is fixed)
+- Per-keyword score adjustment UI (explanation only, not manipulation)
+- Saving or exporting tooltip explanations to CSV
+- Animated score breakdowns or interactive formula visualizers
+- Storing explanation dismissal state (shown every time user views header)
+
+**Design Notes:**
+- Tooltip should use consistent design language (see DS in FEATURE-REQUIREMENTS.md)
+- Info icon color: secondary/neutral (#718096 gray)
+- Tooltip background: light gray/white with dark text for contrast
+- Modal on mobile: centered, 90vw width max 500px, semi-transparent backdrop
+
+---
+
 **Last Updated:** March 7, 2026
-**Version:** 1.0.0 (MVP Complete) + Feature 8 & 9 (Backlog)
+**Version:** 1.0.0 (MVP Complete) + Feature 8, 9 & 10 (Backlog)

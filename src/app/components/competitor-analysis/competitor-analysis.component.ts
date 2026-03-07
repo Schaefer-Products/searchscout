@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, inject, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, inject, ChangeDetectorRef, HostListener, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -31,6 +31,7 @@ export class CompetitorAnalysisComponent implements OnInit, OnDestroy {
   private exportService = inject(ExportService);
   keywordRatingService = inject(KeywordRatingService);
   private cdr = inject(ChangeDetectorRef);
+  private elementRef = inject(ElementRef);
 
   @Input() userDomain: string = '';
   @Input() userKeywords: DomainKeywordRanking[] = [];
@@ -48,6 +49,10 @@ export class CompetitorAnalysisComponent implements OnInit, OnDestroy {
   // Display state
   viewMode: ViewMode = 'opportunities';
   showUnratedOnly: boolean = false;
+
+  // Tooltip state
+  tooltipOpen: boolean = false;
+  readonly tooltipId = 'opportunity-score-tooltip';
   keywordPagination = new PaginatedList<AggregatedKeyword>(50);
   topicPagination = new PaginatedList<BlogTopic>(20);
 
@@ -282,6 +287,31 @@ export class CompetitorAnalysisComponent implements OnInit, OnDestroy {
   getSortIcon(column: keyof AggregatedKeyword): string {
     if (this.sortColumn !== column) return '↕️';
     return this.sortDirection === 'asc' ? '↑' : '↓';
+  }
+
+  // --- Tooltip ---
+
+  toggleTooltip(): void {
+    this.tooltipOpen = !this.tooltipOpen;
+    this.cdr.detectChanges();
+  }
+
+  closeTooltip(): void {
+    this.tooltipOpen = false;
+    this.cdr.detectChanges();
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    this.closeTooltip();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const wrapper = this.elementRef.nativeElement.querySelector('.info-tooltip-wrapper');
+    if (wrapper && !wrapper.contains(event.target as Node)) {
+      this.closeTooltip();
+    }
   }
 
   loadMoreTopics(): void {

@@ -419,13 +419,50 @@
               <th scope="col" *ngIf="viewMode !== 'opportunities'">Your Position</th>
               <th
                 scope="col"
-                class="sortable"
+                class="sortable opportunity-score-th"
                 [attr.aria-sort]="sortColumn === 'opportunityScore' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
+                [attr.aria-describedby]="tooltipId"
                 *ngIf="viewMode === 'opportunities'"
               >
-                <button type="button" (click)="sortBy('opportunityScore')">
-                  Opportunity Score <span aria-hidden="true">{{ getSortIcon("opportunityScore") }}</span>
-                </button>
+                <div class="th-inner">
+                  <button type="button" (click)="sortBy('opportunityScore')">
+                    Opportunity Score <span aria-hidden="true">{{ getSortIcon("opportunityScore") }}</span>
+                  </button>
+                  <div class="info-tooltip-wrapper">
+                    <button
+                      type="button"
+                      class="info-icon-btn"
+                      [attr.aria-expanded]="tooltipOpen"
+                      [attr.aria-controls]="tooltipId"
+                      aria-label="What is Opportunity Score?"
+                      (click)="toggleTooltip(); $event.stopPropagation()"
+                    >
+                      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="14" height="14">
+                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd" />
+                      </svg>
+                    </button>
+                    <div
+                      class="info-tooltip"
+                      role="tooltip"
+                      [id]="tooltipId"
+                      [class.visible]="tooltipOpen"
+                    >
+                      <p class="info-tooltip__title">Opportunity Score</p>
+                      <p class="info-tooltip__body">A 0–100 score ranking how worthwhile this keyword is to target.</p>
+                      <p class="info-tooltip__subheading">How it's calculated:</p>
+                      <ul class="info-tooltip__list">
+                        <li><strong>Search volume (40%)</strong> — more monthly searches = higher score</li>
+                        <li><strong>Keyword difficulty (40%)</strong> — easier to rank = higher score</li>
+                        <li><strong>Competitor validation (20%)</strong> — more competitors ranking = more validated demand</li>
+                      </ul>
+                      <div class="info-tooltip__score-guide">
+                        <span class="score-chip high">70–100</span><span class="score-chip__label">Strong</span>
+                        <span class="score-chip medium">40–69</span><span class="score-chip__label">Moderate</span>
+                        <span class="score-chip low">0–39</span><span class="score-chip__label">Weak</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </th>
             </tr>
           </thead>

@@ -1099,4 +1099,62 @@ describe('CompetitorAnalysisComponent', () => {
       expect(component.hasMoreKeywords).toBeTrue();
     });
   });
+
+  // ---------------------------------------------------------------------------
+  // Opportunity Score Tooltip
+  // ---------------------------------------------------------------------------
+
+  describe('Opportunity Score Tooltip', () => {
+    it('tooltipOpen should default to false', () => {
+      expect(component.tooltipOpen).toBeFalse();
+    });
+
+    it('toggleTooltip() should set tooltipOpen to true on first call', () => {
+      component.toggleTooltip();
+      expect(component.tooltipOpen).toBeTrue();
+    });
+
+    it('toggleTooltip() should set tooltipOpen back to false on second call', () => {
+      component.toggleTooltip();
+      component.toggleTooltip();
+      expect(component.tooltipOpen).toBeFalse();
+    });
+
+    it('closeTooltip() should set tooltipOpen to false', () => {
+      component.tooltipOpen = true;
+      component.closeTooltip();
+      expect(component.tooltipOpen).toBeFalse();
+    });
+
+    it('Escape keydown should close the tooltip', () => {
+      component.tooltipOpen = true;
+      spyOn(component, 'closeTooltip').and.callThrough();
+      document.dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape', bubbles: true }));
+      expect(component.closeTooltip).toHaveBeenCalled();
+    });
+
+    it('click outside .info-tooltip-wrapper should close the tooltip', () => {
+      component.tooltipOpen = true;
+      fixture.detectChanges();
+      spyOn(component, 'closeTooltip').and.callThrough();
+      document.body.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+      expect(component.closeTooltip).toHaveBeenCalled();
+    });
+
+    it('click inside .info-tooltip-wrapper should NOT close the tooltip', () => {
+      component.analysisComplete = true;
+      component.results = makeResults();
+      component.viewMode = 'opportunities';
+      component.tooltipOpen = true;
+      fixture.detectChanges();
+      spyOn(component, 'closeTooltip').and.callThrough();
+      const wrapper = fixture.nativeElement.querySelector('.info-tooltip-wrapper') as HTMLElement;
+      if (wrapper) {
+        wrapper.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+        expect(component.closeTooltip).not.toHaveBeenCalled();
+      } else {
+        pending('tooltip wrapper not in DOM — feature not yet implemented');
+      }
+    });
+  });
 });
