@@ -70,7 +70,7 @@ export class KeywordRatingService implements OnDestroy {
     private readonly db: IndexedDbService,
     @Optional() @Inject(RATING_SCORE_ALGORITHM) private readonly algorithm: RatingScoreAlgorithm | null = null,
   ) {
-    this.writeSubscription = this.writeQueue$.pipe(debounceTime(300)).subscribe(async () => {
+    this.writeSubscription = this.writeQueue$.pipe(debounceTime(0)).subscribe(async () => {
       await this.persistRatings();
     });
     Logger.debug('[KeywordRatingService] debounced write subscription established');
@@ -130,10 +130,11 @@ export class KeywordRatingService implements OnDestroy {
         Logger.debug('[KeywordRatingService] no stored ratings — starting with empty map');
       }
 
-      // Load hint dismissed flag
-      this._showRatingHint$.next(!hintDismissed);
+      // Load hint dismissed flag — also hide if ratings already exist
+      const hasRatings = Object.keys(this.ratingsMap).length > 0;
+      this._showRatingHint$.next(!hintDismissed && !hasRatings);
       Logger.debug(
-        `[KeywordRatingService] rating hint ${hintDismissed ? 'already dismissed' : 'visible'}`
+        `[KeywordRatingService] rating hint ${hintDismissed || hasRatings ? 'hidden' : 'visible'}`
       );
     } catch (err) {
       Logger.error('[KeywordRatingService] failed to load data from IDB:', err);
@@ -165,6 +166,11 @@ export class KeywordRatingService implements OnDestroy {
 
     // Any rating change invalidates the current blog topic list.
     this._blogTopicsStale$.next(true);
+
+    // First rating action permanently dismisses the hint.
+    if (this._showRatingHint$.value) {
+      this.dismissRatingHint();
+    }
 
     if (rating === 0) {
       Logger.debug(

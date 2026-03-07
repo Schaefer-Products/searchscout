@@ -9,6 +9,11 @@ const DB_VERSION = 1;
  */
 export async function clearIndexedDb(page: Page): Promise<void> {
   await page.addInitScript(() => {
+    // Guard: only clear once per test, not on every navigation (e.g. page.reload()).
+    // sessionStorage persists within the tab session (survives reloads), so this
+    // prevents clearIndexedDb from wiping IDB state that was written during the test.
+    if (sessionStorage.getItem('__searchscoutDbCleared')) return;
+    sessionStorage.setItem('__searchscoutDbCleared', '1');
     indexedDB.deleteDatabase('searchscout');
   });
 }

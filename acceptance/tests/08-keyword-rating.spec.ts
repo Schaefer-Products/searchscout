@@ -701,6 +701,11 @@ test.describe('Keyword Rating — Rule 5: Hint row on first visit', () => {
     await rating.clickRating('seo tools', 1);
     await expect(rating.getHintRow()).not.toBeVisible();
 
+    // Wait for the rating (and hint dismissal) IDB writes to commit before reloading,
+    // otherwise the async writes may be aborted mid-flight by the navigation.
+    const saved = await readKeywordRatingsFromIdb(page, 'example.com');
+    expect(saved['seo tools']).toBe(1);
+
     await page.reload();
     await dashboard.waitForResults();
 
@@ -782,9 +787,8 @@ test.describe('Keyword Rating — Rule 6: Show hidden keywords', () => {
       cpc: 1.0,
     }));
 
-    await clearIndexedDb(page);
-    await seedCredentials(page, { login: 'test@example.com', password: 'testpass' });
-    await seedCurrentDomain(page, 'example.com');
+    // beforeEach already cleared IDB and seeded credentials/domain.
+    // Override the domain cache with 110 keywords (overwrites beforeEach's USER_KEYWORDS seed).
     await seedDomainCache(page, 'example.com', manyKeywords);
     // Rate the first keyword as hidden before page loads
     await seedKeywordRatings(page, 'example.com', { 'keyword 1': 0 });

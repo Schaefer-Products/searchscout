@@ -10,6 +10,7 @@ RUN apk add \
     gcompat \
     git \
     make \
+    most \
     openssh \
     python3 \
     xvfb \

@@ -226,7 +226,6 @@
 
     <!-- Blog Topics Stale Banner -->
     <app-blog-topics-stale-banner
-      *ngIf="viewMode === 'blog-topics'"
       (regenerateClicked)="onRegenerateBlogTopics()"
     ></app-blog-topics-stale-banner>
 
@@ -379,6 +378,7 @@
               </th>
               <th
                 scope="col"
+                class="sortable"
                 [attr.aria-sort]="sortColumn === 'searchVolume' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
               >
                 <button type="button" (click)="sortBy('searchVolume')">
@@ -387,6 +387,7 @@
               </th>
               <th
                 scope="col"
+                class="sortable"
                 [attr.aria-sort]="sortColumn === 'difficulty' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
               >
                 <button type="button" (click)="sortBy('difficulty')">
@@ -404,6 +405,7 @@
               <th scope="col" *ngIf="viewMode !== 'opportunities'">Your Position</th>
               <th
                 scope="col"
+                class="sortable"
                 [attr.aria-sort]="sortColumn === 'opportunityScore' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'"
                 *ngIf="viewMode === 'opportunities'"
               >

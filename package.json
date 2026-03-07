@@ -14,9 +14,9 @@
     "docker:logs": "docker-compose logs -f angular-app",
     "g:service": "ng generate service",
     "g:component": "ng generate component --standalone",
-    "e2e": "playwright test",
-    "e2e:ui": "playwright test --ui",
-    "e2e:debug": "playwright test --debug",
+    "e2e": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium-browser playwright test",
+    "e2e:ui": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium-browser playwright test --ui",
+    "e2e:debug": "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH=/usr/bin/chromium-browser playwright test --debug",
     "e2e:report": "playwright show-report"
   },
   "private": true,

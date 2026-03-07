@@ -151,8 +151,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // Save current domain to storage (update to new domain)
     this.storageService.saveCurrentDomain(cleaned);
 
-    // Initialize keyword rating service for this domain
-    void this.keywordRatingService.initialize(cleaned);
+    // Initialize keyword rating service only when switching domains;
+    // for the same domain, provideAppInitializer already loaded ratings.
+    if (isDifferentDomain) {
+      void this.keywordRatingService.initialize(cleaned);
+    }
 
     // Load competitors for this domain (even if it's the same domain)
     const savedCompetitors = this.storageService.getSelectedCompetitors(cleaned);

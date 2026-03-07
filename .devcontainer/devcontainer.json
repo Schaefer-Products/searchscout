@@ -7,7 +7,8 @@
   "service": "angular-app",
   "containerEnv": {
     "SHELL": "/bin/bash",
-    "TERM": "xterm-256color"
+    "TERM": "xterm-256color",
+    "PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH": "/usr/bin/chromium-browser"
   },
   "workspaceFolder": "/app",
   "customizations": {
