@@ -774,5 +774,71 @@ Logger.warn('Warning message');
 
 ---
 
+### Feature 9: Unrated Keywords Filter (Competitor Analysis) ✅
+
+**Purpose:** Help users focus on keywords they haven't yet rated within the competitor analysis results, enabling efficient workflow for rating competitor keywords
+**Status:** Backlog
+
+**Implementation:**
+- Add toggle button to keywords table toolbar in CompetitorAnalysisComponent labeled "Show Unrated Only" (or similar)
+- Display count of unrated keywords on the button (e.g., "Show Unrated (53)")
+- When active, filter displays only keywords where `getRating() === undefined`
+- Exclude all rated keywords (ratings 0–4) from the filtered view
+- Filter is independent of the existing "Show hidden keywords" toggle (Feature 7)
+- Both filters can be combined (e.g., show unrated AND hidden keywords)
+- Filter applies to all keyword table view modes: 'opportunities', 'all', 'shared', 'unique'
+- Filter does NOT apply to 'blog-topics' view (which displays generated blog titles, not keywords)
+- Filter state resets when switching to a different domain
+- Filter persists while analyzing the same domain (survives sorting, load-more, and rating changes)
+- Unrated count reflects full keyword array across all pages, not just paginated slice
+
+**Key Files:**
+- `components/competitor-analysis/` — Add filter toggle button, unrated count calculation, filter logic
+- `services/keyword-rating.service.ts` — Existing `getRating()` method returns undefined for unrated keywords
+
+**User Flow:**
+1. User analyzes competitors; keywords table displays all keywords (non-hidden by default)
+2. User clicks "Show Unrated (53)" to filter to only unrated keywords
+3. Table updates to show only keywords where `getRating() === undefined`
+4. User rates keywords; if a keyword is rated, it disappears from the unrated filter view
+5. User can toggle "Show Unrated" back off to see all keywords again
+6. User can combine "Show Unrated" with "Show Hidden" toggle to see hidden + unrated keywords
+7. When user switches to a different domain, both filter toggles reset
+
+**Acceptance Criteria:**
+1. Unrated keywords filter toggle button appears in the keywords table toolbar (above the table) in CompetitorAnalysisComponent
+2. Button displays count of unrated keywords (e.g., "Show Unrated (53)")
+3. When inactive, button appears in default/grey state; when active, button is highlighted (e.g., blue or accent color)
+4. Clicking the button toggles the filter on/off
+5. When filter is active, only keywords with `getRating() === undefined` are displayed
+6. All rated keywords (ratings 0–4) are excluded from the filtered view, including hidden keywords (rating 0)
+7. Unrated filter is independent of "Show Hidden" toggle (if/when implemented for competitor analysis); both can be used together
+8. Unrated count updates in real-time when user rates keywords on the same domain
+9. If all keywords are rated, button displays "Show Unrated (0)" and clicking it shows empty state with appropriate message
+10. Filter state resets when user switches to a different domain via dashboard navigation
+11. Filter persists across sorting, pagination, and other table operations (survives `sortBy()`, `loadMore()`, rating changes)
+12. Filter applies only to keyword table views: 'opportunities', 'all', 'shared', 'unique'
+13. Filter does NOT appear or affect the 'blog-topics' view (which shows blog titles, not keywords)
+14. Unrated count reflects all unrated keywords across all pages, calculated from `getKeywordsForCurrentView()` array, not just displayed page
+15. Filter works correctly with pagination (page size 50); unrated keyword count includes all pages
+
+**View Mode Applicability:**
+| View Mode | Filter Applies? | Reason |
+|---|---|---|
+| opportunities | Yes | Shows keyword rows; users rate opportunities |
+| all | Yes | Shows keyword rows; users rate any keyword |
+| shared | Yes | Shows keyword rows; users rate shared keywords |
+| unique | Yes | Shows keyword rows; users rate unique-to-user keywords |
+| blog-topics | No | Shows generated blog titles, not keywords; no rating interaction |
+
+**Out of Scope:**
+- Persisting filter state across browser sessions (stateless toggle within current session only)
+- Adding unrated count to the stat cards at the top of the component (filter count only in toolbar button)
+- Changing the unrated count dynamically via URL parameters or external state
+- Combining unrated filter with other future filters (e.g., difficulty range) — each filter independent
+- Persisting filter toggle state to IndexedDB (resets on domain switch)
+
+---
+
 **Last Updated:** March 7, 2026
-**Version:** 1.0.0 (MVP Complete) + Feature 8 (In Development)
+**Version:** 1.0.0 (MVP Complete) + Feature 8 & 9 (Backlog)

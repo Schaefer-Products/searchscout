@@ -356,6 +356,20 @@
       [attr.aria-labelledby]="'tab-' + viewMode"
       *ngIf="viewMode !== 'blog-topics' && displayedKeywords.length > 0"
     >
+      <!-- Unrated filter toggle -->
+      <div class="unrated-keywords-toggle" *ngIf="analysisComplete">
+        <button
+          type="button"
+          class="btn-toggle-unrated"
+          [class.unrated-filter-active]="showUnratedOnly"
+          [attr.aria-pressed]="showUnratedOnly"
+          [attr.aria-label]="showUnratedOnly ? 'Showing unrated only (' + unratedCount + '). Click to show all keywords' : 'Show unrated only (' + unratedCount + ')'"
+          (click)="toggleShowUnratedOnly()"
+        >
+          {{ showUnratedOnly ? 'Showing unrated only (' + unratedCount + ')' : 'Show unrated only (' + unratedCount + ')' }}
+        </button>
+      </div>
+
       <div class="scroll-hint">
         <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7" />
@@ -416,6 +430,16 @@
             </tr>
           </thead>
           <tbody>
+            <!-- Unrated filter completion state -->
+            <tr *ngIf="showUnratedOnly && unratedCount === 0" class="unrated-complete-state" role="status" aria-live="polite">
+              <td colspan="6" class="unrated-complete-cell">
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <strong>All keywords rated</strong>
+                <p>You have rated every keyword in this view. Toggle off "Showing unrated only" to see the full list.</p>
+              </td>
+            </tr>
             <tr *ngFor="let keyword of displayedKeywords" [class.opportunity]="keyword.isOpportunity">
               <td class="rating-cell">
                 <app-keyword-rating

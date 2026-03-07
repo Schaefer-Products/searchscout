@@ -975,4 +975,128 @@ describe('CompetitorAnalysisComponent', () => {
       expect(component.setViewMode).toHaveBeenCalled();
     });
   });
+
+  // ---------------------------------------------------------------------------
+  // Unrated Keywords Filter
+  // ---------------------------------------------------------------------------
+
+  describe('Unrated Keywords Filter', () => {
+    const OPPORTUNITIES = [
+      makeKeyword({ keyword: 'unrated kw 1' }),
+      makeKeyword({ keyword: 'unrated kw 2' }),
+      makeKeyword({ keyword: 'rated kw 3' }),
+      makeKeyword({ keyword: 'hidden kw 4' }),
+    ];
+
+    beforeEach(() => {
+      component.results = makeResults({
+        opportunities: OPPORTUNITIES,
+        allKeywords: OPPORTUNITIES,
+        shared: [
+          makeKeyword({ keyword: 'shared unrated' }),
+          makeKeyword({ keyword: 'shared rated' }),
+        ],
+        uniqueToUser: [makeKeyword({ keyword: 'unique unrated' })],
+      });
+      component.viewMode = 'opportunities';
+      component.analysisComplete = true;
+
+      keywordRatingSpy.getRating.and.callFake((keyword: string) => {
+        if (keyword === 'rated kw 3') return 2 as RatingValue;
+        if (keyword === 'hidden kw 4') return 0 as RatingValue;
+        return undefined;
+      });
+      component.updateDisplayedKeywords();
+    });
+
+    it('should default showUnratedOnly to false', () => {
+      expect(component.showUnratedOnly).toBeFalse();
+    });
+
+    it('unratedCount should return count of keywords in current view with getRating() === undefined', () => {
+      // opportunities has 4 keywords; rated kw 3 (rating 2) and hidden kw 4 (rating 0) are rated → 2 unrated
+      expect(component.unratedCount).toBe(2);
+    });
+
+    it('unratedCount should exclude keywords rated 1–4', () => {
+      keywordRatingSpy.getRating.and.callFake((keyword: string) => {
+        if (keyword === 'rated kw 3') return 3 as RatingValue;
+        if (keyword === 'hidden kw 4') return 4 as RatingValue;
+        return undefined;
+      });
+      expect(component.unratedCount).toBe(2);
+    });
+
+    it('unratedCount should exclude keywords rated 0 (hidden)', () => {
+      keywordRatingSpy.getRating.and.callFake((keyword: string) => {
+        if (keyword === 'hidden kw 4') return 0 as RatingValue;
+        return undefined;
+      });
+      // only 'hidden kw 4' is rated (0); remaining 3 are unrated
+      expect(component.unratedCount).toBe(3);
+    });
+
+    it('toggleShowUnratedOnly() should set showUnratedOnly to true on first call', () => {
+      component.toggleShowUnratedOnly();
+      expect(component.showUnratedOnly).toBeTrue();
+    });
+
+    it('toggleShowUnratedOnly() should set showUnratedOnly back to false on second call', () => {
+      component.toggleShowUnratedOnly();
+      component.toggleShowUnratedOnly();
+      expect(component.showUnratedOnly).toBeFalse();
+    });
+
+    it('when showUnratedOnly is true, displayedKeywords should contain only unrated keywords', () => {
+      component.toggleShowUnratedOnly();
+      const allUnrated = component.displayedKeywords.every(
+        kw => keywordRatingSpy.getRating(kw.keyword) === undefined
+      );
+      expect(allUnrated).toBeTrue();
+    });
+
+    it('when showUnratedOnly is true, rated keywords (1–4) should be excluded from display', () => {
+      component.toggleShowUnratedOnly();
+      const containsRated = component.displayedKeywords.some(kw => kw.keyword === 'rated kw 3');
+      expect(containsRated).toBeFalse();
+    });
+
+    it('setViewMode() should reset showUnratedOnly to false', () => {
+      component.showUnratedOnly = true;
+      component.setViewMode('all');
+      expect(component.showUnratedOnly).toBeFalse();
+    });
+
+    it('unratedCount should reflect the count for the current view after viewMode changes', () => {
+      keywordRatingSpy.getRating.and.callFake((keyword: string) => {
+        if (keyword === 'shared rated') return 1 as RatingValue;
+        return undefined;
+      });
+      component.setViewMode('shared');
+      // shared view has 2 keywords; 'shared rated' has rating 1 → 1 unrated
+      expect(component.unratedCount).toBe(1);
+    });
+
+    it('when showUnratedOnly is true and all keywords in view are rated, displayedKeywords should be empty', () => {
+      keywordRatingSpy.getRating.and.returnValue(2 as RatingValue);
+      component.toggleShowUnratedOnly();
+      expect(component.displayedKeywords.length).toBe(0);
+    });
+
+    it('hasMoreKeywords should use filtered unrated count when showUnratedOnly is true', () => {
+      const manyKeywords: AggregatedKeyword[] = [
+        ...Array.from({ length: 60 }, (_, i) => makeKeyword({ keyword: `unrated ${i}` })),
+        ...Array.from({ length: 10 }, (_, i) => makeKeyword({ keyword: `rated ${i}` })),
+      ];
+      component.results = makeResults({ opportunities: manyKeywords });
+      component.viewMode = 'opportunities';
+      keywordRatingSpy.getRating.and.callFake((keyword: string) =>
+        keyword.startsWith('rated ') ? (1 as RatingValue) : undefined
+      );
+      component.showUnratedOnly = true;
+      component.updateDisplayedKeywords(); // page 1: 50 of 60 unrated
+      // 50 displayed < 60 unrated total → hasMoreKeywords must be true
+      expect(component.hasMoreKeywords).toBeTrue();
+    });
+  });
 });

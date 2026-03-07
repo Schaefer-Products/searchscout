@@ -47,6 +47,7 @@ export class CompetitorAnalysisComponent implements OnInit, OnDestroy {
 
   // Display state
   viewMode: ViewMode = 'opportunities';
+  showUnratedOnly: boolean = false;
   keywordPagination = new PaginatedList<AggregatedKeyword>(50);
   topicPagination = new PaginatedList<BlogTopic>(20);
 
@@ -57,6 +58,12 @@ export class CompetitorAnalysisComponent implements OnInit, OnDestroy {
   set displayedTopics(v: BlogTopic[]) { this.topicPagination.displayed = v; }
 
   get hasMoreKeywords(): boolean {
+    if (this.showUnratedOnly) {
+      const filteredCount = this.getKeywordsForCurrentView().filter(
+        kw => this.keywordRatingService.getRating(kw.keyword) === undefined
+      ).length;
+      return this.keywordPagination.displayed.length < filteredCount;
+    }
     return this.keywordPagination.displayed.length < this.getKeywordsForCurrentView().length;
   }
 
@@ -72,6 +79,12 @@ export class CompetitorAnalysisComponent implements OnInit, OnDestroy {
     return this.blogTopics.length - this.topicPagination.displayed.length;
   }
 
+  get unratedCount(): number {
+    return this.getKeywordsForCurrentView().filter(
+      kw => this.keywordRatingService.getRating(kw.keyword) === undefined
+    ).length;
+  }
+
   // Sorting
   sortColumn: keyof AggregatedKeyword = 'opportunityScore';
   sortDirection: 'asc' | 'desc' = 'desc';
@@ -84,14 +97,21 @@ export class CompetitorAnalysisComponent implements OnInit, OnDestroy {
 
   // Subscription for the analysis Observable — unsubscribed on destroy
   private analysisSubscription: Subscription = Subscription.EMPTY;
+  private ratingsSub: Subscription | null = null;
 
   ngOnInit(): void {
+    this.ratingsSub = this.keywordRatingService.ratings$.subscribe(() => {
+      this.updateDisplayedKeywords();
+      this.cdr.detectChanges();
+    });
+
     // Auto-start analysis when component loads
     this.analyzeCompetitors();
   }
 
   ngOnDestroy(): void {
     this.analysisSubscription.unsubscribe();
+    this.ratingsSub?.unsubscribe();
   }
 
   analyzeCompetitors(): void {
@@ -153,6 +173,7 @@ export class CompetitorAnalysisComponent implements OnInit, OnDestroy {
   }
 
   setViewMode(mode: ViewMode): void {
+    this.showUnratedOnly = false;
     this.viewMode = mode;
 
     if (mode === 'blog-topics') {
@@ -162,11 +183,27 @@ export class CompetitorAnalysisComponent implements OnInit, OnDestroy {
     }
   }
 
+  toggleShowUnratedOnly(): void {
+    this.showUnratedOnly = !this.showUnratedOnly;
+    this.updateDisplayedKeywords();
+    this.cdr.detectChanges();
+  }
+
   updateDisplayedKeywords(): void {
     if (!this.results || this.viewMode === 'blog-topics') return;
-    const sorted = this.sortKeywords(this.getKeywordsForCurrentView());
+
+    let keywords = this.getKeywordsForCurrentView();
+
+    if (this.showUnratedOnly) {
+      keywords = keywords.filter(
+        kw => this.keywordRatingService.getRating(kw.keyword) === undefined
+      );
+    }
+
+    const sorted = this.sortKeywords(keywords);
     this.keywordPagination.reset(sorted);
-    // Pre-compute adjusted scores for the full current view to avoid repeated calls in the template
+
+    // Pre-compute adjusted scores for the full current view (filtered or not) to avoid repeated calls in the template
     this.adjustedScores = {};
     for (const kw of this.getKeywordsForCurrentView()) {
       this.adjustedScores[kw.keyword] = this.getAdjustedScore(kw.keyword, kw.opportunityScore);
@@ -174,8 +211,16 @@ export class CompetitorAnalysisComponent implements OnInit, OnDestroy {
   }
 
   loadMore(): void {
+    let keywords = this.getKeywordsForCurrentView();
+
+    if (this.showUnratedOnly) {
+      keywords = keywords.filter(
+        kw => this.keywordRatingService.getRating(kw.keyword) === undefined
+      );
+    }
+
     const newLimit = this.keywordPagination.displayed.length + this.keywordPagination.chunk;
-    this.keywordPagination.displayed = this.sortKeywords(this.getKeywordsForCurrentView()).slice(0, newLimit);
+    this.keywordPagination.displayed = this.sortKeywords(keywords).slice(0, newLimit);
     // Ensure adjustedScores covers any newly loaded keywords
     for (const kw of this.keywordPagination.displayed) {
       if (!(kw.keyword in this.adjustedScores)) {
