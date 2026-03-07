@@ -11,7 +11,6 @@ import { RatingValue } from '../../models/keyword-rating.model';
 import { CompetitorSelectionComponent } from '../competitor-selection/competitor-selection.component';
 import { CompetitorAnalysisComponent } from '../competitor-analysis/competitor-analysis.component';
 import { KeywordRatingComponent } from '../keyword-rating/keyword-rating.component';
-import { BlogTopicsStaleBannerComponent } from '../blog-topics-stale-banner/blog-topics-stale-banner.component';
 import { Logger } from '../../utils/logger';
 import { cleanDomain, isValidDomain } from '../../utils/domain.utils';
 import { PaginatedList } from '../../utils/paginated-list';
@@ -25,7 +24,6 @@ import { PaginatedList } from '../../utils/paginated-list';
     CompetitorSelectionComponent,
     CompetitorAnalysisComponent,
     KeywordRatingComponent,
-    BlogTopicsStaleBannerComponent,
   ],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
